@@ -3,10 +3,11 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, MessageSquare, Activity, Shield } from 'lucide-react';
+import { Users, MessageSquare, Activity, Shield, Settings as SettingsIcon } from 'lucide-react';
 import CrewChat from '../components/crew/CrewChat';
 import CrewActivityFeed from '../components/crew/CrewActivityFeed';
 import CrewRoleManager from '../components/crew/CrewRoleManager';
+import CrewActions from '../components/crew/CrewActions';
 
 export default function Crew() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -56,6 +57,7 @@ export default function Crew() {
   }
 
   const canManageRoles = permissions?.permissions?.assign_roles || playerData.crew_role === 'boss';
+  const canManageMembers = permissions?.permissions?.manage_members || playerData.crew_role === 'boss';
 
   return (
     <div className="space-y-6">
@@ -100,6 +102,10 @@ export default function Crew() {
             <Shield className="w-4 h-4" />
             Roles & Permissions
           </TabsTrigger>
+          <TabsTrigger value="manage" className="flex items-center gap-2">
+            <SettingsIcon className="w-4 h-4" />
+            Manage
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="chat" className="space-y-4">
@@ -115,6 +121,14 @@ export default function Crew() {
             crewId={crewData.id}
             currentPlayerRole={playerData.crew_role}
             canManageRoles={canManageRoles}
+          />
+        </TabsContent>
+
+        <TabsContent value="manage" className="space-y-4">
+          <CrewActions
+            crewId={crewData.id}
+            playerData={playerData}
+            canManage={canManageMembers}
           />
         </TabsContent>
       </Tabs>
