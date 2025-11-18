@@ -8,6 +8,7 @@ import AIProgressionAnalyzer from '../components/progression/AIProgressionAnalyz
 import { 
   Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle 
 } from 'lucide-react';
+import { createPageUrl } from '../utils';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
@@ -78,8 +79,12 @@ export default function Dashboard() {
 
   const crew = crewData?.[0];
 
-  const handleJoinBattle = (battleId) => {
-    window.location.href = `/Territories?battle=${battleId}`;
+  const handleJoinBattle = async (battleId) => {
+    const battles = await base44.entities.Battle.filter({ id: battleId });
+    if (battles[0]) {
+      // Redirect to territories with battle dialog
+      window.location.href = createPageUrl('Territories');
+    }
   };
 
   const wantedStars = playerData?.wanted_level || 0;
