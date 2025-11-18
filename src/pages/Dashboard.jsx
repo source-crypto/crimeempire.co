@@ -4,12 +4,14 @@ import { useQuery } from '@tanstack/react-query';
 import StatCard from '../components/dashboard/StatCard';
 import ActiveBattles from '../components/dashboard/ActiveBattles';
 import QuickActions from '../components/dashboard/QuickActions';
+import AIProgressionAnalyzer from '../components/progression/AIProgressionAnalyzer';
 import { 
   Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle 
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function Dashboard() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -18,11 +20,41 @@ export default function Dashboard() {
     base44.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
 
-  const { data: playerData } = useQuery({
+  const { data: playerData, refetch: refetchPlayer } = useQuery({
     queryKey: ['player', currentUser?.email],
     queryFn: async () => {
       const players = await base44.entities.Player.filter({ created_by: currentUser.email });
-      return players[0] || null;
+      if (players.length === 0) {
+        // Create initial player
+        const newPlayer = await base44.entities.Player.create({
+          username: currentUser.full_name || currentUser.email.split('@')[0],
+          crypto_balance: 10000,
+          buy_power: 5000,
+          level: 1,
+          strength_score: 10,
+          wanted_level: 0,
+          skill_points: 5,
+          skills: {
+            combat: 1,
+            stealth: 1,
+            driving: 1,
+            hacking: 1,
+            leadership: 1,
+            negotiation: 1
+          },
+          stats: {
+            heists_completed: 0,
+            heists_failed: 0,
+            battles_won: 0,
+            battles_lost: 0,
+            territories_captured: 0,
+            total_loot: 0
+          },
+          playstyle: 'balanced'
+        });
+        return newPlayer;
+      }
+      return players[0];
     },
     enabled: !!currentUser,
   });
@@ -192,15 +224,31 @@ export default function Dashboard() {
         </Card>
       )}
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
-          <ActiveBattles battles={battles} onJoinBattle={handleJoinBattle} />
-        </div>
-        <div>
-          <QuickActions />
-        </div>
-      </div>
+      {/* Main Tabs */}
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList className="glass-panel border border-purple-500/20">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="progression">AI Progression</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <ActiveBattles battles={battles} onJoinBattle={handleJoinBattle} />
+            </div>
+            <div>
+              <QuickActions />
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="progression">
+          <AIProgressionAnalyzer 
+            playerData={playerData} 
+            onUpdate={refetchPlayer}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

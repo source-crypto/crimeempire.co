@@ -307,12 +307,12 @@ Return JSON format.
                 {startHeistMutation.isPending ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Starting...
+                    Planning...
                   </>
                 ) : (
                   <>
                     <Target className="w-4 h-4 mr-2" />
-                    Execute Heist
+                    Confirm Heist Plan
                   </>
                 )}
               </Button>
