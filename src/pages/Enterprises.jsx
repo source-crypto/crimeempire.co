@@ -3,16 +3,19 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Building2, AlertTriangle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Building2, AlertTriangle, ChevronRight } from 'lucide-react';
+import EnterpriseUpgrade from '../components/enterprises/EnterpriseUpgrade';
 
 export default function Enterprises() {
   const [currentUser, setCurrentUser] = useState(null);
+  const [selectedEnterprise, setSelectedEnterprise] = useState(null);
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
 
-  const { data: playerData } = useQuery({
+  const { data: playerData, refetch: refetchPlayer } = useQuery({
     queryKey: ['player', currentUser?.email],
     queryFn: async () => {
       const players = await base44.entities.Player.filter({ created_by: currentUser.email });
@@ -21,11 +24,39 @@ export default function Enterprises() {
     enabled: !!currentUser,
   });
 
-  const { data: enterprises = [] } = useQuery({
+  const { data: enterprises = [], refetch: refetchEnterprises } = useQuery({
     queryKey: ['enterprises', playerData?.id],
     queryFn: () => base44.entities.CriminalEnterprise.filter({ owner_id: playerData.id }),
     enabled: !!playerData?.id,
   });
+
+  const handleUpdate = () => {
+    refetchEnterprises();
+    refetchPlayer();
+  };
+
+  if (selectedEnterprise) {
+    return (
+      <div className="space-y-6">
+        <div className="glass-panel border border-purple-500/20 p-6 rounded-xl">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">{selectedEnterprise.name}</h1>
+              <p className="text-gray-400 capitalize">{selectedEnterprise.type.replace(/_/g, ' ')}</p>
+            </div>
+            <Button variant="outline" onClick={() => setSelectedEnterprise(null)}>
+              Back to Enterprises
+            </Button>
+          </div>
+        </div>
+        <EnterpriseUpgrade 
+          enterprise={selectedEnterprise} 
+          playerData={playerData}
+          onUpdate={handleUpdate}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -45,7 +76,11 @@ export default function Enterprises() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {enterprises.map((enterprise) => (
-            <Card key={enterprise.id} className="glass-panel border-purple-500/20">
+            <Card 
+              key={enterprise.id} 
+              className="glass-panel border-purple-500/20 hover:border-purple-500/40 cursor-pointer transition-all"
+              onClick={() => setSelectedEnterprise(enterprise)}
+            >
               <CardHeader className="border-b border-purple-500/20">
                 <CardTitle className="text-white flex items-center justify-between">
                   {enterprise.name}
@@ -79,6 +114,17 @@ export default function Enterprises() {
                     </span>
                   </div>
                 </div>
+                <Button 
+                  size="sm" 
+                  className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 mt-2"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedEnterprise(enterprise);
+                  }}
+                >
+                  <ChevronRight className="w-4 h-4 mr-2" />
+                  Manage & Upgrade
+                </Button>
               </CardContent>
             </Card>
           ))}
