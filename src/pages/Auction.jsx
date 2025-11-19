@@ -67,9 +67,26 @@ export default function Auction() {
   return (
     <div className="space-y-6">
       <div className="glass-panel border border-purple-500/20 p-6 rounded-xl">
-        <h1 className="text-3xl font-bold text-white mb-2">Auction House</h1>
-        <p className="text-gray-400">Buy and sell valuable items</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2">Auction House</h1>
+            <p className="text-gray-400">Buy and sell valuable items</p>
+          </div>
+          <Button
+            className="bg-gradient-to-r from-green-600 to-emerald-600"
+            onClick={() => setCreateDialogOpen(true)}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            List Item
+          </Button>
+        </div>
       </div>
+
+      <CreateAuctionDialog
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+        playerData={playerData}
+      />
 
       {auctions.length === 0 ? (
         <Card className="glass-panel border-purple-500/20">

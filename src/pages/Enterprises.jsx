@@ -4,8 +4,9 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Building2, AlertTriangle, ChevronRight } from 'lucide-react';
+import { Building2, AlertTriangle, ChevronRight, Plus } from 'lucide-react';
 import EnterpriseUpgrade from '../components/enterprises/EnterpriseUpgrade';
+import CreateEnterpriseDialog from '../components/enterprises/CreateEnterpriseDialog';
 
 export default function Enterprises() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -62,9 +63,26 @@ export default function Enterprises() {
   return (
     <div className="space-y-6">
       <div className="glass-panel border border-purple-500/20 p-6 rounded-xl">
-        <h1 className="text-3xl font-bold text-white mb-2">Criminal Enterprises</h1>
-        <p className="text-gray-400">Manage your illegal businesses</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2">Criminal Enterprises</h1>
+            <p className="text-gray-400">Manage your illegal businesses</p>
+          </div>
+          <Button
+            className="bg-gradient-to-r from-purple-600 to-cyan-600"
+            onClick={() => setCreateDialogOpen(true)}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            New Enterprise
+          </Button>
+        </div>
       </div>
+
+      <CreateEnterpriseDialog
+        open={createDialogOpen}
+        onOpenChange={setCreateDialogOpen}
+        playerData={playerData}
+      />
 
       {enterprises.length === 0 ? (
         <Card className="glass-panel border-purple-500/20">

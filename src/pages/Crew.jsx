@@ -51,10 +51,30 @@ export default function Crew() {
 
   if (!playerData || !crewData) {
     return (
-      <div className="text-center py-12">
-        <Users className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-        <h2 className="text-2xl font-bold text-white mb-2">No Crew</h2>
-        <p className="text-gray-400">You need to join or create a crew first</p>
+      <div className="space-y-6">
+        <div className="glass-panel border border-purple-500/20 p-6 rounded-xl">
+          <h1 className="text-3xl font-bold text-white mb-2">Crew</h1>
+          <p className="text-gray-400">Join or create a crew to get started</p>
+        </div>
+
+        <Card className="glass-panel border-purple-500/20 p-12 text-center max-w-md mx-auto">
+          <Users className="w-16 h-16 mx-auto mb-4 text-purple-400" />
+          <h2 className="text-2xl font-bold text-white mb-2">No Crew</h2>
+          <p className="text-gray-400 mb-6">Create your own crew and build your criminal empire</p>
+          <Button
+            className="bg-gradient-to-r from-purple-600 to-cyan-600"
+            onClick={() => setCreateDialogOpen(true)}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Create Crew
+          </Button>
+        </Card>
+
+        <CreateCrewDialog
+          open={createDialogOpen}
+          onOpenChange={setCreateDialogOpen}
+          playerData={playerData}
+        />
       </div>
     );
   }
