@@ -5,12 +5,14 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Gavel, Loader2, TrendingUp } from 'lucide-react';
+import { Gavel, Loader2, TrendingUp, Plus } from 'lucide-react';
 import { toast } from 'sonner';
+import CreateAuctionDialog from '../components/auction/CreateAuctionDialog';
 
 export default function Auction() {
   const [currentUser, setCurrentUser] = useState(null);
   const [bidAmounts, setBidAmounts] = useState({});
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {

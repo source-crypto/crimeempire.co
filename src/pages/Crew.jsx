@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, MessageSquare, Activity, Shield, Settings as SettingsIcon } from 'lucide-react';
+import { Users, MessageSquare, Activity, Shield, Settings as SettingsIcon, Plus } from 'lucide-react';
 import CrewChat from '../components/crew/CrewChat';
 import CrewActivityFeed from '../components/crew/CrewActivityFeed';
 import CrewRoleManager from '../components/crew/CrewRoleManager';
 import CrewActions from '../components/crew/CrewActions';
+import CreateCrewDialog from '../components/crew/CreateCrewDialog';
 
 export default function Crew() {
   const [currentUser, setCurrentUser] = useState(null);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
