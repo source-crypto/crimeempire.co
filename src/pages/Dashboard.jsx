@@ -3,16 +3,18 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import StatCard from '../components/dashboard/StatCard';
 import ActiveBattles from '../components/dashboard/ActiveBattles';
+import ActiveHeists from '../components/dashboard/ActiveHeists';
 import QuickActions from '../components/dashboard/QuickActions';
+import SystemStatus from '../components/dashboard/SystemStatus';
 import AIProgressionAnalyzer from '../components/progression/AIProgressionAnalyzer';
 import { 
-  Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle 
+  Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle, Building2, Target, Zap
 } from 'lucide-react';
-import { createPageUrl } from '../utils';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { createPageUrl } from '../utils';
 
 export default function Dashboard() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -77,14 +79,30 @@ export default function Dashboard() {
     enabled: !!playerData?.id,
   });
 
+  const { data: activeHeists = [] } = useQuery({
+    queryKey: ['activeHeists', playerData?.crew_id],
+    queryFn: () => base44.entities.Heist.filter({ 
+      crew_id: playerData.crew_id,
+      status: 'in_progress'
+    }),
+    enabled: !!playerData?.crew_id,
+  });
+
+  const { data: recentActivity = [] } = useQuery({
+    queryKey: ['crewActivity', playerData?.crew_id],
+    queryFn: () => base44.entities.CrewActivity.filter(
+      { crew_id: playerData.crew_id },
+      '-created_date',
+      10
+    ),
+    enabled: !!playerData?.crew_id,
+    refetchInterval: 5000
+  });
+
   const crew = crewData?.[0];
 
-  const handleJoinBattle = async (battleId) => {
-    const battles = await base44.entities.Battle.filter({ id: battleId });
-    if (battles[0]) {
-      // Redirect to territories with battle dialog
-      window.location.href = createPageUrl('Territories');
-    }
+  const handleJoinBattle = (battleId) => {
+    window.location.href = createPageUrl('Territories');
   };
 
   const wantedStars = playerData?.wanted_level || 0;
@@ -238,13 +256,58 @@ export default function Dashboard() {
 
         <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 space-y-6">
               <ActiveBattles battles={battles} onJoinBattle={handleJoinBattle} />
+              <ActiveHeists heists={activeHeists} />
             </div>
-            <div>
+            <div className="space-y-6">
               <QuickActions />
+              <SystemStatus 
+                playerData={playerData} 
+                crew={crew} 
+                enterprises={enterprises}
+              />
             </div>
           </div>
+
+          {/* Recent Activity Feed */}
+          {recentActivity.length > 0 && (
+            <Card className="glass-panel border-purple-500/20">
+              <CardHeader className="border-b border-purple-500/20">
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Zap className="w-5 h-5 text-yellow-400" />
+                  Recent Activity
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="space-y-2 max-h-80 overflow-y-auto">
+                  {recentActivity.map((activity) => (
+                    <div
+                      key={activity.id}
+                      className="p-3 rounded-lg bg-slate-900/30 border border-purple-500/10"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h4 className="font-semibold text-white text-sm">{activity.title}</h4>
+                          <p className="text-xs text-gray-400 mt-1">{activity.description}</p>
+                        </div>
+                        {activity.value && (
+                          <Badge className="bg-green-600 text-xs">
+                            +${activity.value.toLocaleString()}
+                          </Badge>
+                        )}
+                      </div>
+                      {activity.player_username && (
+                        <p className="text-xs text-purple-400 mt-2">
+                          by {activity.player_username}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
 
         <TabsContent value="progression">
