@@ -2,25 +2,39 @@ import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { 
-  Map, Building2, Car, Users, Gavel, Zap 
+  Map, Building2, Car, Users, Gavel, Target 
 } from 'lucide-react';
-import { createPageUrl } from '@/utils';
+import { createPageUrl } from '../../utils';
 
 export default function QuickActions() {
   const actions = [
     {
-      title: 'Conquer Territory',
-      description: 'Expand your empire',
-      icon: Map,
+      title: 'Plan Heist',
+      description: 'AI-powered operations',
+      icon: Target,
       color: 'from-red-600 to-orange-600',
+      page: 'Heists'
+    },
+    {
+      title: 'Attack Territory',
+      description: 'Expand control',
+      icon: Map,
+      color: 'from-green-600 to-emerald-600',
       page: 'Territories'
     },
     {
-      title: 'Manage Operations',
-      description: 'Criminal enterprises',
+      title: 'New Enterprise',
+      description: 'Start business',
       icon: Building2,
       color: 'from-purple-600 to-pink-600',
       page: 'Enterprises'
+    },
+    {
+      title: 'Crew',
+      description: 'Manage members',
+      icon: Users,
+      color: 'from-orange-600 to-yellow-600',
+      page: 'Crew'
     },
     {
       title: 'Steal Vehicle',
@@ -30,25 +44,11 @@ export default function QuickActions() {
       page: 'Garage'
     },
     {
-      title: 'Recruit Members',
-      description: 'Grow your crew',
-      icon: Users,
-      color: 'from-green-600 to-emerald-600',
-      page: 'Crew'
-    },
-    {
-      title: 'Auction House',
-      description: 'Buy & sell assets',
+      title: 'Auction',
+      description: 'Trade assets',
       icon: Gavel,
-      color: 'from-yellow-600 to-orange-600',
+      color: 'from-yellow-600 to-green-600',
       page: 'Auction'
-    },
-    {
-      title: 'Boost Stats',
-      description: 'Level up abilities',
-      icon: Zap,
-      color: 'from-indigo-600 to-purple-600',
-      page: 'Dashboard'
     }
   ];
 
