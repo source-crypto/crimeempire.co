@@ -6,6 +6,7 @@ import Garage from './pages/Garage';
 import Auction from './pages/Auction';
 import Enterprises from './pages/Enterprises';
 import Settings from './pages/Settings';
+import Metaverse from './pages/Metaverse';
 import __Layout from './Layout.jsx';
 
 
@@ -18,6 +19,7 @@ export const PAGES = {
     "Auction": Auction,
     "Enterprises": Enterprises,
     "Settings": Settings,
+    "Metaverse": Metaverse,
 }
 
 export const pagesConfig = {

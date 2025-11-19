@@ -13,6 +13,7 @@ export default function Layout({ children, currentPageName }) {
 
   const navigation = [
     { name: 'Dashboard', page: 'Dashboard', icon: Home },
+    { name: 'Metaverse', page: 'Metaverse', icon: Zap },
     { name: 'Territories', page: 'Territories', icon: Map },
     { name: 'Crew', page: 'Crew', icon: Users },
     { name: 'Enterprises', page: 'Enterprises', icon: Building2 },
