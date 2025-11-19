@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import {
   AlertTriangle, CheckCircle, Clock, Users, DollarSign,
-  Eye, Shield, Zap, TrendingUp, ArrowRight, Loader2
+  Eye, Shield, Zap, TrendingUp, ArrowRight, Loader2, AlertCircle
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -148,8 +148,72 @@ Return JSON format.
         }
       });
 
-      const newDetection = Math.min(100, execution.detection_level + outcome.detection_increase);
-      const newProgress = Math.min(100, execution.progress + outcome.progress_gain);
+      // Check for unexpected events based on conditions
+      const unexpectedEvents = [];
+      
+      // Detection-based events (high risk)
+      if (execution.detection_level > 60 && Math.random() > 0.6) {
+        const detectionEvent = await base44.integrations.Core.InvokeLLM({
+          prompt: `Generate an unexpected event for a heist with ${execution.detection_level}% detection. Make it realistic and challenging (e.g., backup guards, alarm malfunction, witness).`,
+          response_json_schema: {
+            type: 'object',
+            properties: {
+              event_type: { type: 'string' },
+              description: { type: 'string' },
+              detection_modifier: { type: 'number' },
+              progress_impact: { type: 'number' }
+            }
+          }
+        });
+        unexpectedEvents.push({ ...detectionEvent, trigger: 'detection' });
+      }
+
+      // Time-based events (random complications)
+      const actionCount = execution.crew_actions?.length || 0;
+      if (actionCount > 3 && Math.random() > 0.7) {
+        const timeEvent = await base44.integrations.Core.InvokeLLM({
+          prompt: `Generate a time-based complication for ${execution.phase} phase after ${actionCount} actions (e.g., shift change, security patrol, equipment failure).`,
+          response_json_schema: {
+            type: 'object',
+            properties: {
+              event_type: { type: 'string' },
+              description: { type: 'string' },
+              detection_modifier: { type: 'number' },
+              progress_impact: { type: 'number' }
+            }
+          }
+        });
+        unexpectedEvents.push({ ...timeEvent, trigger: 'time' });
+      }
+
+      // Action-based events (player choices)
+      if (action.includes('risk') && Math.random() > 0.5) {
+        const actionEvent = await base44.integrations.Core.InvokeLLM({
+          prompt: `Generate a consequence for taking a risky action: "${action}" (e.g., spotted, trap triggered, valuable found).`,
+          response_json_schema: {
+            type: 'object',
+            properties: {
+              event_type: { type: 'string' },
+              description: { type: 'string' },
+              detection_modifier: { type: 'number' },
+              progress_impact: { type: 'number' }
+            }
+          }
+        });
+        unexpectedEvents.push({ ...actionEvent, trigger: 'action' });
+      }
+
+      // Apply unexpected event modifiers
+      let totalDetectionIncrease = outcome.detection_increase;
+      let totalProgressGain = outcome.progress_gain;
+      
+      unexpectedEvents.forEach(event => {
+        totalDetectionIncrease += event.detection_modifier || 0;
+        totalProgressGain += event.progress_impact || 0;
+      });
+
+      const newDetection = Math.min(100, execution.detection_level + totalDetectionIncrease);
+      const newProgress = Math.min(100, execution.progress + totalProgressGain);
       const newLoot = execution.loot_collected + outcome.loot_gained;
 
       let newPhase = execution.phase;
@@ -186,23 +250,33 @@ Return JSON format.
         });
       }
 
+      // Build enhanced events log with unexpected events
+      const newEventsLog = [
+        ...execution.events_log,
+        `✓ ${outcome.event_description}`,
+        ...unexpectedEvents.map(e => `⚠️ UNEXPECTED: ${e.description}`)
+      ];
+
       const updatedExecution = await base44.entities.HeistExecution.update(execution.id, {
         phase: newPhase,
         current_challenge: nextChallenge,
         completed_challenges: [...execution.completed_challenges, {
           challenge: execution.current_challenge,
-          outcome
+          outcome,
+          unexpected_events: unexpectedEvents
         }],
         crew_actions: [...execution.crew_actions, {
           action,
           success: outcome.success,
-          impact: outcome.impact
+          impact: outcome.impact,
+          timestamp: new Date().toISOString()
         }],
-        events_log: [...execution.events_log, outcome.event_description],
+        events_log: newEventsLog,
         detection_level: newDetection,
         progress: newProgress,
         loot_collected: newLoot,
-        status: newStatus
+        status: newStatus,
+        heat_generated: (execution.heat_generated || 0) + Math.floor(totalDetectionIncrease / 10)
       });
 
       // If heist completed, update heist entity
@@ -501,12 +575,30 @@ Return JSON format.
         </CardHeader>
         <CardContent className="p-4">
           <div className="space-y-2 max-h-60 overflow-y-auto">
-            {execution.events_log?.slice().reverse().map((event, idx) => (
-              <div key={idx} className="p-2 rounded bg-slate-900/30 text-sm text-gray-300">
-                <span className="text-purple-400 mr-2">›</span>
-                {event}
-              </div>
-            ))}
+            {execution.events_log?.slice().reverse().map((event, idx) => {
+              const isUnexpected = event.includes('UNEXPECTED');
+              const isSuccess = event.startsWith('✓');
+              const isWarning = event.startsWith('⚠️');
+              
+              return (
+                <div 
+                  key={idx} 
+                  className={`p-3 rounded-lg text-sm border ${
+                    isUnexpected 
+                      ? 'bg-red-900/20 border-red-500/30 text-red-200'
+                      : isWarning
+                      ? 'bg-yellow-900/20 border-yellow-500/30 text-yellow-200'
+                      : 'bg-slate-900/30 border-purple-500/10 text-gray-300'
+                  }`}
+                >
+                  <div className="flex items-start gap-2">
+                    {isUnexpected && <AlertTriangle className="w-4 h-4 mt-0.5 text-red-400" />}
+                    {isSuccess && <CheckCircle className="w-4 h-4 mt-0.5 text-green-400" />}
+                    <span className="flex-1">{event.replace('✓ ', '').replace('⚠️ ', '')}</span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </CardContent>
       </Card>
