@@ -10,6 +10,7 @@ import CrewActivityFeed from '../components/crew/CrewActivityFeed';
 import CrewRoleManager from '../components/crew/CrewRoleManager';
 import CrewActions from '../components/crew/CrewActions';
 import CreateCrewDialog from '../components/crew/CreateCrewDialog';
+import CrewRecruitmentSystem from '../components/crew/CrewRecruitmentSystem';
 
 export default function Crew() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -129,7 +130,11 @@ export default function Crew() {
             <SettingsIcon className="w-4 h-4" />
             Manage
           </TabsTrigger>
-        </TabsList>
+          <TabsTrigger value="recruitment" className="flex items-center gap-2">
+            <Users className="w-4 h-4" />
+            Recruitment
+          </TabsTrigger>
+          </TabsList>
 
         <TabsContent value="chat" className="space-y-4">
           <CrewChat crewId={crewData.id} currentPlayer={playerData} />
@@ -154,7 +159,11 @@ export default function Crew() {
             canManage={canManageMembers}
           />
         </TabsContent>
-      </Tabs>
+
+        <TabsContent value="recruitment" className="space-y-4">
+          <CrewRecruitmentSystem crewId={crewData.id} playerData={playerData} />
+        </TabsContent>
+        </Tabs>
     </div>
   );
 }

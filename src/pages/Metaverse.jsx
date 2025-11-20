@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Target, BarChart3, Shield, Zap } from 'lucide-react';
+import { Target, BarChart3, Shield, Zap, Globe } from 'lucide-react';
 import MissionBoard from '../components/missions/MissionBoard';
 import DynamicMarket from '../components/marketplace/DynamicMarket';
 import RivalFactionSystem from '../components/factions/RivalFactionSystem';
+import WorldEventSystem from '../components/worldevents/WorldEventSystem';
 
 export default function Metaverse() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -55,6 +56,10 @@ export default function Metaverse() {
             <Shield className="w-4 h-4" />
             Rival Factions
           </TabsTrigger>
+          <TabsTrigger value="events" className="flex items-center gap-2">
+            <Globe className="w-4 h-4" />
+            World Events
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="missions">
@@ -67,6 +72,10 @@ export default function Metaverse() {
 
         <TabsContent value="factions">
           <RivalFactionSystem playerData={playerData} />
+        </TabsContent>
+
+        <TabsContent value="events">
+          <WorldEventSystem playerData={playerData} />
         </TabsContent>
       </Tabs>
     </div>
