@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { 
   Home, Map, Users, Building2, Car, Gavel, 
-  Settings, Menu, X, Zap, Shield, Bell
+  Settings, Menu, X, Zap, Shield, Bell, Crown
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
@@ -19,6 +19,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Enterprises', page: 'Enterprises', icon: Building2 },
     { name: 'Garage', page: 'Garage', icon: Car },
     { name: 'Auction', page: 'Auction', icon: Gavel },
+    { name: 'Governance', page: 'Governance', icon: Crown },
   ];
 
   return (
