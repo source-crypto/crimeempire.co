@@ -228,7 +228,7 @@ export default function Territories() {
 
                   <TabsContent value="supply">
                     <SupplyLineManager
-                      crewId={playerData.crew_id}
+                      crewId={playerData?.crew_id}
                       canManage={canManage}
                     />
                   </TabsContent>
@@ -248,7 +248,7 @@ export default function Territories() {
         <TabsContent value="all">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {allTerritories.map((territory) => {
-              const isOwned = territory.controlling_crew_id === playerData.crew_id;
+              const isOwned = territory.controlling_crew_id === playerData?.crew_id;
               const canAttack = !isOwned && !territory.is_contested && canInitiateBattle;
 
               return (
