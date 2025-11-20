@@ -7,8 +7,11 @@ import ActiveHeists from '../components/dashboard/ActiveHeists';
 import QuickActions from '../components/dashboard/QuickActions';
 import SystemStatus from '../components/dashboard/SystemStatus';
 import AIProgressionAnalyzer from '../components/progression/AIProgressionAnalyzer';
+import PlayerMarketplace from '../components/trading/PlayerMarketplace';
+import InvestmentPortfolio from '../components/investments/InvestmentPortfolio';
+import AIContractBoard from '../components/contracts/AIContractBoard';
 import { 
-  Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle, Building2, Target, Zap
+  Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle, Building2, Target, Zap, ShoppingCart
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -252,6 +255,9 @@ export default function Dashboard() {
         <TabsList className="glass-panel border border-purple-500/20">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="progression">AI Progression</TabsTrigger>
+          <TabsTrigger value="marketplace">Marketplace</TabsTrigger>
+          <TabsTrigger value="investments">Investments</TabsTrigger>
+          <TabsTrigger value="contracts">Contracts</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -315,6 +321,18 @@ export default function Dashboard() {
             playerData={playerData} 
             onUpdate={refetchPlayer}
           />
+        </TabsContent>
+
+        <TabsContent value="marketplace">
+          <PlayerMarketplace playerData={playerData} />
+        </TabsContent>
+
+        <TabsContent value="investments">
+          <InvestmentPortfolio playerData={playerData} />
+        </TabsContent>
+
+        <TabsContent value="contracts">
+          <AIContractBoard playerData={playerData} />
         </TabsContent>
       </Tabs>
     </div>
