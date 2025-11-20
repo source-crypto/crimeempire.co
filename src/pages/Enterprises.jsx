@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Building2, AlertTriangle, ChevronRight, Plus } from 'lucide-react';
 import EnterpriseUpgrade from '../components/enterprises/EnterpriseUpgrade';
 import CreateEnterpriseDialog from '../components/enterprises/CreateEnterpriseDialog';
+import EnterpriseManagementSystem from '../components/enterprises/EnterpriseManagementSystem';
 
 export default function Enterprises() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -51,11 +52,17 @@ export default function Enterprises() {
             </Button>
           </div>
         </div>
-        <EnterpriseUpgrade 
-          enterprise={selectedEnterprise} 
-          playerData={playerData}
-          onUpdate={handleUpdate}
-        />
+        <div className="space-y-6">
+          <EnterpriseUpgrade 
+            enterprise={selectedEnterprise} 
+            playerData={playerData}
+            onUpdate={handleUpdate}
+          />
+          <EnterpriseManagementSystem 
+            enterprise={selectedEnterprise}
+            playerData={playerData}
+          />
+        </div>
       </div>
     );
   }

@@ -7,6 +7,7 @@ import MissionBoard from '../components/missions/MissionBoard';
 import DynamicMarket from '../components/marketplace/DynamicMarket';
 import RivalFactionSystem from '../components/factions/RivalFactionSystem';
 import WorldEventSystem from '../components/worldevents/WorldEventSystem';
+import FactionDiplomacySystem from '../components/diplomacy/FactionDiplomacySystem';
 
 export default function Metaverse() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -75,7 +76,10 @@ export default function Metaverse() {
         </TabsContent>
 
         <TabsContent value="events">
-          <WorldEventSystem playerData={playerData} />
+          <div className="space-y-4">
+            <WorldEventSystem playerData={playerData} />
+            <FactionDiplomacySystem />
+          </div>
         </TabsContent>
       </Tabs>
     </div>
