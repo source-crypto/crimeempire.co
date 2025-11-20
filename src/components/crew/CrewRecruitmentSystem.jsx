@@ -29,6 +29,10 @@ const memberTypeColors = {
 export default function CrewRecruitmentSystem({ crewId, playerData }) {
   const queryClient = useQueryClient();
 
+  if (!crewId || !playerData) {
+    return null;
+  }
+
   const { data: crewMembers = [] } = useQuery({
     queryKey: ['crewMembers', crewId],
     queryFn: () => base44.entities.CrewMember.filter({ crew_id: crewId }),
@@ -150,10 +154,6 @@ Make them interesting and valuable. Return JSON.`;
       toast.error(error.message);
     }
   });
-
-  if (!crewId) {
-    return null;
-  }
 
   return (
     <div className="space-y-4">

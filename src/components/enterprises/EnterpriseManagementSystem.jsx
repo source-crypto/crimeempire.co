@@ -31,6 +31,10 @@ const eventColors = {
 export default function EnterpriseManagementSystem({ enterprise, playerData }) {
   const queryClient = useQueryClient();
 
+  if (!enterprise || !playerData) {
+    return null;
+  }
+
   const { data: enterpriseEvents = [] } = useQuery({
     queryKey: ['enterpriseEvents', enterprise?.id],
     queryFn: () => base44.entities.EnterpriseEvent.filter({ 
@@ -176,8 +180,6 @@ Make it relevant to the enterprise type. Return JSON.`;
       toast.error(error.message);
     }
   });
-
-  if (!enterprise) return null;
 
   return (
     <div className="space-y-4">
