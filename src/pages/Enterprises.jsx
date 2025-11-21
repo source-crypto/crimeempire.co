@@ -54,6 +54,10 @@ export default function Enterprises() {
           </div>
         </div>
         <div className="space-y-6">
+          <ResearchTreeSystem
+            enterprise={selectedEnterprise}
+            playerData={playerData}
+          />
           <EnterpriseUpgrade 
             enterprise={selectedEnterprise} 
             playerData={playerData}
