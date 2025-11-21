@@ -1,248 +1,305 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Handshake, Swords, TrendingUp, Shield, AlertTriangle, Loader2, Sparkles } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Users, Eye, Bomb, Handshake, FileText, Loader2, Crown } from 'lucide-react';
 import { toast } from 'sonner';
 
-const relationshipIcons = {
-  alliance: Handshake,
-  non_aggression: Shield,
-  trade_agreement: TrendingUp,
-  rivalry: Swords,
-  war: AlertTriangle,
-  neutral: Shield
+const actionTypes = {
+  negotiate_peace: { icon: Handshake, label: 'Negotiate Peace', cost: 30000, role: 'president' },
+  trade_agreement: { icon: FileText, label: 'Trade Agreement', cost: 25000, role: 'mayor' },
+  intelligence_gathering: { icon: Eye, label: 'Intelligence Gathering', cost: 40000, role: 'spy_master' },
+  sabotage: { icon: Bomb, label: 'Sabotage Operation', cost: 60000, role: 'spy_master' },
+  covert_operation: { icon: Eye, label: 'Covert Operation', cost: 75000, role: 'spy_master' },
+  form_alliance: { icon: Users, label: 'Form Alliance', cost: 50000, role: 'president' },
+  declare_war: { icon: Bomb, label: 'Declare War', cost: 100000, role: 'president' }
 };
 
-const relationshipColors = {
-  alliance: 'bg-green-600',
-  non_aggression: 'bg-blue-600',
-  trade_agreement: 'bg-cyan-600',
-  rivalry: 'bg-orange-600',
-  war: 'bg-red-600',
-  neutral: 'bg-gray-600'
-};
-
-export default function FactionDiplomacySystem() {
+export default function FactionDiplomacySystem({ playerData, crewData }) {
+  const [selectedAction, setSelectedAction] = useState('negotiate_peace');
+  const [selectedFaction, setSelectedFaction] = useState('');
+  const [playerMessage, setPlayerMessage] = useState('');
   const queryClient = useQueryClient();
 
   const { data: factions = [] } = useQuery({
-    queryKey: ['factions'],
-    queryFn: () => base44.entities.RivalFaction.filter({ is_active: true })
+    queryKey: ['rivalFactions'],
+    queryFn: () => base44.entities.RivalFaction.list()
   });
 
-  const { data: relations = [] } = useQuery({
-    queryKey: ['factionDiplomacy'],
-    queryFn: () => base44.entities.FactionDiplomacy.filter({ status: 'active' }),
-    refetchInterval: 30000
+  const { data: diplomacyActions = [] } = useQuery({
+    queryKey: ['diplomacy', playerData?.id],
+    queryFn: () => base44.entities.FactionDiplomacy.filter({ 
+      player_id: playerData.id 
+    }, '-created_date', 10),
+    enabled: !!playerData
   });
 
-  const generateRelationMutation = useMutation({
+  const initiateDiplomacyMutation = useMutation({
     mutationFn: async () => {
-      if (factions.length < 2) {
-        throw new Error('Need at least 2 factions');
+      if (!selectedFaction) throw new Error('Select a faction');
+      
+      const actionConfig = actionTypes[selectedAction];
+      const faction = factions.find(f => f.id === selectedFaction);
+
+      if (playerData.crypto_balance < actionConfig.cost) {
+        throw new Error('Insufficient funds');
       }
 
-      const factionA = factions[Math.floor(Math.random() * factions.length)];
-      const remaining = factions.filter(f => f.id !== factionA.id);
-      const factionB = remaining[Math.floor(Math.random() * remaining.length)];
+      const prompt = `Simulate AI-driven ${selectedAction.replace('_', ' ')} between player and ${faction.name} faction.
 
-      const prompt = `Generate diplomatic relations between two criminal factions:
+Faction Type: ${faction.faction_type}
+Faction Power: ${faction.power_level}
+Faction Aggression: ${faction.aggression}
+Player Message: "${playerMessage || 'Standard diplomatic approach'}"
+Player Level: ${playerData.level}
+Crew Reputation: ${crewData?.reputation || 0}
 
-Faction A: ${factionA.name} (${factionA.faction_type})
-Faction B: ${factionB.name} (${factionB.faction_type})
+Generate:
+1. For negotiations: 3-5 rounds of back-and-forth dialogue with mood indicators
+2. For intelligence: Detailed intel on territories, plans, weaknesses, secret operations
+3. For sabotage/covert ops: Mission details, success probability, and potential outcomes
+4. Success probability and relationship impact
+5. Potential benefits or risks
 
-Create relation with:
-1. Relationship type (alliance/non_aggression/trade_agreement/rivalry)
-2. Trust level (30-80)
-3. Treaty terms (duration in hours, benefits)
-4. Betrayal likelihood (10-60 based on relationship)
+Create immersive NPC responses and realistic outcomes.`;
 
-Consider faction types and strategies. Return JSON.`;
-
-      const relationData = await base44.integrations.Core.InvokeLLM({
+      const diplomacyData = await base44.integrations.Core.InvokeLLM({
         prompt,
+        add_context_from_internet: false,
         response_json_schema: {
-          type: 'object',
+          type: "object",
           properties: {
-            relationship_type: { type: 'string' },
-            trust_level: { type: 'number' },
-            treaty_terms: {
-              type: 'object',
-              properties: {
-                duration: { type: 'number' },
-                trade_bonus: { type: 'number' },
-                military_support: { type: 'boolean' },
-                territory_respect: { type: 'boolean' }
+            success_probability: { type: "number" },
+            relationship_change: { type: "number" },
+            negotiation_log: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  round: { type: "number" },
+                  player_offer: { type: "string" },
+                  faction_response: { type: "string" },
+                  mood: { type: "string" }
+                }
               }
             },
-            betrayal_likelihood: { type: 'number' }
+            intel_gathered: {
+              type: "object",
+              properties: {
+                territory_plans: { type: "array", items: { type: "string" } },
+                military_strength: { type: "number" },
+                weaknesses: { type: "array", items: { type: "string" } },
+                secret_operations: { type: "array", items: { type: "string" } }
+              }
+            },
+            outcomes: {
+              type: "object",
+              properties: {
+                immediate_effect: { type: "string" },
+                long_term_impact: { type: "string" },
+                rewards: { type: "object" }
+              }
+            }
           }
         }
       });
 
-      const formedAt = new Date();
-      const expiresAt = new Date();
-      expiresAt.setHours(expiresAt.getHours() + relationData.treaty_terms.duration);
-
-      return await base44.entities.FactionDiplomacy.create({
-        faction_a_id: factionA.id,
-        faction_a_name: factionA.name,
-        faction_b_id: factionB.id,
-        faction_b_name: factionB.name,
-        ...relationData,
-        status: 'active',
-        events_log: [],
-        formed_at: formedAt.toISOString(),
-        expires_at: expiresAt.toISOString()
+      await base44.entities.Player.update(playerData.id, {
+        crypto_balance: playerData.crypto_balance - actionConfig.cost
       });
+
+      const completionTime = new Date();
+      completionTime.setHours(completionTime.getHours() + 24);
+
+      await base44.entities.FactionDiplomacy.create({
+        player_id: playerData.id,
+        crew_id: playerData.crew_id,
+        target_faction_id: selectedFaction,
+        target_faction_name: faction.name,
+        action_type: selectedAction,
+        diplomat_role: actionConfig.role,
+        cost: actionConfig.cost,
+        duration_hours: 24,
+        success_probability: diplomacyData.success_probability,
+        ai_negotiation_log: diplomacyData.negotiation_log || [],
+        intel_gathered: diplomacyData.intel_gathered || {},
+        relationship_change: diplomacyData.relationship_change,
+        status: 'negotiating',
+        outcomes: diplomacyData.outcomes,
+        started_at: new Date().toISOString(),
+        completed_at: completionTime.toISOString()
+      });
+
+      await base44.entities.TransactionLog.create({
+        transaction_type: 'purchase',
+        player_id: playerData.id,
+        player_username: playerData.username,
+        amount: actionConfig.cost,
+        description: `${actionConfig.label} with ${faction.name}`,
+        status: 'completed'
+      });
+
+      return diplomacyData;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['factionDiplomacy']);
-      toast.success('New diplomatic relation formed!');
+      queryClient.invalidateQueries(['diplomacy']);
+      queryClient.invalidateQueries(['player']);
+      toast.success('Diplomatic action initiated!');
+      setPlayerMessage('');
+      setSelectedFaction('');
     },
     onError: (error) => {
       toast.error(error.message);
     }
   });
 
-  const betrayalCheckMutation = useMutation({
-    mutationFn: async (relation) => {
-      const shouldBetray = Math.random() * 100 < relation.betrayal_likelihood;
-
-      if (shouldBetray) {
-        await base44.entities.FactionDiplomacy.update(relation.id, {
-          status: 'broken',
-          relationship_type: 'rivalry',
-          trust_level: 0,
-          events_log: [
-            ...(relation.events_log || []),
-            {
-              event_type: 'betrayal',
-              description: `${relation.faction_a_name} betrayed ${relation.faction_b_name}!`,
-              trust_impact: -100,
-              timestamp: new Date().toISOString()
-            }
-          ]
-        });
-
-        return { betrayed: true, betrayer: relation.faction_a_name };
-      }
-
-      return { betrayed: false };
-    },
-    onSuccess: (result) => {
-      queryClient.invalidateQueries(['factionDiplomacy']);
-      if (result.betrayed) {
-        toast.warning(`⚠️ Betrayal! ${result.betrayer} broke the pact!`);
-      }
-    }
-  });
+  if (!playerData) return null;
 
   return (
-    <Card className="glass-panel border-purple-500/20">
-      <CardHeader className="border-b border-purple-500/20">
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2 text-white">
-            <Handshake className="w-5 h-5 text-purple-400" />
-            Faction Diplomacy
+    <div className="space-y-4">
+      <Card className="glass-panel border-blue-500/20">
+        <CardHeader className="border-b border-blue-500/20">
+          <CardTitle className="text-white flex items-center gap-2">
+            <Crown className="w-5 h-5 text-blue-400" />
+            Faction Diplomacy & Espionage
           </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 space-y-4">
+          <div>
+            <label className="text-sm text-gray-400 mb-2 block">Action Type</label>
+            <Select value={selectedAction} onValueChange={setSelectedAction}>
+              <SelectTrigger className="bg-slate-900/50 border-blue-500/20 text-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(actionTypes).map(([key, config]) => (
+                  <SelectItem key={key} value={key}>
+                    {config.label} - ${config.cost.toLocaleString()} ({config.role})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="text-sm text-gray-400 mb-2 block">Target Faction</label>
+            <Select value={selectedFaction} onValueChange={setSelectedFaction}>
+              <SelectTrigger className="bg-slate-900/50 border-blue-500/20 text-white">
+                <SelectValue placeholder="Select faction" />
+              </SelectTrigger>
+              <SelectContent>
+                {factions.map((faction) => (
+                  <SelectItem key={faction.id} value={faction.id}>
+                    {faction.name} ({faction.faction_type}) - Power: {faction.power_level}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="text-sm text-gray-400 mb-2 block">Your Approach (Optional)</label>
+            <Textarea
+              placeholder="Describe your negotiation strategy or operation details..."
+              value={playerMessage}
+              onChange={(e) => setPlayerMessage(e.target.value)}
+              className="bg-slate-900/50 border-blue-500/20 text-white"
+              rows={3}
+            />
+          </div>
+
+          <div className="p-3 rounded-lg bg-blue-900/20 border border-blue-500/30">
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              <div>
+                <span className="text-gray-400">Cost:</span>
+                <span className="text-blue-400 ml-2">${actionTypes[selectedAction].cost.toLocaleString()}</span>
+              </div>
+              <div>
+                <span className="text-gray-400">Role:</span>
+                <span className="text-cyan-400 ml-2 capitalize">{actionTypes[selectedAction].role.replace('_', ' ')}</span>
+              </div>
+            </div>
+          </div>
+
           <Button
-            size="sm"
-            className="bg-gradient-to-r from-purple-600 to-cyan-600"
-            onClick={() => generateRelationMutation.mutate()}
-            disabled={generateRelationMutation.isPending || factions.length < 2}
+            className="w-full bg-gradient-to-r from-blue-600 to-cyan-600"
+            onClick={() => initiateDiplomacyMutation.mutate()}
+            disabled={initiateDiplomacyMutation.isPending || !selectedFaction}
           >
-            {generateRelationMutation.isPending ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+            {initiateDiplomacyMutation.isPending ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Processing...
+              </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 mr-2" />
-                Form Relation
+                <Crown className="w-4 h-4 mr-2" />
+                Initiate {actionTypes[selectedAction].label}
               </>
             )}
           </Button>
-        </div>
-      </CardHeader>
-      <CardContent className="p-4 space-y-3">
-        {relations.length === 0 ? (
-          <div className="text-center py-8">
-            <Handshake className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-            <p className="text-gray-400">No diplomatic relations yet</p>
-          </div>
-        ) : (
-          relations.map((relation) => {
-            const RelationIcon = relationshipIcons[relation.relationship_type];
+        </CardContent>
+      </Card>
 
-            return (
-              <div key={relation.id} className="p-3 rounded-lg bg-purple-900/20 border border-purple-500/30">
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <RelationIcon className="w-5 h-5 text-purple-400" />
+      <Card className="glass-panel border-blue-500/20">
+        <CardHeader className="border-b border-blue-500/20">
+          <CardTitle className="text-white text-sm">Active Diplomatic Actions</CardTitle>
+        </CardHeader>
+        <CardContent className="p-4">
+          {diplomacyActions.length === 0 ? (
+            <p className="text-center text-gray-400 py-4 text-sm">No active diplomatic actions</p>
+          ) : (
+            <div className="space-y-3">
+              {diplomacyActions.map((action) => (
+                <div key={action.id} className="p-3 rounded-lg bg-slate-900/30 border border-blue-500/10">
+                  <div className="flex items-start justify-between mb-2">
                     <div>
-                      <p className="text-sm font-semibold text-white">
-                        {relation.faction_a_name} ↔ {relation.faction_b_name}
-                      </p>
-                      <p className="text-xs text-gray-400 capitalize">
-                        {relation.relationship_type.replace('_', ' ')}
-                      </p>
+                      <h4 className="text-white font-semibold text-sm capitalize">{action.action_type.replace('_', ' ')}</h4>
+                      <p className="text-xs text-gray-400">{action.target_faction_name}</p>
                     </div>
+                    <Badge className={
+                      action.status === 'negotiating' ? 'bg-yellow-600' :
+                      action.status === 'completed' ? 'bg-green-600' :
+                      action.status === 'failed' ? 'bg-red-600' : 'bg-gray-600'
+                    }>
+                      {action.status}
+                    </Badge>
                   </div>
-                  <Badge className={relationshipColors[relation.relationship_type]}>
-                    {relation.relationship_type.replace('_', ' ')}
-                  </Badge>
+                  
+                  {action.success_probability && (
+                    <p className="text-xs text-cyan-400 mb-2">Success Rate: {action.success_probability}%</p>
+                  )}
+
+                  {action.intel_gathered && action.intel_gathered.territory_plans?.length > 0 && (
+                    <div className="mt-2 p-2 rounded bg-blue-900/20 border border-blue-500/20">
+                      <p className="text-xs text-blue-400 font-semibold mb-1">Intel Gathered:</p>
+                      {action.intel_gathered.territory_plans.slice(0, 2).map((intel, idx) => (
+                        <p key={idx} className="text-xs text-gray-300">• {intel}</p>
+                      ))}
+                    </div>
+                  )}
+
+                  {action.ai_negotiation_log && action.ai_negotiation_log.length > 0 && (
+                    <div className="mt-2 p-2 rounded bg-slate-900/50 border border-blue-500/10 max-h-32 overflow-y-auto">
+                      <p className="text-xs text-blue-400 font-semibold mb-1">Negotiations:</p>
+                      {action.ai_negotiation_log.slice(0, 2).map((log, idx) => (
+                        <div key={idx} className="mb-2">
+                          <p className="text-xs text-gray-300">Round {log.round}:</p>
+                          <p className="text-xs text-cyan-300 ml-2">"{log.faction_response}"</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-
-                <div className="mb-3">
-                  <div className="flex justify-between text-xs text-gray-400 mb-1">
-                    <span>Trust Level</span>
-                    <span>{relation.trust_level}%</span>
-                  </div>
-                  <Progress value={relation.trust_level} className="h-1" />
-                </div>
-
-                {relation.treaty_terms && (
-                  <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
-                    {relation.treaty_terms.trade_bonus > 0 && (
-                      <div className="text-gray-400">
-                        Trade: <span className="text-green-400">+{relation.treaty_terms.trade_bonus}%</span>
-                      </div>
-                    )}
-                    {relation.treaty_terms.military_support && (
-                      <div className="text-gray-400">
-                        Military: <span className="text-cyan-400">Active</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                <div className="flex items-center justify-between text-xs mb-2">
-                  <span className="text-gray-400">Betrayal Risk</span>
-                  <span className={`font-semibold ${
-                    relation.betrayal_likelihood > 50 ? 'text-red-400' : 
-                    relation.betrayal_likelihood > 30 ? 'text-yellow-400' : 'text-green-400'
-                  }`}>
-                    {relation.betrayal_likelihood}%
-                  </span>
-                </div>
-
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="w-full border-red-500/30 text-xs"
-                  onClick={() => betrayalCheckMutation.mutate(relation)}
-                  disabled={betrayalCheckMutation.isPending}
-                >
-                  Check for Betrayal
-                </Button>
-              </div>
-            );
-          })
-        )}
-      </CardContent>
-    </Card>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 }
