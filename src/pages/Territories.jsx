@@ -4,11 +4,13 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { MapPin, TrendingUp, Link as LinkIcon, Swords, Loader2 } from 'lucide-react';
+import { MapPin, TrendingUp, Link as LinkIcon, Swords, Loader2, Zap } from 'lucide-react';
 import TerritoryBenefits from '../components/territory/TerritoryBenefits';
 import SupplyLineManager from '../components/territory/SupplyLineManager';
 import TerritoryDevelopmentSystem from '../components/territory/TerritoryDevelopmentSystem';
 import BattleInterface from '../components/battle/BattleInterface';
+import TerritoryEventSystem from '../components/territory/TerritoryEventSystem';
+import SmuggleRouteOptimizer from '../components/territory/SmuggleRouteOptimizer';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
@@ -213,9 +215,17 @@ export default function Territories() {
                       <TrendingUp className="w-4 h-4" />
                       Benefits
                     </TabsTrigger>
+                    <TabsTrigger value="events" className="flex items-center gap-2">
+                      <Zap className="w-4 h-4" />
+                      Events
+                    </TabsTrigger>
                     <TabsTrigger value="supply" className="flex items-center gap-2">
                       <LinkIcon className="w-4 h-4" />
-                      Supply Lines
+                      Supply
+                    </TabsTrigger>
+                    <TabsTrigger value="routes" className="flex items-center gap-2">
+                      <MapPin className="w-4 h-4" />
+                      Routes
                     </TabsTrigger>
                   </TabsList>
 
@@ -226,10 +236,24 @@ export default function Territories() {
                     />
                   </TabsContent>
 
+                  <TabsContent value="events">
+                    <TerritoryEventSystem
+                      territory={selectedTerritory}
+                      playerData={playerData}
+                    />
+                  </TabsContent>
+
                   <TabsContent value="supply">
                     <SupplyLineManager
                       crewId={playerData?.crew_id}
                       canManage={canManage}
+                    />
+                  </TabsContent>
+
+                  <TabsContent value="routes">
+                    <SmuggleRouteOptimizer
+                      crewId={playerData?.crew_id}
+                      playerData={playerData}
                     />
                   </TabsContent>
                 </Tabs>

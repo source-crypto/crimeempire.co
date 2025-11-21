@@ -8,6 +8,7 @@ import { Building2, AlertTriangle, ChevronRight, Plus } from 'lucide-react';
 import EnterpriseUpgrade from '../components/enterprises/EnterpriseUpgrade';
 import CreateEnterpriseDialog from '../components/enterprises/CreateEnterpriseDialog';
 import EnterpriseManagementSystem from '../components/enterprises/EnterpriseManagementSystem';
+import EnterpriseResearchTree from '../components/enterprises/EnterpriseResearchTree';
 
 export default function Enterprises() {
   const [currentUser, setCurrentUser] = useState(null);
