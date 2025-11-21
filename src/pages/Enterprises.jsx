@@ -59,6 +59,10 @@ export default function Enterprises() {
             playerData={playerData}
             onUpdate={handleUpdate}
           />
+          <EnterpriseResearchTree
+            enterprise={selectedEnterprise}
+            playerData={playerData}
+          />
           <EnterpriseManagementSystem 
             enterprise={selectedEnterprise}
             playerData={playerData}
