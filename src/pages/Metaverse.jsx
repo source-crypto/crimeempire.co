@@ -9,7 +9,6 @@ import RivalFactionSystem from '../components/factions/RivalFactionSystem';
 import WorldEventSystem from '../components/worldevents/WorldEventSystem';
 import PlayerInitiatedEvents from '../components/worldevents/PlayerInitiatedEvents';
 import FactionDiplomacySystem from '../components/diplomacy/FactionDiplomacySystem';
-import FactionDiplomacySystem from '../components/diplomacy/FactionDiplomacySystem';
 
 export default function Metaverse() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -25,6 +24,15 @@ export default function Metaverse() {
       return players[0] || null;
     },
     enabled: !!currentUser,
+  });
+
+  const { data: crewData } = useQuery({
+    queryKey: ['crew', playerData?.crew_id],
+    queryFn: async () => {
+      const crews = await base44.entities.Crew.filter({ id: playerData.crew_id });
+      return crews[0];
+    },
+    enabled: !!playerData?.crew_id,
   });
 
   if (!playerData) {
@@ -81,9 +89,9 @@ export default function Metaverse() {
         </TabsContent>
 
         <TabsContent value="events">
-          <div className="space-y-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <WorldEventSystem playerData={playerData} />
-            <FactionDiplomacySystem />
+            <PlayerInitiatedEvents playerData={playerData} crewData={crewData} />
           </div>
         </TabsContent>
       </Tabs>
