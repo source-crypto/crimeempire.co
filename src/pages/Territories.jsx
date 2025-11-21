@@ -8,9 +8,9 @@ import { MapPin, TrendingUp, Link as LinkIcon, Swords, Loader2, Zap } from 'luci
 import TerritoryBenefits from '../components/territory/TerritoryBenefits';
 import SupplyLineManager from '../components/territory/SupplyLineManager';
 import TerritoryDevelopmentSystem from '../components/territory/TerritoryDevelopmentSystem';
-import BattleInterface from '../components/battle/BattleInterface';
 import TerritoryEventSystem from '../components/territory/TerritoryEventSystem';
-import SmuggleRouteOptimizer from '../components/territory/SmuggleRouteOptimizer';
+import SmartRouteOptimizer from '../components/territory/SmartRouteOptimizer';
+import BattleInterface from '../components/battle/BattleInterface';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
@@ -221,10 +221,6 @@ export default function Territories() {
                     </TabsTrigger>
                     <TabsTrigger value="supply" className="flex items-center gap-2">
                       <LinkIcon className="w-4 h-4" />
-                      Supply
-                    </TabsTrigger>
-                    <TabsTrigger value="routes" className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4" />
                       Routes
                     </TabsTrigger>
                   </TabsList>
@@ -238,20 +234,13 @@ export default function Territories() {
 
                   <TabsContent value="events">
                     <TerritoryEventSystem
-                      territory={selectedTerritory}
+                      territoryId={selectedTerritory.id}
                       playerData={playerData}
                     />
                   </TabsContent>
 
                   <TabsContent value="supply">
-                    <SupplyLineManager
-                      crewId={playerData?.crew_id}
-                      canManage={canManage}
-                    />
-                  </TabsContent>
-
-                  <TabsContent value="routes">
-                    <SmuggleRouteOptimizer
+                    <SmartRouteOptimizer
                       crewId={playerData?.crew_id}
                       playerData={playerData}
                     />
