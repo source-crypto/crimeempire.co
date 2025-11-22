@@ -73,11 +73,22 @@ export default function BattleInterface({ battle, playerData, onComplete }) {
 
   const resolveBattleMutation = useMutation({
     mutationFn: async () => {
-      const winner = battleData.attack_power > battleData.defense_power 
+      // Enhanced battle outcome with morale, fatigue, equipment
+      const attackMoraleBonus = (battleData.attacking_morale || 75) / 100;
+      const attackFatiguePenalty = 1 - ((battleData.attacking_fatigue || 0) / 200);
+      const attackEquipmentBonus = (battleData.attacking_equipment_condition || 100) / 100;
+      const finalAttackPower = battleData.attack_power * attackMoraleBonus * attackFatiguePenalty * attackEquipmentBonus;
+
+      const defenseMoraleBonus = (battleData.defending_morale || 75) / 100;
+      const defenseFatiguePenalty = 1 - ((battleData.defending_fatigue || 0) / 200);
+      const defenseEquipmentBonus = (battleData.defending_equipment_condition || 100) / 100;
+      const finalDefensePower = battleData.defense_power * defenseMoraleBonus * defenseFatiguePenalty * defenseEquipmentBonus;
+
+      const winner = finalAttackPower > finalDefensePower 
         ? battleData.attacking_crew_id 
         : battleData.defending_crew_id;
       
-      const status = battleData.attack_power > battleData.defense_power ? 'success' : 'failed';
+      const status = finalAttackPower > finalDefensePower ? 'success' : 'failed';
 
       // Update battle
       await base44.entities.Battle.update(battleData.id, {

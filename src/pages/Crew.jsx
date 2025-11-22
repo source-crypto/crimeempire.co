@@ -11,6 +11,8 @@ import CrewRoleManager from '../components/crew/CrewRoleManager';
 import CrewActions from '../components/crew/CrewActions';
 import CreateCrewDialog from '../components/crew/CreateCrewDialog';
 import CrewRecruitmentSystem from '../components/crew/CrewRecruitmentSystem';
+import AICrewManagement from '../components/crew/AICrewManagement';
+import CrewPerformanceReviews from '../components/crew/CrewPerformanceReviews';
 
 export default function Crew() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -134,7 +136,15 @@ export default function Crew() {
             <Users className="w-4 h-4" />
             Recruitment
           </TabsTrigger>
-          </TabsList>
+          <TabsTrigger value="management" className="flex items-center gap-2">
+            <SettingsIcon className="w-4 h-4" />
+            AI Management
+          </TabsTrigger>
+          <TabsTrigger value="reviews" className="flex items-center gap-2">
+            <Activity className="w-4 h-4" />
+            Performance
+          </TabsTrigger>
+        </TabsList>
 
         <TabsContent value="chat" className="space-y-4">
           <CrewChat crewId={crewData.id} currentPlayer={playerData} />
@@ -163,7 +173,15 @@ export default function Crew() {
         <TabsContent value="recruitment" className="space-y-4">
           <CrewRecruitmentSystem crewId={crewData.id} playerData={playerData} />
         </TabsContent>
-        </Tabs>
+
+        <TabsContent value="management" className="space-y-4">
+          <AICrewManagement crewId={crewData.id} playerData={playerData} />
+        </TabsContent>
+
+        <TabsContent value="reviews" className="space-y-4">
+          <CrewPerformanceReviews crewId={crewData.id} playerData={playerData} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

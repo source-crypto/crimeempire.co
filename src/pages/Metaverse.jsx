@@ -90,9 +90,12 @@ export default function Metaverse() {
         </TabsContent>
 
         <TabsContent value="events">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <WorldEventSystem playerData={playerData} />
-            <PlayerInitiatedEvents playerData={playerData} crewData={crewData} />
+          <div className="space-y-4">
+            <CascadingEventEngine playerData={playerData} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <WorldEventSystem playerData={playerData} />
+              <PlayerInitiatedEvents playerData={playerData} crewData={crewData} />
+            </div>
           </div>
         </TabsContent>
       </Tabs>
