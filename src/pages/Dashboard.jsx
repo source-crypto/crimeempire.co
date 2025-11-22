@@ -12,6 +12,8 @@ import InvestmentPortfolio from '../components/investments/InvestmentPortfolio';
 import AIContractBoard from '../components/contracts/AIContractBoard';
 import EventBroadcastSystem from '../components/events/EventBroadcastSystem';
 import LiveMarketTracker from '../components/marketplace/LiveMarketTracker';
+import TransparentInvestmentSystem from '../components/economy/TransparentInvestmentSystem';
+import EconomyDashboard from '../components/economy/EconomyDashboard';
 import { 
   Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle, Building2, Target, Zap, ShoppingCart
 } from 'lucide-react';
@@ -261,6 +263,7 @@ export default function Dashboard() {
           <TabsTrigger value="investments">Investments</TabsTrigger>
           <TabsTrigger value="contracts">Contracts</TabsTrigger>
           <TabsTrigger value="broadcasts">Event Broadcasts</TabsTrigger>
+          <TabsTrigger value="economy">Economy</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -334,7 +337,10 @@ export default function Dashboard() {
         </TabsContent>
 
         <TabsContent value="investments">
-          <InvestmentPortfolio playerData={playerData} />
+          <div className="space-y-4">
+            <TransparentInvestmentSystem playerData={playerData} />
+            <InvestmentPortfolio playerData={playerData} />
+          </div>
         </TabsContent>
 
         <TabsContent value="contracts">
@@ -343,6 +349,10 @@ export default function Dashboard() {
 
         <TabsContent value="broadcasts">
           <EventBroadcastSystem playerData={playerData} />
+        </TabsContent>
+
+        <TabsContent value="economy">
+          <EconomyDashboard playerData={playerData} />
         </TabsContent>
       </Tabs>
     </div>
