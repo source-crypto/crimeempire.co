@@ -11,6 +11,7 @@ import PlayerMarketplace from '../components/trading/PlayerMarketplace';
 import InvestmentPortfolio from '../components/investments/InvestmentPortfolio';
 import AIContractBoard from '../components/contracts/AIContractBoard';
 import EventBroadcastSystem from '../components/events/EventBroadcastSystem';
+import LiveMarketTracker from '../components/marketplace/LiveMarketTracker';
 import { 
   Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle, Building2, Target, Zap, ShoppingCart
 } from 'lucide-react';
@@ -326,7 +327,10 @@ export default function Dashboard() {
         </TabsContent>
 
         <TabsContent value="marketplace">
-          <PlayerMarketplace playerData={playerData} />
+          <div className="space-y-4">
+            <LiveMarketTracker playerData={playerData} />
+            <PlayerMarketplace playerData={playerData} />
+          </div>
         </TabsContent>
 
         <TabsContent value="investments">

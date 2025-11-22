@@ -11,6 +11,7 @@ import TerritoryDevelopmentSystem from '../components/territory/TerritoryDevelop
 import TerritoryEventSystem from '../components/territory/TerritoryEventSystem';
 import SmartRouteOptimizer from '../components/territory/SmartRouteOptimizer';
 import BattleInterface from '../components/battle/BattleInterface';
+import PlayerTerritoryManager from '../components/territory/PlayerTerritoryManager';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
@@ -149,11 +150,16 @@ export default function Territories() {
         <p className="text-gray-400">Manage your crew's territories and supply lines</p>
       </div>
 
-      <Tabs defaultValue="owned" className="space-y-4">
+      <Tabs defaultValue="manage" className="space-y-4">
         <TabsList className="glass-panel border border-purple-500/20">
+          <TabsTrigger value="manage">Manage</TabsTrigger>
           <TabsTrigger value="owned">Your Territories</TabsTrigger>
           <TabsTrigger value="all">All Territories</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="manage">
+          <PlayerTerritoryManager playerData={playerData} />
+        </TabsContent>
 
         <TabsContent value="owned">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
