@@ -4,11 +4,16 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Users, Briefcase, GraduationCap, Zap, Loader2, Target } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Users, Briefcase, GraduationCap, Zap, Loader2, Target, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AICrewManagement({ crewId, playerData }) {
   const [optimizing, setOptimizing] = useState(false);
+  const [manualMode, setManualMode] = useState(false);
+  const [selectedMember, setSelectedMember] = useState('');
+  const [selectedAssignment, setSelectedAssignment] = useState('');
+  const [selectedTarget, setSelectedTarget] = useState('');
   const queryClient = useQueryClient();
 
   if (!crewId || !playerData) return null;
@@ -124,6 +129,48 @@ Provide 5-8 specific assignments with efficiency scores.`;
     }
   });
 
+  const manualAssignMutation = useMutation({
+    mutationFn: async () => {
+      if (!selectedMember || !selectedAssignment || !selectedTarget) {
+        throw new Error('Please select member, assignment type, and target');
+      }
+
+      const member = crewMembers.find(m => m.id === selectedMember);
+      const target = territories.find(t => t.id === selectedTarget) || 
+                    enterprises.find(e => e.id === selectedTarget);
+
+      if (!member || !target) throw new Error('Invalid selection');
+
+      const endsAt = new Date();
+      endsAt.setHours(endsAt.getHours() + 24);
+
+      await base44.entities.CrewAssignment.create({
+        crew_member_id: member.id,
+        crew_member_name: member.member_name,
+        assignment_type: selectedAssignment,
+        assigned_to_id: target.id,
+        assigned_to_name: target.name,
+        crew_id: crewId,
+        efficiency_score: 70,
+        workload: 50,
+        ai_recommendation: 'Manually assigned by player',
+        status: 'active',
+        started_at: new Date().toISOString(),
+        ends_at: endsAt.toISOString()
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['crewAssignments']);
+      toast.success('Crew member assigned');
+      setSelectedMember('');
+      setSelectedAssignment('');
+      setSelectedTarget('');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    }
+  });
+
   const startTrainingMutation = useMutation({
     mutationFn: async ({ memberId, skill }) => {
       const member = crewMembers.find(m => m.id === memberId);
@@ -205,27 +252,109 @@ Generate a personalized training curriculum with exercises, duration, and expect
               <Briefcase className="w-5 h-5 text-cyan-400" />
               AI Crew Management
             </CardTitle>
-            <Button
-              size="sm"
-              onClick={() => optimizeAssignmentsMutation.mutate()}
-              disabled={optimizing || crewMembers.length === 0}
-              className="bg-gradient-to-r from-cyan-600 to-blue-600"
-            >
-              {optimizing ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Optimizing...
-                </>
-              ) : (
-                <>
-                  <Zap className="w-4 h-4 mr-2" />
-                  Optimize Assignments
-                </>
-              )}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setManualMode(!manualMode)}
+                className="border-purple-500/30"
+              >
+                <UserPlus className="w-4 h-4 mr-2" />
+                {manualMode ? 'AI Mode' : 'Manual Mode'}
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => optimizeAssignmentsMutation.mutate()}
+                disabled={optimizing || crewMembers.length === 0 || manualMode}
+                className="bg-gradient-to-r from-cyan-600 to-blue-600"
+              >
+                {optimizing ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Optimizing...
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-4 h-4 mr-2" />
+                    AI Optimize
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         </CardHeader>
-        <CardContent className="p-4">
+        <CardContent className="p-4 space-y-4">
+          {manualMode && (
+            <div className="p-4 rounded-lg bg-blue-900/20 border border-blue-500/30">
+              <h4 className="text-white font-semibold mb-3 text-sm">Manual Assignment</h4>
+              <div className="space-y-3">
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Crew Member</label>
+                  <Select value={selectedMember} onValueChange={setSelectedMember}>
+                    <SelectTrigger className="bg-slate-900/50 border-blue-500/20 text-white">
+                      <SelectValue placeholder="Select member" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {crewMembers.map((member) => (
+                        <SelectItem key={member.id} value={member.id}>
+                          {member.member_name} ({member.member_type})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Assignment Type</label>
+                  <Select value={selectedAssignment} onValueChange={setSelectedAssignment}>
+                    <SelectTrigger className="bg-slate-900/50 border-blue-500/20 text-white">
+                      <SelectValue placeholder="Select type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="territory_defense">Territory Defense</SelectItem>
+                      <SelectItem value="enterprise_management">Enterprise Management</SelectItem>
+                      <SelectItem value="intelligence">Intelligence</SelectItem>
+                      <SelectItem value="recruitment">Recruitment</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Target</label>
+                  <Select value={selectedTarget} onValueChange={setSelectedTarget}>
+                    <SelectTrigger className="bg-slate-900/50 border-blue-500/20 text-white">
+                      <SelectValue placeholder="Select target" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <optgroup label="Territories">
+                        {territories.map((t) => (
+                          <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
+                        ))}
+                      </optgroup>
+                      <optgroup label="Enterprises">
+                        {enterprises.map((e) => (
+                          <SelectItem key={e.id} value={e.id}>{e.name}</SelectItem>
+                        ))}
+                      </optgroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button
+                  className="w-full bg-gradient-to-r from-blue-600 to-cyan-600"
+                  onClick={() => manualAssignMutation.mutate()}
+                  disabled={manualAssignMutation.isPending || !selectedMember || !selectedAssignment || !selectedTarget}
+                >
+                  {manualAssignMutation.isPending ? (
+                    <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Assigning...</>
+                  ) : (
+                    <><UserPlus className="w-4 h-4 mr-2" /> Assign Member</>
+                  )}
+                </Button>
+              </div>
+            </div>
+          )}
+
           {crewMembers.length === 0 ? (
             <div className="text-center py-8 text-gray-400">
               <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />

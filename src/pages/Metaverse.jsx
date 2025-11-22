@@ -8,6 +8,7 @@ import DynamicMarket from '../components/marketplace/DynamicMarket';
 import RivalFactionSystem from '../components/factions/RivalFactionSystem';
 import WorldEventSystem from '../components/worldevents/WorldEventSystem';
 import PlayerInitiatedEvents from '../components/worldevents/PlayerInitiatedEvents';
+import CascadingEventEngine from '../components/worldevents/CascadingEventEngine';
 import FactionDiplomacySystem from '../components/diplomacy/FactionDiplomacySystem';
 
 export default function Metaverse() {
