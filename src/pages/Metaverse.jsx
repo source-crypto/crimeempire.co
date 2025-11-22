@@ -13,6 +13,7 @@ import FactionDiplomacySystem from '../components/diplomacy/FactionDiplomacySyst
 import DynamicMissionGenerator from '../components/missions/DynamicMissionGenerator';
 import EnhancedFactionAI from '../components/factions/EnhancedFactionAI';
 import EscalationManager from '../components/escalation/EscalationManager';
+import AIDiplomaticAdvisor from '../components/diplomacy/AIDiplomaticAdvisor';
 
 export default function Metaverse() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -94,6 +95,7 @@ export default function Metaverse() {
 
         <TabsContent value="factions">
           <div className="space-y-4">
+            <AIDiplomaticAdvisor playerData={playerData} />
             <EnhancedFactionAI playerData={playerData} />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <RivalFactionSystem playerData={playerData} />

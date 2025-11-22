@@ -14,6 +14,7 @@ import EventBroadcastSystem from '../components/events/EventBroadcastSystem';
 import LiveMarketTracker from '../components/marketplace/LiveMarketTracker';
 import TransparentInvestmentSystem from '../components/economy/TransparentInvestmentSystem';
 import EconomyDashboard from '../components/economy/EconomyDashboard';
+import PlayerActionEventSystem from '../components/economy/PlayerActionEventSystem';
 import { 
   Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle, Building2, Target, Zap, ShoppingCart
 } from 'lucide-react';
@@ -352,7 +353,10 @@ export default function Dashboard() {
         </TabsContent>
 
         <TabsContent value="economy">
-          <EconomyDashboard playerData={playerData} />
+          <div className="space-y-4">
+            <PlayerActionEventSystem playerData={playerData} />
+            <EconomyDashboard playerData={playerData} />
+          </div>
         </TabsContent>
       </Tabs>
     </div>

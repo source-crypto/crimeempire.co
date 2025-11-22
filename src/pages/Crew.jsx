@@ -13,6 +13,7 @@ import CreateCrewDialog from '../components/crew/CreateCrewDialog';
 import CrewRecruitmentSystem from '../components/crew/CrewRecruitmentSystem';
 import AICrewManagement from '../components/crew/AICrewManagement';
 import CrewPerformanceReviews from '../components/crew/CrewPerformanceReviews';
+import AdvancedCrewEvolution from '../components/crew/AdvancedCrewEvolution';
 
 export default function Crew() {
   const [currentUser, setCurrentUser] = useState(null);
