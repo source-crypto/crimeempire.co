@@ -145,6 +145,10 @@ export default function Crew() {
             <Activity className="w-4 h-4" />
             Performance
           </TabsTrigger>
+          <TabsTrigger value="evolution" className="flex items-center gap-2">
+            <Users className="w-4 h-4" />
+            Evolution
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="chat" className="space-y-4">
@@ -181,6 +185,10 @@ export default function Crew() {
 
         <TabsContent value="reviews" className="space-y-4">
           <CrewPerformanceReviews crewId={crewData.id} playerData={playerData} />
+        </TabsContent>
+
+        <TabsContent value="evolution" className="space-y-4">
+          <AdvancedCrewEvolution playerData={playerData} />
         </TabsContent>
       </Tabs>
     </div>
