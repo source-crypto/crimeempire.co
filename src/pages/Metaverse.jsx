@@ -10,6 +10,9 @@ import WorldEventSystem from '../components/worldevents/WorldEventSystem';
 import PlayerInitiatedEvents from '../components/worldevents/PlayerInitiatedEvents';
 import CascadingEventEngine from '../components/worldevents/CascadingEventEngine';
 import FactionDiplomacySystem from '../components/diplomacy/FactionDiplomacySystem';
+import DynamicMissionGenerator from '../components/missions/DynamicMissionGenerator';
+import EnhancedFactionAI from '../components/factions/EnhancedFactionAI';
+import EscalationManager from '../components/escalation/EscalationManager';
 
 export default function Metaverse() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -72,6 +75,10 @@ export default function Metaverse() {
             <Globe className="w-4 h-4" />
             World Events
           </TabsTrigger>
+          <TabsTrigger value="escalation" className="flex items-center gap-2">
+            <Zap className="w-4 h-4" />
+            Escalation
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="missions">
@@ -86,9 +93,12 @@ export default function Metaverse() {
         </TabsContent>
 
         <TabsContent value="factions">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <RivalFactionSystem playerData={playerData} />
-            <FactionDiplomacySystem playerData={playerData} crewData={crewData} />
+          <div className="space-y-4">
+            <EnhancedFactionAI playerData={playerData} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <RivalFactionSystem playerData={playerData} />
+              <FactionDiplomacySystem playerData={playerData} crewData={crewData} />
+            </div>
           </div>
         </TabsContent>
 
@@ -100,6 +110,10 @@ export default function Metaverse() {
               <PlayerInitiatedEvents playerData={playerData} crewData={crewData} />
             </div>
           </div>
+        </TabsContent>
+
+        <TabsContent value="escalation">
+          <EscalationManager playerData={playerData} />
         </TabsContent>
       </Tabs>
     </div>
