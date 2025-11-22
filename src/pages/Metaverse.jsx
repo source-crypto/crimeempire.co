@@ -75,7 +75,10 @@ export default function Metaverse() {
         </TabsList>
 
         <TabsContent value="missions">
-          <MissionBoard playerData={playerData} />
+          <div className="space-y-4">
+            <DynamicMissionGenerator playerData={playerData} />
+            <MissionBoard playerData={playerData} />
+          </div>
         </TabsContent>
 
         <TabsContent value="market">
