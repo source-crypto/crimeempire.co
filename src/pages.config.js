@@ -1,41 +1,29 @@
-import Auction from './pages/Auction';
-import Crew from './pages/Crew';
 import Dashboard from './pages/Dashboard';
-import Enterprises from './pages/Enterprises';
-import Garage from './pages/Garage';
-import Governance from './pages/Governance';
-import Heists from './pages/Heists';
-import Home from './pages/Home';
-import Metaverse from './pages/Metaverse';
-import PlayerSetup from './pages/PlayerSetup';
-import Settings from './pages/Settings';
+import Crew from './pages/Crew';
 import Territories from './pages/Territories';
-import Cases from './pages/Cases';
-import CaseDetail from './pages/CaseDetail';
-import EvidenceSearch from './pages/EvidenceSearch';
-import OfficerPerformance from './pages/OfficerPerformance';
-import Notifications from './pages/Notifications';
+import Heists from './pages/Heists';
+import Garage from './pages/Garage';
+import Auction from './pages/Auction';
+import Enterprises from './pages/Enterprises';
+import Settings from './pages/Settings';
+import Metaverse from './pages/Metaverse';
+import Governance from './pages/Governance';
+import PlayerSetup from './pages/PlayerSetup';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "Auction": Auction,
-    "Crew": Crew,
     "Dashboard": Dashboard,
-    "Enterprises": Enterprises,
-    "Garage": Garage,
-    "Governance": Governance,
-    "Heists": Heists,
-    "Home": Home,
-    "Metaverse": Metaverse,
-    "PlayerSetup": PlayerSetup,
-    "Settings": Settings,
+    "Crew": Crew,
     "Territories": Territories,
-    "Cases": Cases,
-    "CaseDetail": CaseDetail,
-    "EvidenceSearch": EvidenceSearch,
-    "OfficerPerformance": OfficerPerformance,
-    "Notifications": Notifications,
+    "Heists": Heists,
+    "Garage": Garage,
+    "Auction": Auction,
+    "Enterprises": Enterprises,
+    "Settings": Settings,
+    "Metaverse": Metaverse,
+    "Governance": Governance,
+    "PlayerSetup": PlayerSetup,
 }
 
 export const pagesConfig = {
