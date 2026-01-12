@@ -13,7 +13,6 @@ import PlayerSetup from './pages/PlayerSetup';
 import Settings from './pages/Settings';
 import Territories from './pages/Territories';
 import OfficerPerformance from './pages/OfficerPerformance';
-import EvidenceSearch from './pages/EvidenceSearch';
 import __Layout from './Layout.jsx';
 
 
@@ -33,7 +32,6 @@ export const PAGES = {
     "Settings": Settings,
     "Territories": Territories,
     "OfficerPerformance": OfficerPerformance,
-    "EvidenceSearch": EvidenceSearch,
 }
 
 export const pagesConfig = {

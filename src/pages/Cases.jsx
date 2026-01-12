@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, FolderOpen } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import CaseCard from "../components/cases/CaseCard";
-import CaseFormWithNotifications from "../components/cases/CaseFormWithNotifications";
+import CaseForm from "../components/cases/CaseForm";
 import CaseFilters from "../components/cases/CaseFilters";
 
 export default function Cases() {
@@ -127,7 +127,7 @@ export default function Cases() {
 
                 <AnimatePresence>
                     {showForm && (
-                        <CaseFormWithNotifications
+                        <CaseForm
                             caseData={editingCase}
                             onSubmit={handleSubmit}
                             onCancel={() => {

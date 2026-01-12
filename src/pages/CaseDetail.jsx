@@ -13,7 +13,7 @@ import PriorityBadge from "../components/cases/PriorityBadge";
 import EvidenceCard from "../components/evidence/EvidenceCard";
 import EvidenceForm from "../components/evidence/EvidenceForm";
 import EvidenceDetailView from "../components/evidence/EvidenceDetailView";
-import CaseFormWithNotifications from "../components/cases/CaseFormWithNotifications";
+import CaseForm from "../components/cases/CaseForm";
 import CaseNotesLog from "../components/notes/CaseNotesLog";
 
 export default function CaseDetail() {
@@ -206,7 +206,7 @@ export default function CaseDetail() {
                         />
                     )}
                     {showCaseForm && (
-                        <CaseFormWithNotifications
+                        <CaseForm
                             caseData={caseItem}
                             onSubmit={(data) => updateCaseMutation.mutate({ id: caseItem.id, data })}
                             onCancel={() => setShowCaseForm(false)}
