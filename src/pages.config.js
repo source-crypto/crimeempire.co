@@ -12,6 +12,9 @@ import Settings from './pages/Settings';
 import Territories from './pages/Territories';
 import Cases from './pages/Cases';
 import CaseDetail from './pages/CaseDetail';
+import EvidenceSearch from './pages/EvidenceSearch';
+import OfficerPerformance from './pages/OfficerPerformance';
+import Notifications from './pages/Notifications';
 import __Layout from './Layout.jsx';
 
 
@@ -30,6 +33,9 @@ export const PAGES = {
     "Territories": Territories,
     "Cases": Cases,
     "CaseDetail": CaseDetail,
+    "EvidenceSearch": EvidenceSearch,
+    "OfficerPerformance": OfficerPerformance,
+    "Notifications": Notifications,
 }
 
 export const pagesConfig = {
