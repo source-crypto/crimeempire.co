@@ -1,12 +1,11 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Calendar, User, FileText, Image, Video, Database, Eye } from "lucide-react";
+import { Calendar, User, FileText, Image, Video, Database } from "lucide-react";
 import { format } from "date-fns";
 import { motion } from "framer-motion";
 
-export default function EvidenceCard({ evidence, onViewDetails }) {
+export default function EvidenceCard({ evidence }) {
     const typeIcons = {
         physical: FileText,
         digital: Database,
@@ -68,27 +67,16 @@ export default function EvidenceCard({ evidence, onViewDetails }) {
                                     </div>
                                 )}
                             </div>
-                            <div className="flex gap-2 mt-2">
-                                {evidence.file_url && (
-                                    <a 
-                                        href={evidence.file_url} 
-                                        target="_blank" 
-                                        rel="noopener noreferrer"
-                                        className="text-amber-500 hover:text-amber-400 text-sm underline inline-block"
-                                    >
-                                        View File
-                                    </a>
-                                )}
-                                <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => onViewDetails(evidence)}
-                                    className="border-slate-600 text-slate-300 hover:bg-slate-800 text-xs"
+                            {evidence.file_url && (
+                                <a 
+                                    href={evidence.file_url} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-amber-500 hover:text-amber-400 text-sm underline inline-block"
                                 >
-                                    <Eye className="w-3 h-3 mr-1" />
-                                    Chain of Custody
-                                </Button>
-                            </div>
+                                    View File
+                                </a>
+                            )}
                         </div>
                     </div>
                 </CardContent>

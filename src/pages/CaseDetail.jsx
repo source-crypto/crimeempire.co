@@ -12,14 +12,11 @@ import StatusBadge from "../components/cases/StatusBadge";
 import PriorityBadge from "../components/cases/PriorityBadge";
 import EvidenceCard from "../components/evidence/EvidenceCard";
 import EvidenceForm from "../components/evidence/EvidenceForm";
-import EvidenceDetailView from "../components/evidence/EvidenceDetailView";
 import CaseForm from "../components/cases/CaseForm";
-import CaseNotesLog from "../components/notes/CaseNotesLog";
 
 export default function CaseDetail() {
     const [showEvidenceForm, setShowEvidenceForm] = useState(false);
     const [showCaseForm, setShowCaseForm] = useState(false);
-    const [selectedEvidence, setSelectedEvidence] = useState(null);
     
     const urlParams = new URLSearchParams(window.location.search);
     const caseId = urlParams.get('id');
@@ -154,47 +151,39 @@ export default function CaseDetail() {
                         </CardContent>
                     </Card>
 
-                    <div className="grid grid-cols-1 gap-6">
-                        <Card className="bg-slate-900/50 border-slate-700/50 backdrop-blur-sm">
-                            <CardHeader>
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center gap-3">
-                                        <FileText className="w-6 h-6 text-amber-500" />
-                                        <CardTitle className="text-2xl text-slate-100">
-                                            Evidence ({evidence.length})
-                                        </CardTitle>
-                                    </div>
-                                    <Button
-                                        onClick={() => setShowEvidenceForm(true)}
-                                        className="bg-amber-600 hover:bg-amber-700 text-white"
-                                    >
-                                        <Plus className="w-4 h-4 mr-2" />
-                                        Add Evidence
-                                    </Button>
+                    <Card className="bg-slate-900/50 border-slate-700/50 backdrop-blur-sm">
+                        <CardHeader>
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <FileText className="w-6 h-6 text-amber-500" />
+                                    <CardTitle className="text-2xl text-slate-100">
+                                        Evidence ({evidence.length})
+                                    </CardTitle>
                                 </div>
-                            </CardHeader>
-                            <CardContent>
-                                {evidence.length === 0 ? (
-                                    <div className="text-center py-12">
-                                        <FileText className="w-16 h-16 text-slate-700 mx-auto mb-3" />
-                                        <p className="text-slate-500">No evidence added yet</p>
-                                    </div>
-                                ) : (
-                                    <div className="space-y-3">
-                                        {evidence.map((item) => (
-                                            <EvidenceCard 
-                                                key={item.id} 
-                                                evidence={item}
-                                                onViewDetails={setSelectedEvidence}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-                            </CardContent>
-                        </Card>
-
-                        <CaseNotesLog caseId={caseId} />
-                    </div>
+                                <Button
+                                    onClick={() => setShowEvidenceForm(true)}
+                                    className="bg-amber-600 hover:bg-amber-700 text-white"
+                                >
+                                    <Plus className="w-4 h-4 mr-2" />
+                                    Add Evidence
+                                </Button>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            {evidence.length === 0 ? (
+                                <div className="text-center py-12">
+                                    <FileText className="w-16 h-16 text-slate-700 mx-auto mb-3" />
+                                    <p className="text-slate-500">No evidence added yet</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-3">
+                                    {evidence.map((item) => (
+                                        <EvidenceCard key={item.id} evidence={item} />
+                                    ))}
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
                 </motion.div>
 
                 <AnimatePresence>
@@ -210,12 +199,6 @@ export default function CaseDetail() {
                             caseData={caseItem}
                             onSubmit={(data) => updateCaseMutation.mutate({ id: caseItem.id, data })}
                             onCancel={() => setShowCaseForm(false)}
-                        />
-                    )}
-                    {selectedEvidence && (
-                        <EvidenceDetailView
-                            evidence={selectedEvidence}
-                            onClose={() => setSelectedEvidence(null)}
                         />
                     )}
                 </AnimatePresence>
