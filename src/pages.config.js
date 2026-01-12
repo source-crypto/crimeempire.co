@@ -1,4 +1,6 @@
 import Auction from './pages/Auction';
+import CaseDetail from './pages/CaseDetail';
+import Cases from './pages/Cases';
 import Crew from './pages/Crew';
 import Dashboard from './pages/Dashboard';
 import Enterprises from './pages/Enterprises';
@@ -10,13 +12,14 @@ import Metaverse from './pages/Metaverse';
 import PlayerSetup from './pages/PlayerSetup';
 import Settings from './pages/Settings';
 import Territories from './pages/Territories';
-import Cases from './pages/Cases';
-import CaseDetail from './pages/CaseDetail';
+import OfficerPerformance from './pages/OfficerPerformance';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Auction": Auction,
+    "CaseDetail": CaseDetail,
+    "Cases": Cases,
     "Crew": Crew,
     "Dashboard": Dashboard,
     "Enterprises": Enterprises,
@@ -28,8 +31,7 @@ export const PAGES = {
     "PlayerSetup": PlayerSetup,
     "Settings": Settings,
     "Territories": Territories,
-    "Cases": Cases,
-    "CaseDetail": CaseDetail,
+    "OfficerPerformance": OfficerPerformance,
 }
 
 export const pagesConfig = {
