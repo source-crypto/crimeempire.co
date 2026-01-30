@@ -15,6 +15,7 @@ import LiveMarketTracker from '../components/marketplace/LiveMarketTracker';
 import TransparentInvestmentSystem from '../components/economy/TransparentInvestmentSystem';
 import EconomyDashboard from '../components/economy/EconomyDashboard';
 import PlayerActionEventSystem from '../components/economy/PlayerActionEventSystem';
+import RewardSystem from '../components/rewards/RewardSystem';
 import { 
   Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle, Building2, Target, Zap, ShoppingCart
 } from 'lucide-react';
@@ -270,6 +271,7 @@ export default function Dashboard() {
         <TabsContent value="overview" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
+              <RewardSystem playerData={playerData} />
               <ActiveBattles battles={battles} onJoinBattle={handleJoinBattle} />
               <ActiveHeists heists={activeHeists} />
             </div>
