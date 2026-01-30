@@ -1,54 +1,45 @@
-import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, Minus } from "lucide-react";
+import React from 'react';
+import { Card } from '@/components/ui/card';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 
-export default function StatCard({ title, value, change, icon: Icon, color = "amber" }) {
+export default function StatCard({ title, value, icon: Icon, trend, trendValue, color = "purple" }) {
   const colorClasses = {
-    amber: "bg-amber-50 text-amber-600 border-amber-100",
-    emerald: "bg-emerald-50 text-emerald-600 border-emerald-100",
-    red: "bg-red-50 text-red-600 border-red-100",
-    blue: "bg-blue-50 text-blue-600 border-blue-100",
-    slate: "bg-slate-50 text-slate-600 border-slate-100"
-  };
-
-  const getTrendIcon = () => {
-    if (!change) return <Minus className="w-4 h-4" />;
-    return change > 0 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />;
-  };
-
-  const getTrendColor = () => {
-    if (!change) return "text-slate-500";
-    return change > 0 ? "text-emerald-600" : "text-red-600";
+    purple: "from-purple-600 to-purple-800 border-purple-500/30",
+    cyan: "from-cyan-600 to-cyan-800 border-cyan-500/30",
+    red: "from-red-600 to-red-800 border-red-500/30",
+    green: "from-green-600 to-green-800 border-green-500/30",
+    orange: "from-orange-600 to-orange-800 border-orange-500/30"
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-      whileHover={{ y: -4 }}
-    >
-      <Card className="bg-white border-slate-200 hover:shadow-lg transition-all duration-300">
-        <CardContent className="pt-6">
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <p className="text-sm font-medium text-slate-600 mb-1">{title}</p>
-              <p className="text-3xl font-bold text-slate-900 mb-2">{value}</p>
-              {change !== undefined && (
-                <div className={`flex items-center gap-1 text-sm ${getTrendColor()}`}>
-                  {getTrendIcon()}
-                  <span className="font-medium">{Math.abs(change)}%</span>
-                  <span className="text-slate-500 ml-1">vs last period</span>
-                </div>
-              )}
-            </div>
-            <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${colorClasses[color]} border`}>
-              <Icon className="w-7 h-7" />
-            </div>
+    <Card className="glass-panel border p-6 relative overflow-hidden group hover:scale-105 transition-transform">
+      {/* Gradient Background */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${colorClasses[color]} opacity-10 group-hover:opacity-20 transition-opacity`} />
+      
+      <div className="relative z-10">
+        <div className="flex justify-between items-start mb-4">
+          <div>
+            <p className="text-sm text-gray-400 mb-1">{title}</p>
+            <p className="text-3xl font-bold text-white">{value}</p>
           </div>
-        </CardContent>
-      </Card>
-    </motion.div>
+          <div className={`p-3 rounded-xl bg-gradient-to-br ${colorClasses[color]} neon-border`}>
+            <Icon className="w-6 h-6 text-white" />
+          </div>
+        </div>
+        
+        {trend && (
+          <div className="flex items-center gap-2">
+            {trend === 'up' ? (
+              <TrendingUp className="w-4 h-4 text-green-400" />
+            ) : (
+              <TrendingDown className="w-4 h-4 text-red-400" />
+            )}
+            <span className={`text-sm ${trend === 'up' ? 'text-green-400' : 'text-red-400'}`}>
+              {trendValue}
+            </span>
+          </div>
+        )}
+      </div>
+    </Card>
   );
 }

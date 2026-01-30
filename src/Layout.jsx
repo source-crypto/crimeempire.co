@@ -1,72 +1,140 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { LayoutDashboard, FileText, Users, BarChart3, Shield } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
+import { 
+  FolderOpen, 
+  Search, 
+  Bell, 
+  BarChart3, 
+  Settings, 
+  Shield,
+  Menu,
+  X
+} from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export default function Layout({ children, currentPageName }) {
+  const [user, setUser] = React.useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    base44.auth.me().then(setUser).catch(() => setUser(null));
+  }, []);
+
+  const { data: notifications = [] } = useQuery({
+    queryKey: ['notifications', user?.email],
+    queryFn: () => user ? base44.entities.Notification.filter({ 
+      user_email: user.email, 
+      is_read: false 
+    }) : [],
+    enabled: !!user,
+    refetchInterval: 30000,
+  });
+
   const navItems = [
-    { name: "Dashboard", icon: LayoutDashboard, page: "Dashboard" },
-    { name: "Reports", icon: FileText, page: "Reports" },
-    { name: "Resources", icon: Users, page: "Resources" },
-    { name: "Analytics", icon: BarChart3, page: "Analytics" }
+    { name: "Cases", icon: FolderOpen, page: "Cases" },
+    { name: "Evidence Search", icon: Search, page: "EvidenceSearch" },
+    { name: "Officer Performance", icon: BarChart3, page: "OfficerPerformance" },
+    { name: "Notifications", icon: Bell, page: "Notifications", badge: notifications.length },
+    { name: "Settings", icon: Settings, page: "Settings" },
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Top Navigation Bar */}
-      <nav className="bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-lg">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+      {/* Header */}
+      <header className="bg-slate-900/80 backdrop-blur-sm border-b border-slate-800 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-amber-500 flex items-center justify-center">
-                <Shield className="w-6 h-6 text-slate-900" />
-              </div>
+              <Shield className="w-8 h-8 text-amber-500" />
               <div>
-                <h1 className="text-xl font-bold text-white">CrimeWatch Command</h1>
-                <p className="text-xs text-slate-400">Intelligent Crime Management System</p>
+                <h1 className="text-xl font-bold text-slate-100">Crime Empire</h1>
+                <p className="text-xs text-slate-400">Case Management System</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = currentPageName === item.page;
-                
+                return (
+                  <Link key={item.page} to={createPageUrl(item.page)}>
+                    <Button
+                      variant="ghost"
+                      className={`relative ${
+                        isActive
+                          ? "bg-amber-600/20 text-amber-400"
+                          : "text-slate-400 hover:text-slate-100 hover:bg-slate-800"
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 mr-2" />
+                      {item.name}
+                      {item.badge > 0 && (
+                        <Badge className="ml-2 bg-red-500 text-white text-xs px-1.5">
+                          {item.badge}
+                        </Badge>
+                      )}
+                    </Button>
+                  </Link>
+                );
+              })}
+            </nav>
+
+            {/* Mobile menu button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden text-slate-400"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-slate-800 bg-slate-900">
+            <nav className="px-4 py-3 space-y-1">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = currentPageName === item.page;
                 return (
                   <Link
                     key={item.page}
                     to={createPageUrl(item.page)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200 ${
-                      isActive
-                        ? "bg-amber-500 text-slate-900 font-semibold shadow-md"
-                        : "text-slate-300 hover:bg-slate-700 hover:text-white"
-                    }`}
+                    onClick={() => setMobileMenuOpen(false)}
                   >
-                    <Icon className="w-5 h-5" />
-                    <span className="hidden md:inline">{item.name}</span>
+                    <Button
+                      variant="ghost"
+                      className={`w-full justify-start relative ${
+                        isActive
+                          ? "bg-amber-600/20 text-amber-400"
+                          : "text-slate-400 hover:text-slate-100 hover:bg-slate-800"
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 mr-2" />
+                      {item.name}
+                      {item.badge > 0 && (
+                        <Badge className="ml-auto bg-red-500 text-white text-xs px-1.5">
+                          {item.badge}
+                        </Badge>
+                      )}
+                    </Button>
                   </Link>
                 );
               })}
-            </div>
+            </nav>
           </div>
-        </div>
-      </nav>
+        )}
+      </header>
 
       {/* Main Content */}
       <main>{children}</main>
-
-      {/* Footer */}
-      <footer className="bg-slate-900 text-slate-400 py-6 mt-12">
-        <div className="max-w-7xl mx-auto px-6 text-center text-sm">
-          <p>© 2024 CrimeWatch Command. Advanced Crime Management System.</p>
-        </div>
-      </footer>
-
-      <style>{`
-        body {
-          background: linear-gradient(to bottom right, #f8fafc, #e2e8f0);
-        }
-      `}</style>
     </div>
   );
 }
