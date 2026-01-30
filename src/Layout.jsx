@@ -35,9 +35,10 @@ export default function Layout({ children, currentPageName }) {
   });
 
   const navItems = [
+    { name: "Dashboard", icon: BarChart3, page: "Dashboard" },
+    { name: "Earnings", icon: Shield, page: "Earnings" },
     { name: "Cases", icon: FolderOpen, page: "Cases" },
-    { name: "Evidence Search", icon: Search, page: "EvidenceSearch" },
-    { name: "Officer Performance", icon: BarChart3, page: "OfficerPerformance" },
+    { name: "Evidence", icon: Search, page: "EvidenceSearch" },
     { name: "Notifications", icon: Bell, page: "Notifications", badge: notifications.length },
     { name: "Settings", icon: Settings, page: "Settings" },
   ];

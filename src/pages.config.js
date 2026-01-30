@@ -65,6 +65,7 @@ import Notifications from './pages/Notifications';
 import OfficerPerformance from './pages/OfficerPerformance';
 import Settings from './pages/Settings';
 import Resources from './pages/Resources';
+import Earnings from './pages/Earnings';
 import __Layout from './Layout.jsx';
 
 
@@ -87,6 +88,7 @@ export const PAGES = {
     "OfficerPerformance": OfficerPerformance,
     "Settings": Settings,
     "Resources": Resources,
+    "Earnings": Earnings,
 }
 
 export const pagesConfig = {
