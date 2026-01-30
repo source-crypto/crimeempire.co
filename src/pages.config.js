@@ -66,6 +66,9 @@ import OfficerPerformance from './pages/OfficerPerformance';
 import Settings from './pages/Settings';
 import Resources from './pages/Resources';
 import Earnings from './pages/Earnings';
+import Syndicates from './pages/Syndicates';
+import Trading from './pages/Trading';
+import Skills from './pages/Skills';
 import __Layout from './Layout.jsx';
 
 
@@ -89,6 +92,9 @@ export const PAGES = {
     "Settings": Settings,
     "Resources": Resources,
     "Earnings": Earnings,
+    "Syndicates": Syndicates,
+    "Trading": Trading,
+    "Skills": Skills,
 }
 
 export const pagesConfig = {

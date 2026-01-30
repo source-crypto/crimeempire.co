@@ -36,9 +36,9 @@ export default function Layout({ children, currentPageName }) {
 
   const navItems = [
     { name: "Dashboard", icon: BarChart3, page: "Dashboard" },
-    { name: "Earnings", icon: Shield, page: "Earnings" },
-    { name: "Cases", icon: FolderOpen, page: "Cases" },
-    { name: "Evidence", icon: Search, page: "EvidenceSearch" },
+    { name: "Skills", icon: Shield, page: "Skills" },
+    { name: "Syndicates", icon: FolderOpen, page: "Syndicates" },
+    { name: "Trading", icon: Search, page: "Trading" },
     { name: "Notifications", icon: Bell, page: "Notifications", badge: notifications.length },
     { name: "Settings", icon: Settings, page: "Settings" },
   ];
