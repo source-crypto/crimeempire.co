@@ -7,10 +7,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, Users, Package, FileText, BarChart } from "lucide-react";
-import ResourceCard from "../components/resources/ResourceCard";
-import TaskManager from "../components/resources/TaskManager";
-import InvestigationManager from "../components/resources/InvestigationManager";
-import ResourceAllocation from "../components/resources/ResourceAllocation";
+import ResourceCard from "@/components/resources/ResourceCard";
+import TaskManager from "@/components/resources/TaskManager";
+import InvestigationManager from "@/components/resources/InvestigationManager";
+import ResourceAllocation from "@/components/resources/ResourceAllocation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
