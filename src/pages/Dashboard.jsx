@@ -8,7 +8,7 @@ import CrimeMap from "../components/maps/CrimeMap";
 import ReportCard from "../components/reports/ReportCard";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "./utils";
+import { createPageUrl } from "@/utils";
 
 export default function Dashboard() {
   const { data: reports = [], isLoading: reportsLoading } = useQuery({

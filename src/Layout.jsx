@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "./utils";
+import { createPageUrl } from "@/utils";
 import { LayoutDashboard, FileText, Users, BarChart3, Shield } from "lucide-react";
 
 export default function Layout({ children, currentPageName }) {
