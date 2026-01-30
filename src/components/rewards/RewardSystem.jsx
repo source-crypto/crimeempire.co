@@ -195,5 +195,3 @@ export default function RewardSystem({ playerData }) {
     </Card>
   );
 }
-
-export { processReward };
