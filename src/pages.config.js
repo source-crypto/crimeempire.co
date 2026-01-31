@@ -66,6 +66,7 @@ import Skills from './pages/Skills';
 import Syndicates from './pages/Syndicates';
 import Territories from './pages/Territories';
 import Trading from './pages/Trading';
+import CrimeMap from './pages/CrimeMap';
 import __Layout from './Layout.jsx';
 
 
@@ -89,6 +90,7 @@ export const PAGES = {
     "Syndicates": Syndicates,
     "Territories": Territories,
     "Trading": Trading,
+    "CrimeMap": CrimeMap,
 }
 
 export const pagesConfig = {
