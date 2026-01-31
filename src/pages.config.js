@@ -52,9 +52,11 @@ import CaseDetail from './pages/CaseDetail';
 import Cases from './pages/Cases';
 import Combat from './pages/Combat';
 import Crew from './pages/Crew';
+import CrimeMap from './pages/CrimeMap';
 import Dashboard from './pages/Dashboard';
 import Earnings from './pages/Earnings';
 import Enterprises from './pages/Enterprises';
+import Factions from './pages/Factions';
 import Garage from './pages/Garage';
 import Governance from './pages/Governance';
 import Heists from './pages/Heists';
@@ -66,8 +68,6 @@ import Skills from './pages/Skills';
 import Syndicates from './pages/Syndicates';
 import Territories from './pages/Territories';
 import Trading from './pages/Trading';
-import CrimeMap from './pages/CrimeMap';
-import Factions from './pages/Factions';
 import Tutorial from './pages/Tutorial';
 import __Layout from './Layout.jsx';
 
@@ -78,9 +78,11 @@ export const PAGES = {
     "Cases": Cases,
     "Combat": Combat,
     "Crew": Crew,
+    "CrimeMap": CrimeMap,
     "Dashboard": Dashboard,
     "Earnings": Earnings,
     "Enterprises": Enterprises,
+    "Factions": Factions,
     "Garage": Garage,
     "Governance": Governance,
     "Heists": Heists,
@@ -92,8 +94,6 @@ export const PAGES = {
     "Syndicates": Syndicates,
     "Territories": Territories,
     "Trading": Trading,
-    "CrimeMap": CrimeMap,
-    "Factions": Factions,
     "Tutorial": Tutorial,
 }
 
