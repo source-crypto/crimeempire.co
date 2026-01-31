@@ -13,12 +13,12 @@ export default function Layout({ children, currentPageName }) {
 
   const navigation = [
     { name: 'Dashboard', page: 'Dashboard', icon: Home },
-    { name: 'Metaverse', page: 'Metaverse', icon: Zap },
+    { name: 'Combat', page: 'Combat', icon: Shield },
+    { name: 'Skills', page: 'Skills', icon: Zap },
+    { name: 'Syndicates', page: 'Syndicates', icon: Users },
+    { name: 'Trading', page: 'Trading', icon: Gavel },
     { name: 'Territories', page: 'Territories', icon: Map },
-    { name: 'Crew', page: 'Crew', icon: Users },
     { name: 'Enterprises', page: 'Enterprises', icon: Building2 },
-    { name: 'Garage', page: 'Garage', icon: Car },
-    { name: 'Auction', page: 'Auction', icon: Gavel },
     { name: 'Governance', page: 'Governance', icon: Crown },
   ];
 
