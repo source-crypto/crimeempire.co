@@ -25,6 +25,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Territories', page: 'Territories', icon: Map },
     { name: 'Enterprises', page: 'Enterprises', icon: Building2 },
     { name: 'Black Market', page: 'BlackMarket', icon: Zap },
+    { name: 'AI Systems', page: 'AIManagement', icon: Zap },
     { name: 'Governance', page: 'Governance', icon: Crown },
   ];
 
