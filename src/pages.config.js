@@ -67,6 +67,7 @@ import Syndicates from './pages/Syndicates';
 import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import CrimeMap from './pages/CrimeMap';
+import Factions from './pages/Factions';
 import __Layout from './Layout.jsx';
 
 
@@ -91,6 +92,7 @@ export const PAGES = {
     "Territories": Territories,
     "Trading": Trading,
     "CrimeMap": CrimeMap,
+    "Factions": Factions,
 }
 
 export const pagesConfig = {
