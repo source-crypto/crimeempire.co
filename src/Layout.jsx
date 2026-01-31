@@ -19,6 +19,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Factions', page: 'Factions', icon: Users },
     { name: 'Combat', page: 'Combat', icon: Shield },
     { name: 'Earnings', page: 'Earnings', icon: Bell },
+    { name: 'Reputation', page: 'Reputation', icon: Crown },
     { name: 'Syndicates', page: 'Syndicates', icon: Users },
     { name: 'Trading', page: 'Trading', icon: Gavel },
     { name: 'Territories', page: 'Territories', icon: Map },

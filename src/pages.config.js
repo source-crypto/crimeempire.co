@@ -70,6 +70,7 @@ import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
 import BlackMarket from './pages/BlackMarket';
+import Reputation from './pages/Reputation';
 import __Layout from './Layout.jsx';
 
 
@@ -97,6 +98,7 @@ export const PAGES = {
     "Trading": Trading,
     "Tutorial": Tutorial,
     "BlackMarket": BlackMarket,
+    "Reputation": Reputation,
 }
 
 export const pagesConfig = {
