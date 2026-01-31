@@ -6,7 +6,9 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import NPCBehaviorSimulator from '../components/ai/NPCBehaviorSimulator';
 import FactionAIReactivitySystem from '../components/ai/FactionAIReactivitySystem';
 import LawEnforcementInvestigationTracker from '../components/ai/LawEnforcementInvestigationTracker';
-import { Users, Brain, Shield } from 'lucide-react';
+import AIMissionDirector from '../components/ai/AIMissionDirector';
+import ChaseSequenceManager from '../components/ai/ChaseSequenceManager';
+import { Users, Brain, Shield, Target, AlertTriangle } from 'lucide-react';
 
 export default function AIManagement() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -41,6 +43,12 @@ export default function AIManagement() {
   const { data: factions = [] } = useQuery({
     queryKey: ['factions'],
     queryFn: () => base44.entities.Faction.list()
+  });
+
+  const { data: leResponse } = useQuery({
+    queryKey: ['lawEnforcementResponse', playerData?.id],
+    queryFn: () => base44.entities.LawEnforcementResponse.filter({ player_id: playerData.id }).then(r => r[0]),
+    enabled: !!playerData?.id
   });
 
   if (!playerData) {
@@ -78,6 +86,14 @@ export default function AIManagement() {
             <Shield className="w-4 h-4" />
             Law Enforcement
           </TabsTrigger>
+          <TabsTrigger value="missions" className="flex items-center gap-2">
+            <Target className="w-4 h-4" />
+            Mission Director
+          </TabsTrigger>
+          <TabsTrigger value="chase" className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            Chase System
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="npcs">
@@ -92,6 +108,20 @@ export default function AIManagement() {
           <LawEnforcementInvestigationTracker 
             playerData={playerData}
             playerReputation={playerReputation}
+          />
+        </TabsContent>
+
+        <TabsContent value="missions">
+          <AIMissionDirector 
+            playerData={playerData}
+            playerReputation={playerReputation}
+          />
+        </TabsContent>
+
+        <TabsContent value="chase">
+          <ChaseSequenceManager 
+            playerData={playerData}
+            leResponse={leResponse}
           />
         </TabsContent>
       </Tabs>
