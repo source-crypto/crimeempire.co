@@ -37,22 +37,24 @@ export default function Dashboard() {
     queryFn: async () => {
       const players = await base44.entities.Player.filter({ created_by: currentUser.email });
       if (players.length === 0) {
-        // Create initial player
+        // Create initial player with welcome bonus
         const newPlayer = await base44.entities.Player.create({
           username: currentUser.full_name || currentUser.email.split('@')[0],
-          crypto_balance: 10000,
-          buy_power: 5000,
+          crypto_balance: 50000,
+          buy_power: 50000,
+          endgame_points: 50000,
           level: 1,
           strength_score: 10,
           wanted_level: 0,
+          experience: 0,
           skill_points: 5,
           skills: {
-            combat: 1,
-            stealth: 1,
-            driving: 1,
-            hacking: 1,
-            leadership: 1,
-            negotiation: 1
+            combat: 0,
+            stealth: 0,
+            driving: 0,
+            hacking: 0,
+            leadership: 0,
+            negotiation: 0
           },
           stats: {
             heists_completed: 0,
@@ -60,7 +62,10 @@ export default function Dashboard() {
             battles_won: 0,
             battles_lost: 0,
             territories_captured: 0,
-            total_loot: 0
+            total_loot: 0,
+            contracts_completed: 0,
+            items_traded: 0,
+            investments_made: 0
           },
           playstyle: 'balanced'
         });

@@ -18,12 +18,16 @@ export default function AIDiplomacySystem({ playerFaction }) {
 
   const { data: diplomacyRelations = [] } = useQuery({
     queryKey: ['diplomacy', playerFaction?.id],
-    queryFn: () => base44.entities.FactionDiplomacy.filter({
-      $or: [
-        { faction_a_id: playerFaction.id },
-        { faction_b_id: playerFaction.id }
-      ]
-    }),
+    queryFn: async () => {
+      // Fetch both directions of diplomacy relations
+      const relationsA = await base44.entities.FactionDiplomacy.filter({ 
+        faction_a_id: playerFaction.id 
+      });
+      const relationsB = await base44.entities.FactionDiplomacy.filter({ 
+        faction_b_id: playerFaction.id 
+      });
+      return [...relationsA, ...relationsB];
+    },
     enabled: !!playerFaction?.id
   });
 
