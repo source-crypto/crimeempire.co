@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Settings as SettingsIcon, LogOut, Mail, Lock, Shield, UserPlus } from 'lucide-react';
 import { toast } from 'sonner';
-import { createPageUrl } from './utils';
 
 export default function Settings() {
   const [currentUser, setCurrentUser] = useState(null);
