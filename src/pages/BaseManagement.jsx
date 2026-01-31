@@ -44,8 +44,6 @@ export default function BaseManagement() {
     );
   }
 
-  const [selectedBase, setSelectedBase] = useState(null);
-
   return (
     <div className="space-y-6">
       {/* Header */}
