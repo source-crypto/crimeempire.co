@@ -11,6 +11,9 @@ import EnterpriseManagementSystem from '../components/enterprises/EnterpriseMana
 import ResearchTreeSystem from '../components/enterprises/ResearchTreeSystem';
 import ProductionChainManager from '../components/enterprises/ProductionChainManager';
 import AIEmployeeManagement from '../components/enterprises/AIEmployeeManagement';
+import BusinessManagementUI from '../components/enterprise/BusinessManagementUI';
+import AdvancedNPCManagement from '../components/enterprise/AdvancedNPCManagement';
+import SupplyChainOptimization from '../components/territory/SupplyChainOptimization';
 
 export default function Enterprises() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -36,6 +39,18 @@ export default function Enterprises() {
     enabled: !!playerData?.id,
   });
 
+  const { data: supplyChains = [] } = useQuery({
+    queryKey: ['supplyChains', selectedEnterprise?.id],
+    queryFn: () => base44.entities.AdvancedSupplyChain.filter({ enterprise_id: selectedEnterprise.id }),
+    enabled: !!selectedEnterprise?.id,
+  });
+
+  const { data: enterpriseNPCs = [] } = useQuery({
+    queryKey: ['enterpriseNPCs', selectedEnterprise?.id],
+    queryFn: () => base44.entities.EnterpriseNPC.filter({ enterprise_id: selectedEnterprise.id }),
+    enabled: !!selectedEnterprise?.id,
+  });
+
   const handleUpdate = () => {
     refetchEnterprises();
     refetchPlayer();
@@ -56,6 +71,20 @@ export default function Enterprises() {
           </div>
         </div>
         <div className="space-y-6">
+          <BusinessManagementUI 
+            enterprise={selectedEnterprise}
+            playerData={playerData}
+          />
+          <AdvancedNPCManagement 
+            enterpriseData={selectedEnterprise}
+            playerData={playerData}
+          />
+          <SupplyChainOptimization
+            supplyChains={supplyChains}
+            enterpriseData={selectedEnterprise}
+            playerData={playerData}
+            enterpriseNPCs={enterpriseNPCs}
+          />
           <ResearchTreeSystem
             enterprise={selectedEnterprise}
             playerData={playerData}
