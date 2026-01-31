@@ -72,6 +72,7 @@ import Tutorial from './pages/Tutorial';
 import BlackMarket from './pages/BlackMarket';
 import Reputation from './pages/Reputation';
 import AIManagement from './pages/AIManagement';
+import BaseManagement from './pages/BaseManagement';
 import __Layout from './Layout.jsx';
 
 
@@ -101,6 +102,7 @@ export const PAGES = {
     "BlackMarket": BlackMarket,
     "Reputation": Reputation,
     "AIManagement": AIManagement,
+    "BaseManagement": BaseManagement,
 }
 
 export const pagesConfig = {
