@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Target, Users, TrendingUp, Clock, AlertTriangle } from 'lucide-react';
-import { createPageUrl } from '../../utils';
+import { createPageUrl } from '@/utils';
 
 export default function ActiveHeists({ heists }) {
   if (!heists || heists.length === 0) {
