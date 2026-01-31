@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
+import React from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Zap, Target, Shield, Car, Laptop, Users, MessageSquare } from 'lucide-react';
+import { Brain, Gift, TrendingUp } from 'lucide-react';
+import SkillTreeDisplay from '../components/progression/SkillTreeDisplay';
+import PerkSystem from '../components/progression/PerkSystem';
+import ExperienceTracker from '../components/progression/ExperienceTracker';
 
 export default function Skills() {
-  const queryClient = useQueryClient();
-
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: () => base44.auth.me()
@@ -23,99 +22,47 @@ export default function Skills() {
     enabled: !!user
   });
 
-  const upgradeSkill = useMutation({
-    mutationFn: async (skillName) => {
-      const currentLevel = playerData.skills?.[skillName] || 0;
-      const newSkills = { ...playerData.skills, [skillName]: currentLevel + 1 };
-      
-      await base44.entities.Player.update(playerData.id, {
-        skills: newSkills,
-        skill_points: (playerData.skill_points || 0) - 1
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['player']);
-    }
-  });
-
   if (!playerData) {
-    return <div className="text-white">Loading...</div>;
+    return <div className="text-white text-center py-12">Loading...</div>;
   }
-
-  const skills = [
-    { name: 'combat', icon: Shield, description: 'Increases damage in battles', color: 'red' },
-    { name: 'stealth', icon: Target, description: 'Reduces detection during operations', color: 'purple' },
-    { name: 'driving', icon: Car, description: 'Better vehicle handling and speed', color: 'cyan' },
-    { name: 'hacking', icon: Laptop, description: 'Bypass security systems', color: 'green' },
-    { name: 'leadership', icon: Users, description: 'Crew bonuses and recruitment', color: 'yellow' },
-    { name: 'negotiation', icon: MessageSquare, description: 'Better deals and diplomacy', color: 'blue' }
-  ];
-
-  const colorClasses = {
-    red: 'from-red-600 to-orange-600',
-    purple: 'from-purple-600 to-pink-600',
-    cyan: 'from-cyan-600 to-blue-600',
-    green: 'from-green-600 to-emerald-600',
-    yellow: 'from-yellow-600 to-orange-600',
-    blue: 'from-blue-600 to-indigo-600'
-  };
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-white">Skill Tree</h1>
-          <p className="text-gray-400">Develop your character's abilities</p>
-        </div>
-        <div className="text-right">
-          <p className="text-sm text-gray-400">Available Points</p>
-          <p className="text-3xl font-bold text-purple-400">{playerData.skill_points || 0}</p>
-        </div>
+      <div>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+          Character Progression
+        </h1>
+        <p className="text-gray-400 mt-1">Master skills, unlock perks, and specialize your playstyle</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {skills.map((skill) => {
-          const Icon = skill.icon;
-          const currentLevel = playerData.skills?.[skill.name] || 0;
-          const canUpgrade = (playerData.skill_points || 0) > 0;
+      <Tabs defaultValue="skills" className="space-y-4">
+        <TabsList className="glass-panel border-purple-500/30">
+          <TabsTrigger value="skills" className="flex items-center gap-2">
+            <Brain className="w-4 h-4" />
+            Skill Trees
+          </TabsTrigger>
+          <TabsTrigger value="perks" className="flex items-center gap-2">
+            <Gift className="w-4 h-4" />
+            Perks
+          </TabsTrigger>
+          <TabsTrigger value="experience" className="flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" />
+            Experience
+          </TabsTrigger>
+        </TabsList>
 
-          return (
-            <Card key={skill.name} className="glass-panel border-purple-500/30">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-3">
-                  <div className={`p-3 rounded-lg bg-gradient-to-br ${colorClasses[skill.color]}`}>
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <div className="text-white capitalize">{skill.name}</div>
-                    <div className="text-sm text-gray-400">Level {currentLevel}</div>
-                  </div>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-gray-400">{skill.description}</p>
-                
-                <div>
-                  <div className="flex justify-between text-sm text-gray-400 mb-2">
-                    <span>Progress</span>
-                    <span>{currentLevel}/10</span>
-                  </div>
-                  <Progress value={(currentLevel / 10) * 100} className="h-2" />
-                </div>
+        <TabsContent value="skills">
+          <SkillTreeDisplay playerData={playerData} />
+        </TabsContent>
 
-                <Button
-                  onClick={() => upgradeSkill.mutate(skill.name)}
-                  disabled={!canUpgrade || currentLevel >= 10}
-                  className={`w-full bg-gradient-to-r ${colorClasses[skill.color]}`}
-                >
-                  <Zap className="w-4 h-4 mr-2" />
-                  {currentLevel >= 10 ? 'Maxed Out' : 'Upgrade'}
-                </Button>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+        <TabsContent value="perks">
+          <PerkSystem playerData={playerData} />
+        </TabsContent>
+
+        <TabsContent value="experience">
+          <ExperienceTracker playerData={playerData} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
