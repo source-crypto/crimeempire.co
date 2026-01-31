@@ -246,10 +246,17 @@ export default function Territories() {
                   </TabsContent>
 
                   <TabsContent value="supply">
-                    <SmartRouteOptimizer
+                    <SupplyLineManager
                       crewId={playerData?.crew_id}
                       playerData={playerData}
+                      canManage={canManage}
                     />
+                    <div className="mt-4">
+                      <SmartRouteOptimizer
+                        crewId={playerData?.crew_id}
+                        playerData={playerData}
+                      />
+                    </div>
                   </TabsContent>
                 </Tabs>
               ) : (

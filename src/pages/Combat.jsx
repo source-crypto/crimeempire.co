@@ -28,9 +28,29 @@ export default function CombatPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-white">Combat & Economy</h1>
-        <p className="text-slate-400">Engage in PvP battles and monitor the criminal economy</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-white">Combat & Economy</h1>
+          <p className="text-slate-400">Engage in PvP battles and monitor the criminal economy</p>
+        </div>
+        <Button
+          onClick={async () => {
+            const zone = await base44.entities.EconomyZone.create({
+              name: `Zone ${Date.now()}`,
+              zone_type: 'black_market',
+              coordinates: { lat: 40.7 + Math.random() * 0.1, lng: -73.9 + Math.random() * 0.1 },
+              economic_activity: Math.floor(Math.random() * 50) + 50,
+              average_prices: { weapons: 10000, vehicles: 50000, materials: 500, contraband: 8000 },
+              trade_volume: Math.floor(Math.random() * 300000) + 100000,
+              crime_rate: Math.floor(Math.random() * 50) + 40,
+              law_enforcement_presence: Math.floor(Math.random() * 40) + 20
+            });
+          }}
+          className="bg-cyan-600 hover:bg-cyan-700"
+        >
+          <Map className="w-4 h-4 mr-2" />
+          Create Economy Zone
+        </Button>
       </div>
 
       <Tabs defaultValue="pvp" className="space-y-4">

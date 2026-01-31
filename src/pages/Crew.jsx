@@ -168,6 +168,52 @@ export default function Crew() {
         </TabsContent>
 
         <TabsContent value="manage" className="space-y-4">
+          <Card className="glass-panel border-purple-500/30 mb-4">
+            <CardContent className="p-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <Button
+                  onClick={async () => {
+                    await base44.entities.CrewActivity.create({
+                      crew_id: crewData.id,
+                      activity_type: 'heist_completed',
+                      title: '💰 Quick Heist',
+                      description: `${playerData.username} initiated a quick heist`,
+                      player_id: playerData.id,
+                      player_username: playerData.username,
+                      value: 5000
+                    });
+                  }}
+                  className="bg-purple-600 hover:bg-purple-700"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Log Activity
+                </Button>
+                <Button
+                  onClick={async () => {
+                    await base44.entities.CrewMessage.create({
+                      crew_id: crewData.id,
+                      sender_id: playerData.id,
+                      sender_username: playerData.username,
+                      sender_role: playerData.crew_role,
+                      message: 'Quick announcement!',
+                      message_type: 'alert'
+                    });
+                  }}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Send Alert
+                </Button>
+                <Button
+                  onClick={() => window.location.href = '/Territories'}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  <Shield className="w-4 h-4 mr-2" />
+                  Manage Territories
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
           <CrewActions
             crewId={crewData.id}
             playerData={playerData}
