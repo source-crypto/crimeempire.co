@@ -12,6 +12,7 @@ import TerritoryEventSystem from '../components/territory/TerritoryEventSystem';
 import SmartRouteOptimizer from '../components/territory/SmartRouteOptimizer';
 import BattleInterface from '../components/battle/BattleInterface';
 import PlayerTerritoryManager from '../components/territory/PlayerTerritoryManager';
+import TerritoryCreator from '../components/territory/TerritoryCreator';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
@@ -37,6 +38,15 @@ export default function Territories() {
   const { data: territories = [] } = useQuery({
     queryKey: ['territories', playerData?.crew_id],
     queryFn: () => base44.entities.Territory.filter({ controlling_crew_id: playerData.crew_id }),
+    enabled: !!playerData?.crew_id,
+  });
+
+  const { data: crewData } = useQuery({
+    queryKey: ['crew', playerData?.crew_id],
+    queryFn: async () => {
+      const crews = await base44.entities.Crew.filter({ id: playerData.crew_id });
+      return crews[0];
+    },
     enabled: !!playerData?.crew_id,
   });
 
@@ -146,8 +156,13 @@ export default function Territories() {
   return (
     <div className="space-y-6">
       <div className="glass-panel border border-purple-500/20 p-6 rounded-xl">
-        <h1 className="text-3xl font-bold text-white mb-2">Territory Control</h1>
-        <p className="text-gray-400">Manage your crew's territories and supply lines</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2">Territory Control</h1>
+            <p className="text-gray-400">Manage your crew's territories and supply lines</p>
+          </div>
+          <TerritoryCreator playerData={playerData} crewData={crewData} />
+        </div>
       </div>
 
       <Tabs defaultValue="manage" className="space-y-4">
