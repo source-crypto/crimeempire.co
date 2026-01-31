@@ -13,6 +13,7 @@ import SmartRouteOptimizer from '../components/territory/SmartRouteOptimizer';
 import BattleInterface from '../components/battle/BattleInterface';
 import PlayerTerritoryManager from '../components/territory/PlayerTerritoryManager';
 import TerritoryCreator from '../components/territory/TerritoryCreator';
+import TerritoryOutpostManager from '../components/territory/TerritoryOutpostManager';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
@@ -60,6 +61,23 @@ export default function Territories() {
       return perms[0];
     },
     enabled: !!playerData?.crew_id && !!playerData?.id,
+  });
+
+  const { data: playerFaction } = useQuery({
+    queryKey: ['playerFaction', playerData?.id],
+    queryFn: async () => {
+      const members = await base44.entities.FactionMember.filter({ 
+        player_id: playerData.id 
+      });
+      if (members.length > 0) {
+        const factions = await base44.entities.Faction.filter({ 
+          id: members[0].faction_id 
+        });
+        return factions[0];
+      }
+      return null;
+    },
+    enabled: !!playerData?.id
   });
 
   const canManage = permissions?.permissions?.manage_territories || playerData?.crew_role === 'boss';
@@ -254,10 +272,18 @@ export default function Territories() {
                   </TabsContent>
 
                   <TabsContent value="events">
-                    <TerritoryEventSystem
-                      territoryId={selectedTerritory.id}
-                      playerData={playerData}
-                    />
+                    <div className="space-y-4">
+                      <TerritoryEventSystem
+                        territoryId={selectedTerritory.id}
+                        playerData={playerData}
+                      />
+                      {playerFaction && (
+                        <TerritoryOutpostManager
+                          territory={selectedTerritory}
+                          playerFaction={playerFaction}
+                        />
+                      )}
+                    </div>
                   </TabsContent>
 
                   <TabsContent value="supply">
