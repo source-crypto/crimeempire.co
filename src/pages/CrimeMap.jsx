@@ -7,6 +7,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import InteractiveCrimeMap from '../components/map/InteractiveCrimeMap';
 import MapLegend from '../components/map/MapLegend';
 import MapControls from '../components/map/MapControls';
+import AIRouteOptimizer from '../components/map/AIRouteOptimizer';
+import AIContrabandManager from '../components/map/AIContrabandManager';
 import { Map, Layers, Filter } from 'lucide-react';
 
 export default function CrimeMap() {
@@ -127,6 +129,23 @@ export default function CrimeMap() {
           />
         </CardContent>
       </Card>
+
+      {/* AI Systems and Stats */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <AIRouteOptimizer
+          playerData={playerData}
+          territories={territories}
+          lawEnforcement={lawEnforcement}
+          contrabandCaches={contrabandCaches}
+          allPlayers={allPlayers}
+        />
+        
+        <AIContrabandManager
+          playerData={playerData}
+          territories={territories}
+          contrabandCaches={contrabandCaches}
+        />
+      </div>
 
       {/* Legend and Stats */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
