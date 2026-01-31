@@ -48,7 +48,12 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import Auction from './pages/Auction';
+import CaseDetail from './pages/CaseDetail';
+import Cases from './pages/Cases';
+import Combat from './pages/Combat';
 import Crew from './pages/Crew';
+import Dashboard from './pages/Dashboard';
+import Earnings from './pages/Earnings';
 import Enterprises from './pages/Enterprises';
 import Garage from './pages/Garage';
 import Governance from './pages/Governance';
@@ -56,22 +61,22 @@ import Heists from './pages/Heists';
 import Home from './pages/Home';
 import Metaverse from './pages/Metaverse';
 import PlayerSetup from './pages/PlayerSetup';
-import Territories from './pages/Territories';
-import Dashboard from './pages/Dashboard';
 import Settings from './pages/Settings';
-import Cases from './pages/Cases';
-import CaseDetail from './pages/CaseDetail';
-import Combat from './pages/Combat';
-import Earnings from './pages/Earnings';
 import Skills from './pages/Skills';
 import Syndicates from './pages/Syndicates';
+import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Auction": Auction,
+    "CaseDetail": CaseDetail,
+    "Cases": Cases,
+    "Combat": Combat,
     "Crew": Crew,
+    "Dashboard": Dashboard,
+    "Earnings": Earnings,
     "Enterprises": Enterprises,
     "Garage": Garage,
     "Governance": Governance,
@@ -79,15 +84,10 @@ export const PAGES = {
     "Home": Home,
     "Metaverse": Metaverse,
     "PlayerSetup": PlayerSetup,
-    "Territories": Territories,
-    "Dashboard": Dashboard,
     "Settings": Settings,
-    "Cases": Cases,
-    "CaseDetail": CaseDetail,
-    "Combat": Combat,
-    "Earnings": Earnings,
     "Skills": Skills,
     "Syndicates": Syndicates,
+    "Territories": Territories,
     "Trading": Trading,
 }
 
