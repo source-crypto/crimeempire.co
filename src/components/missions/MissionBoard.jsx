@@ -15,7 +15,8 @@ const missionTypeColors = {
   side_quest: 'from-blue-600 to-cyan-600',
   crew_mission: 'from-orange-600 to-red-600',
   faction_conflict: 'from-red-600 to-orange-600',
-  heist_preparation: 'from-green-600 to-emerald-600'
+  heist_preparation: 'from-green-600 to-emerald-600',
+  all_to_die_for: 'from-red-700 to-purple-700'
 };
 
 const difficultyColors = {
@@ -28,6 +29,27 @@ const difficultyColors = {
 export default function MissionBoard({ playerData }) {
   const [selectedMission, setSelectedMission] = useState(null);
   const queryClient = useQueryClient();
+
+  const allToDieForMission = {
+    id: 'all_to_die_for_permanent',
+    title: 'All to Die For',
+    description: 'The ultimate high-stakes mission: infiltrate the most heavily guarded federal facility',
+    narrative: 'Intelligence suggests the government is holding critical evidence. This is the mission legends are made of—but few survive it.',
+    mission_type: 'all_to_die_for',
+    difficulty: 'extreme',
+    status: 'available',
+    objectives: [
+      { description: 'Gather intel on facility', completed: false, progress: 0 },
+      { description: 'Assemble elite team', completed: false, progress: 0 },
+      { description: 'Breach security systems', completed: false, progress: 0 },
+      { description: 'Retrieve evidence', completed: false, progress: 0 },
+      { description: 'Escape with crew intact', completed: false, progress: 0 }
+    ],
+    rewards: { crypto: 20000, experience: 5000, reputation: 100 },
+    requirements: { min_level: 20, crew_required: true },
+    crew_required: true,
+    generated_by_ai: false
+  };
 
   const { data: availableMissions = [] } = useQuery({
     queryKey: ['missions', 'available', playerData?.id],
@@ -217,6 +239,9 @@ Make it unique and adapted to player's progress. Return JSON.`;
 
       <Tabs defaultValue="available" className="space-y-4">
         <TabsList className="glass-panel border border-purple-500/20">
+          <TabsTrigger value="all_to_die_for">
+            All to Die For
+          </TabsTrigger>
           <TabsTrigger value="available">
             Available ({availableMissions.length})
           </TabsTrigger>
@@ -224,6 +249,87 @@ Make it unique and adapted to player's progress. Return JSON.`;
             Active ({activeMissions.length})
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="all_to_die_for">
+          <Card className="glass-panel border-red-500/30">
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-2xl font-bold text-red-400 mb-2">{allToDieForMission.title}</h3>
+                  <p className="text-white mb-2">{allToDieForMission.description}</p>
+                  <p className="text-gray-400 italic">{allToDieForMission.narrative}</p>
+                </div>
+                <Badge className="bg-red-700 text-lg px-4 py-2">
+                  {allToDieForMission.difficulty.toUpperCase()}
+                </Badge>
+              </div>
+
+              <div className="space-y-4 mb-6">
+                <h4 className="text-white font-semibold">Objectives:</h4>
+                {allToDieForMission.objectives.map((obj, idx) => (
+                  <div key={idx} className="flex items-center gap-2 text-gray-300">
+                    <div className="w-6 h-6 rounded-full bg-red-900/30 border border-red-500/30 flex items-center justify-center text-xs text-red-400">
+                      {idx + 1}
+                    </div>
+                    <span>{obj.description}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="p-3 bg-slate-900/50 rounded-lg border border-green-500/30">
+                  <p className="text-xs text-gray-400">Crypto Reward</p>
+                  <p className="text-2xl font-bold text-green-400">${allToDieForMission.rewards.crypto.toLocaleString()}</p>
+                </div>
+                <div className="p-3 bg-slate-900/50 rounded-lg border border-purple-500/30">
+                  <p className="text-xs text-gray-400">Experience</p>
+                  <p className="text-2xl font-bold text-purple-400">{allToDieForMission.rewards.experience.toLocaleString()}</p>
+                </div>
+                <div className="p-3 bg-slate-900/50 rounded-lg border border-blue-500/30">
+                  <p className="text-xs text-gray-400">Reputation</p>
+                  <p className="text-2xl font-bold text-blue-400">+{allToDieForMission.rewards.reputation}</p>
+                </div>
+              </div>
+
+              {playerData && playerData.level < allToDieForMission.requirements.min_level && (
+                <div className="p-3 bg-yellow-900/20 border border-yellow-500/30 rounded mb-4 text-yellow-300 text-sm">
+                  ⚠️ Requires Level {allToDieForMission.requirements.min_level} (You: Level {playerData.level})
+                </div>
+              )}
+
+              {playerData && !playerData.crew_id && (
+                <div className="p-3 bg-red-900/20 border border-red-500/30 rounded mb-4 text-red-300 text-sm">
+                  ⚠️ Crew Required
+                </div>
+              )}
+
+              <Button
+                size="lg"
+                className="w-full bg-gradient-to-r from-red-700 to-purple-700 hover:from-red-800 hover:to-purple-800 text-white font-bold"
+                onClick={() => {
+                  const canAccept = playerData && 
+                    playerData.level >= allToDieForMission.requirements.min_level && 
+                    playerData.crew_id;
+                  if (canAccept) {
+                    acceptMissionMutation.mutate(allToDieForMission);
+                  }
+                }}
+                disabled={
+                  !playerData || 
+                  playerData.level < allToDieForMission.requirements.min_level || 
+                  !playerData.crew_id ||
+                  acceptMissionMutation.isPending
+                }
+              >
+                {playerData && playerData.level < allToDieForMission.requirements.min_level
+                  ? 'Requirements Not Met'
+                  : !playerData.crew_id
+                  ? 'Crew Required'
+                  : 'Accept Mission'}
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="available">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
