@@ -118,6 +118,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      <GameEngine playerData={playerData} />
       {/* Welcome Section */}
       <div className="glass-panel border border-purple-500/20 p-6 rounded-xl">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

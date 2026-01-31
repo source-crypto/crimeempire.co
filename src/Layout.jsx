@@ -13,8 +13,9 @@ export default function Layout({ children, currentPageName }) {
 
   const navigation = [
     { name: 'Dashboard', page: 'Dashboard', icon: Home },
+    { name: 'Metaverse', page: 'Metaverse', icon: Zap },
     { name: 'Combat', page: 'Combat', icon: Shield },
-    { name: 'Skills', page: 'Skills', icon: Zap },
+    { name: 'Earnings', page: 'Earnings', icon: Bell },
     { name: 'Syndicates', page: 'Syndicates', icon: Users },
     { name: 'Trading', page: 'Trading', icon: Gavel },
     { name: 'Territories', page: 'Territories', icon: Map },
