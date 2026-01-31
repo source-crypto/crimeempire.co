@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
+import GameEngine from '../components/engine/GameEngine';
 import StatCard from '../components/dashboard/StatCard';
 import ActiveBattles from '../components/dashboard/ActiveBattles';
 import ActiveHeists from '../components/dashboard/ActiveHeists';
