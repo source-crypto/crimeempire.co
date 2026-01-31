@@ -3,9 +3,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Brain, Gift, TrendingUp } from 'lucide-react';
-import SkillTreeDisplay from '../components/progression/SkillTreeDisplay';
-import PerkSystem from '../components/progression/PerkSystem';
-import ExperienceTracker from '../components/progression/ExperienceTracker';
+import SkillTreeDisplay from '../components/progression/SkillTreeDisplay.jsx';
+import PerkSystem from '../components/progression/PerkSystem.jsx';
+import ExperienceTracker from '../components/progression/ExperienceTracker.jsx';
 
 export default function Skills() {
   const { data: user } = useQuery({
