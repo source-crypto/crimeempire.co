@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
-import { Crown, Building, Users, TrendingUp, Shield } from 'lucide-react';
+import { Crown, Building, Users, TrendingUp, Shield, Eye } from 'lucide-react';
+import GovernancePreview from '../components/governance/GovernancePreview';
 
 export default function Governance() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -47,8 +48,12 @@ export default function Governance() {
         </p>
       </div>
 
-      <Tabs defaultValue="president">
+      <Tabs defaultValue="preview">
         <TabsList className="glass-panel border border-purple-500/20">
+          <TabsTrigger value="preview">
+            <Eye className="w-4 h-4 mr-2" />
+            Preview
+          </TabsTrigger>
           <TabsTrigger value="president">
             <Crown className="w-4 h-4 mr-2" />
             President
@@ -62,6 +67,10 @@ export default function Governance() {
             Policies
           </TabsTrigger>
         </TabsList>
+
+        <TabsContent value="preview">
+          <GovernancePreview />
+        </TabsContent>
 
         <TabsContent value="president">
           <Card className="glass-panel border-purple-500/20">

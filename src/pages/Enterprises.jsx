@@ -9,6 +9,8 @@ import EnterpriseUpgrade from '../components/enterprises/EnterpriseUpgrade';
 import CreateEnterpriseDialog from '../components/enterprises/CreateEnterpriseDialog';
 import EnterpriseManagementSystem from '../components/enterprises/EnterpriseManagementSystem';
 import ResearchTreeSystem from '../components/enterprises/ResearchTreeSystem';
+import ProductionChainManager from '../components/enterprises/ProductionChainManager';
+import AIEmployeeManagement from '../components/enterprises/AIEmployeeManagement';
 
 export default function Enterprises() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -58,6 +60,16 @@ export default function Enterprises() {
             enterprise={selectedEnterprise}
             playerData={playerData}
           />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ProductionChainManager
+              enterprise={selectedEnterprise}
+              playerData={playerData}
+            />
+            <AIEmployeeManagement
+              enterprise={selectedEnterprise}
+              playerData={playerData}
+            />
+          </div>
           <EnterpriseUpgrade 
             enterprise={selectedEnterprise} 
             playerData={playerData}
