@@ -63,6 +63,9 @@ import Cases from './pages/Cases';
 import CaseDetail from './pages/CaseDetail';
 import Combat from './pages/Combat';
 import Earnings from './pages/Earnings';
+import Skills from './pages/Skills';
+import Syndicates from './pages/Syndicates';
+import Trading from './pages/Trading';
 import __Layout from './Layout.jsx';
 
 
@@ -83,6 +86,9 @@ export const PAGES = {
     "CaseDetail": CaseDetail,
     "Combat": Combat,
     "Earnings": Earnings,
+    "Skills": Skills,
+    "Syndicates": Syndicates,
+    "Trading": Trading,
 }
 
 export const pagesConfig = {
