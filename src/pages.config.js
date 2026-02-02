@@ -108,7 +108,7 @@ export const PAGES = {
 }
 
 export const pagesConfig = {
-    mainPage: "Dashboard",
+    mainPage: "MoneyLaundering",
     Pages: PAGES,
     Layout: __Layout,
 };
