@@ -6,13 +6,13 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import LaunderingBusinessManager from '../components/laundering/LaunderingBusinessManager';
 import CurrencyMarketplace from '../components/laundering/CurrencyMarketplace';
 import AccessoryShop from '../components/laundering/AccessoryShop';
-import RiskManagementPanel from '../components/laundering/RiskManagementPanel';
+import RiskManagementSystem from '../components/laundering/RiskManagementSystem';
 import LaunderingMissions from '../components/laundering/LaunderingMissions';
-import BusinessAnalytics from '../components/laundering/BusinessAnalytics';
-import BusinessExpansionPanel from '../components/laundering/BusinessExpansionPanel';
-import DarkWebMarket from '../components/laundering/DarkWebMarket';
-import AccessoryMarketplace from '../components/laundering/AccessoryMarketplace';
-import { DollarSign, TrendingUp, ShoppingBag, Database, AlertTriangle, Target, BarChart3, Building2, Skull, Package } from 'lucide-react';
+import BusinessExpansionManager from '../components/laundering/BusinessExpansionManager';
+import AnalyticsDashboard from '../components/laundering/AnalyticsDashboard';
+import DarkWebMarketplace from '../components/laundering/DarkWebMarketplace';
+import AccessoryMarket from '../components/laundering/AccessoryMarket';
+import { DollarSign, TrendingUp, ShoppingBag, Database, AlertTriangle, Target, BarChart3, Building2, Skull, Wrench } from 'lucide-react';
 
 export default function MoneyLaundering() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -120,9 +120,9 @@ export default function MoneyLaundering() {
             <ShoppingBag className="w-4 h-4" />
             Shop
           </TabsTrigger>
-          <TabsTrigger value="trading" className="flex items-center gap-2">
-            <Package className="w-4 h-4" />
-            Trading
+          <TabsTrigger value="market" className="flex items-center gap-2">
+            <Wrench className="w-4 h-4" />
+            Trades
           </TabsTrigger>
           <TabsTrigger value="analytics" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
@@ -135,7 +135,7 @@ export default function MoneyLaundering() {
         </TabsContent>
 
         <TabsContent value="risk">
-          <RiskManagementPanel playerData={playerData} businesses={businesses} />
+          <RiskManagementSystem playerData={playerData} businesses={businesses} />
         </TabsContent>
 
         <TabsContent value="missions">
@@ -143,7 +143,7 @@ export default function MoneyLaundering() {
         </TabsContent>
 
         <TabsContent value="expansion">
-          <BusinessExpansionPanel playerData={playerData} businesses={businesses} />
+          <BusinessExpansionManager playerData={playerData} businesses={businesses} />
         </TabsContent>
 
         <TabsContent value="marketplace">
@@ -151,19 +151,19 @@ export default function MoneyLaundering() {
         </TabsContent>
 
         <TabsContent value="darkweb">
-          <DarkWebMarket playerData={playerData} businesses={businesses} />
+          <DarkWebMarketplace playerData={playerData} businesses={businesses} />
         </TabsContent>
 
         <TabsContent value="accessories">
           <AccessoryShop playerData={playerData} businesses={businesses} />
         </TabsContent>
 
-        <TabsContent value="trading">
-          <AccessoryMarketplace playerData={playerData} businesses={businesses} />
+        <TabsContent value="market">
+          <AccessoryMarket playerData={playerData} businesses={businesses} />
         </TabsContent>
 
         <TabsContent value="analytics">
-          <BusinessAnalytics businesses={businesses} />
+          <AnalyticsDashboard businesses={businesses} />
         </TabsContent>
       </Tabs>
     </div>
