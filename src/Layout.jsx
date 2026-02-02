@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { 
   Home, Map, Users, Building2, Car, Gavel, 
-  Settings, Menu, X, Zap, Shield, Bell, Crown, BookOpen
+  Settings, Menu, X, Zap, Shield, Bell, Crown, BookOpen, DollarSign
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
