@@ -6,7 +6,13 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import LaunderingBusinessManager from '../components/laundering/LaunderingBusinessManager';
 import CurrencyMarketplace from '../components/laundering/CurrencyMarketplace';
 import AccessoryShop from '../components/laundering/AccessoryShop';
-import { DollarSign, TrendingUp, ShoppingBag, Database } from 'lucide-react';
+import RiskManagementPanel from '../components/laundering/RiskManagementPanel';
+import LaunderingMissions from '../components/laundering/LaunderingMissions';
+import BusinessAnalytics from '../components/laundering/BusinessAnalytics';
+import BusinessExpansionPanel from '../components/laundering/BusinessExpansionPanel';
+import DarkWebMarket from '../components/laundering/DarkWebMarket';
+import AccessoryMarketplace from '../components/laundering/AccessoryMarketplace';
+import { DollarSign, TrendingUp, ShoppingBag, Database, AlertTriangle, Target, BarChart3, Building2, Skull, Package } from 'lucide-react';
 
 export default function MoneyLaundering() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -85,18 +91,42 @@ export default function MoneyLaundering() {
 
       {/* Tabs */}
       <Tabs defaultValue="businesses" className="space-y-4">
-        <TabsList className="glass-panel border border-green-500/20">
+        <TabsList className="glass-panel border border-green-500/20 flex-wrap h-auto">
           <TabsTrigger value="businesses" className="flex items-center gap-2">
             <Database className="w-4 h-4" />
-            My Businesses
+            Businesses
+          </TabsTrigger>
+          <TabsTrigger value="risk" className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            Risk
+          </TabsTrigger>
+          <TabsTrigger value="missions" className="flex items-center gap-2">
+            <Target className="w-4 h-4" />
+            Missions
+          </TabsTrigger>
+          <TabsTrigger value="expansion" className="flex items-center gap-2">
+            <Building2 className="w-4 h-4" />
+            Expansion
           </TabsTrigger>
           <TabsTrigger value="marketplace" className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
-            Currency Exchange
+            Exchange
+          </TabsTrigger>
+          <TabsTrigger value="darkweb" className="flex items-center gap-2">
+            <Skull className="w-4 h-4" />
+            Dark Web
           </TabsTrigger>
           <TabsTrigger value="accessories" className="flex items-center gap-2">
             <ShoppingBag className="w-4 h-4" />
-            Accessories
+            Shop
+          </TabsTrigger>
+          <TabsTrigger value="trading" className="flex items-center gap-2">
+            <Package className="w-4 h-4" />
+            Trading
+          </TabsTrigger>
+          <TabsTrigger value="analytics" className="flex items-center gap-2">
+            <BarChart3 className="w-4 h-4" />
+            Analytics
           </TabsTrigger>
         </TabsList>
 
@@ -104,12 +134,36 @@ export default function MoneyLaundering() {
           <LaunderingBusinessManager playerData={playerData} businesses={businesses} />
         </TabsContent>
 
+        <TabsContent value="risk">
+          <RiskManagementPanel playerData={playerData} businesses={businesses} />
+        </TabsContent>
+
+        <TabsContent value="missions">
+          <LaunderingMissions playerData={playerData} businesses={businesses} />
+        </TabsContent>
+
+        <TabsContent value="expansion">
+          <BusinessExpansionPanel playerData={playerData} businesses={businesses} />
+        </TabsContent>
+
         <TabsContent value="marketplace">
           <CurrencyMarketplace playerData={playerData} businesses={businesses} />
         </TabsContent>
 
+        <TabsContent value="darkweb">
+          <DarkWebMarket playerData={playerData} businesses={businesses} />
+        </TabsContent>
+
         <TabsContent value="accessories">
           <AccessoryShop playerData={playerData} businesses={businesses} />
+        </TabsContent>
+
+        <TabsContent value="trading">
+          <AccessoryMarketplace playerData={playerData} businesses={businesses} />
+        </TabsContent>
+
+        <TabsContent value="analytics">
+          <BusinessAnalytics businesses={businesses} />
         </TabsContent>
       </Tabs>
     </div>
