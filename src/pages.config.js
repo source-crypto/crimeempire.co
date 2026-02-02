@@ -47,7 +47,10 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import AIManagement from './pages/AIManagement';
 import Auction from './pages/Auction';
+import BaseManagement from './pages/BaseManagement';
+import BlackMarket from './pages/BlackMarket';
 import CaseDetail from './pages/CaseDetail';
 import Cases from './pages/Cases';
 import Combat from './pages/Combat';
@@ -63,21 +66,21 @@ import Heists from './pages/Heists';
 import Home from './pages/Home';
 import Metaverse from './pages/Metaverse';
 import PlayerSetup from './pages/PlayerSetup';
+import Reputation from './pages/Reputation';
 import Settings from './pages/Settings';
 import Skills from './pages/Skills';
 import Syndicates from './pages/Syndicates';
 import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
-import BlackMarket from './pages/BlackMarket';
-import Reputation from './pages/Reputation';
-import AIManagement from './pages/AIManagement';
-import BaseManagement from './pages/BaseManagement';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "AIManagement": AIManagement,
     "Auction": Auction,
+    "BaseManagement": BaseManagement,
+    "BlackMarket": BlackMarket,
     "CaseDetail": CaseDetail,
     "Cases": Cases,
     "Combat": Combat,
@@ -93,16 +96,13 @@ export const PAGES = {
     "Home": Home,
     "Metaverse": Metaverse,
     "PlayerSetup": PlayerSetup,
+    "Reputation": Reputation,
     "Settings": Settings,
     "Skills": Skills,
     "Syndicates": Syndicates,
     "Territories": Territories,
     "Trading": Trading,
     "Tutorial": Tutorial,
-    "BlackMarket": BlackMarket,
-    "Reputation": Reputation,
-    "AIManagement": AIManagement,
-    "BaseManagement": BaseManagement,
 }
 
 export const pagesConfig = {

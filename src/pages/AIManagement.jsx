@@ -8,7 +8,10 @@ import FactionAIReactivitySystem from '../components/ai/FactionAIReactivitySyste
 import LawEnforcementInvestigationTracker from '../components/ai/LawEnforcementInvestigationTracker';
 import AIMissionDirector from '../components/ai/AIMissionDirector';
 import ChaseSequenceManager from '../components/ai/ChaseSequenceManager';
-import { Users, Brain, Shield, Target, AlertTriangle } from 'lucide-react';
+import EventDrivenLEResponse from '../components/ai/EventDrivenLEResponse';
+import FacilityIntelligenceOps from '../components/ai/FacilityIntelligenceOps';
+import NPCInfiltrationSystem from '../components/ai/NPCInfiltrationSystem';
+import { Users, Brain, Shield, Target, AlertTriangle, Activity, Search, UserX } from 'lucide-react';
 
 export default function AIManagement() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -48,6 +51,12 @@ export default function AIManagement() {
   const { data: leResponse } = useQuery({
     queryKey: ['lawEnforcementResponse', playerData?.id],
     queryFn: () => base44.entities.LawEnforcementResponse.filter({ player_id: playerData.id }).then(r => r[0]),
+    enabled: !!playerData?.id
+  });
+
+  const { data: bases = [] } = useQuery({
+    queryKey: ['playerBases', playerData?.id],
+    queryFn: () => base44.entities.PlayerBase.filter({ player_id: playerData.id }),
     enabled: !!playerData?.id
   });
 
@@ -94,6 +103,18 @@ export default function AIManagement() {
             <AlertTriangle className="w-4 h-4" />
             Chase System
           </TabsTrigger>
+          <TabsTrigger value="events" className="flex items-center gap-2">
+            <Activity className="w-4 h-4" />
+            Event Response
+          </TabsTrigger>
+          <TabsTrigger value="facility" className="flex items-center gap-2">
+            <Search className="w-4 h-4" />
+            Facility Intel
+          </TabsTrigger>
+          <TabsTrigger value="infiltration" className="flex items-center gap-2">
+            <UserX className="w-4 h-4" />
+            NPC Infiltration
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="npcs">
@@ -123,6 +144,33 @@ export default function AIManagement() {
             playerData={playerData}
             leResponse={leResponse}
           />
+        </TabsContent>
+
+        <TabsContent value="events">
+          <EventDrivenLEResponse 
+            playerData={playerData}
+            bases={bases}
+          />
+        </TabsContent>
+
+        <TabsContent value="facility">
+          {bases.length === 0 ? (
+            <Card className="glass-panel border-blue-500/20 p-6 text-center">
+              <p className="text-gray-400">Establish a base first to view facility intel</p>
+            </Card>
+          ) : (
+            <FacilityIntelligenceOps selectedBase={bases[0]} />
+          )}
+        </TabsContent>
+
+        <TabsContent value="infiltration">
+          {bases.length === 0 ? (
+            <Card className="glass-panel border-purple-500/20 p-6 text-center">
+              <p className="text-gray-400">Establish a base first to view infiltration attempts</p>
+            </Card>
+          ) : (
+            <NPCInfiltrationSystem selectedBase={bases[0]} playerData={playerData} />
+          )}
         </TabsContent>
       </Tabs>
     </div>
