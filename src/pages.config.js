@@ -73,6 +73,7 @@ import Syndicates from './pages/Syndicates';
 import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
+import MoneyLaundering from './pages/MoneyLaundering';
 import __Layout from './Layout.jsx';
 
 
@@ -103,6 +104,7 @@ export const PAGES = {
     "Territories": Territories,
     "Trading": Trading,
     "Tutorial": Tutorial,
+    "MoneyLaundering": MoneyLaundering,
 }
 
 export const pagesConfig = {
