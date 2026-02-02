@@ -36,12 +36,13 @@ export default function AccessoryShop({ playerData, businesses }) {
 
       const currentAccessories = business.accessories || [];
       
-      // Apply bonus
+      // Apply bonus with full durability
       let updates = {
         accessories: [...currentAccessories, {
           accessory_name: accessory.accessory_name,
           bonus_type: accessory.accessory_type,
-          bonus_value: accessory.bonus_value
+          bonus_value: accessory.bonus_value,
+          durability: 100
         }]
       };
 
@@ -77,7 +78,11 @@ export default function AccessoryShop({ playerData, businesses }) {
         { accessory_name: 'Offshore Account Access', accessory_type: 'capacity_increase', tier: 3, cost: 150000, bonus_value: 25000, description: '+25k capacity/hour' },
         { accessory_name: 'Encrypted Ledgers', accessory_type: 'security', tier: 1, cost: 60000, bonus_value: 15, description: 'Reduce LE suspicion buildup' },
         { accessory_name: 'High-Frequency Trading Bots', accessory_type: 'efficiency_boost', tier: 3, cost: 200000, bonus_value: 8, description: '+8% efficiency', compatible_business_types: ['crypto_exchange'] },
-        { accessory_name: 'VIP Lounge', accessory_type: 'capacity_increase', tier: 2, cost: 120000, bonus_value: 30000, description: '+30k capacity/hour', compatible_business_types: ['casino', 'nightclub'] }
+        { accessory_name: 'VIP Lounge', accessory_type: 'capacity_increase', tier: 2, cost: 120000, bonus_value: 30000, description: '+30k capacity/hour', compatible_business_types: ['casino', 'nightclub'] },
+        { accessory_name: 'AI Money Tracer Jammer', accessory_type: 'security', tier: 4, cost: 250000, bonus_value: 20, description: 'Block AI tracking systems' },
+        { accessory_name: 'Network Obfuscator', accessory_type: 'heat_reduction', tier: 3, cost: 180000, bonus_value: 4, description: 'Hide digital footprints' },
+        { accessory_name: 'Quantum Encryption Module', accessory_type: 'security', tier: 5, cost: 500000, bonus_value: 30, description: 'Military-grade encryption', compatible_business_types: ['crypto_exchange'] },
+        { accessory_name: 'Ghost Transaction Protocol', accessory_type: 'heat_reduction', tier: 4, cost: 300000, bonus_value: 6, description: 'Untraceable transactions' }
       ];
 
       for (const acc of defaultAccessories) {

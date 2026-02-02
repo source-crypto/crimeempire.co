@@ -5,8 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { TrendingUp, ArrowRightLeft, Plus, DollarSign } from 'lucide-react';
+import { TrendingUp, ArrowRightLeft, Plus, DollarSign, Star } from 'lucide-react';
 import { toast } from 'sonner';
+import { motion } from 'framer-motion';
 
 export default function CurrencyMarketplace({ playerData, businesses }) {
   const queryClient = useQueryClient();
@@ -19,7 +20,15 @@ export default function CurrencyMarketplace({ playerData, businesses }) {
 
   const { data: listings = [] } = useQuery({
     queryKey: ['currencyExchanges'],
-    queryFn: () => base44.entities.CurrencyExchange.filter({ status: 'active' }, '-created_date', 50)
+    queryFn: () => base44.entities.CurrencyExchange.filter({ 
+      status: 'active',
+      risk_rating: { $lt: 70 }
+    }, '-created_date', 50)
+  });
+
+  const { data: ratings = [] } = useQuery({
+    queryKey: ['businessRatings'],
+    queryFn: () => base44.entities.BusinessRating.list('-created_date', 100)
   });
 
   const createListingMutation = useMutation({
@@ -108,6 +117,28 @@ export default function CurrencyMarketplace({ playerData, businesses }) {
     },
     onError: (error) => toast.error(error.message)
   });
+
+  const rateBusinessMutation = useMutation({
+    mutationFn: async ({ businessId, rating, trustScore }) => {
+      await base44.entities.BusinessRating.create({
+        business_id: businessId,
+        rater_id: playerData.id,
+        rating,
+        trust_score: trustScore,
+        transaction_success: true
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['businessRatings']);
+      toast.success('Business rated!');
+    }
+  });
+
+  const getBusinessTrustScore = (businessId) => {
+    const businessRatings = ratings.filter(r => r.business_id === businessId);
+    if (businessRatings.length === 0) return 50;
+    return businessRatings.reduce((sum, r) => sum + r.trust_score, 0) / businessRatings.length;
+  };
 
   const marketplaceBusinesses = businesses.filter(b => b.marketplace_enabled);
 
@@ -255,12 +286,27 @@ export default function CurrencyMarketplace({ playerData, businesses }) {
               listings.map(listing => {
                 const business = businesses.find(b => b.id === listing.business_id);
                 const isOwnListing = listing.seller_id === playerData.id;
+                const trustScore = getBusinessTrustScore(listing.business_id);
 
                 return (
-                  <div key={listing.id} className="p-3 bg-slate-900/50 rounded border border-purple-500/30">
+                  <motion.div
+                    key={listing.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="p-3 bg-slate-900/50 rounded border border-purple-500/30"
+                  >
                     <div className="flex items-center justify-between mb-2">
                       <div className="text-xs">
                         <p className="text-white font-semibold">{business?.business_name || 'Unknown Business'}</p>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-2.5 h-2.5 ${i < Math.round(trustScore / 20) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-600'}`}
+                            />
+                          ))}
+                          <span className="text-gray-400 ml-0.5">({trustScore.toFixed(0)}%)</span>
+                        </div>
                         <p className="text-gray-400 text-[10px]">
                           {listing.exchange_type === 'crypto_to_cash' ? '₿ → $' : '$ → ₿'}
                         </p>
@@ -299,7 +345,7 @@ export default function CurrencyMarketplace({ playerData, businesses }) {
                         Execute Exchange
                       </Button>
                     )}
-                  </div>
+                  </motion.div>
                 );
               })
             )}

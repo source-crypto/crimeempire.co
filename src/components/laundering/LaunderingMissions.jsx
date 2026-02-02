@@ -1,129 +1,151 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Target, Clock, TrendingUp, CheckCircle, XCircle } from 'lucide-react';
+import { Target, Clock, DollarSign, Trophy, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion } from 'framer-motion';
-
-const missionTypes = {
-  bulk_wash: { label: 'Bulk Wash', icon: '💰', desc: 'Launder large sum quickly', business: 'any' },
-  vip_client: { label: 'VIP Client', icon: '👔', desc: 'Service high-profile client', business: 'casino' },
-  offshore_transfer: { label: 'Offshore Transfer', icon: '🌊', desc: 'Move money overseas', business: 'real_estate' },
-  shell_creation: { label: 'Shell Company', icon: '🏢', desc: 'Create shell corporation', business: 'any' },
-  audit_cover: { label: 'Audit Cover-Up', icon: '📋', desc: 'Cover tracks during audit', business: 'any' },
-  crypto_tumble: { label: 'Crypto Tumbling', icon: '₿', desc: 'Mix cryptocurrency', business: 'crypto_exchange' }
-};
 
 export default function LaunderingMissions({ playerData, businesses }) {
   const queryClient = useQueryClient();
 
   const { data: missions = [] } = useQuery({
-    queryKey: ['launderingMissions', playerData?.id],
-    queryFn: () => base44.entities.LaunderingMission.filter({ player_id: playerData.id }),
-    enabled: !!playerData?.id
+    queryKey: ['launderingMissions'],
+    queryFn: () => base44.entities.LaunderingMission.filter({ is_available: true })
   });
 
-  const generateMissionMutation = useMutation({
+  const initMissionsMutation = useMutation({
     mutationFn: async () => {
-      const types = Object.keys(missionTypes);
-      const randomType = types[Math.floor(Math.random() * types.length)];
-      const missionInfo = missionTypes[randomType];
-      
-      const targetAmount = Math.floor(Math.random() * 500000) + 100000;
-      const reward = targetAmount * (0.15 + Math.random() * 0.1);
-      const risk = Math.floor(Math.random() * 50) + 30;
-
-      await base44.entities.LaunderingMission.create({
-        player_id: playerData.id,
-        mission_name: `${missionInfo.label} Operation`,
-        mission_type: randomType,
-        required_business_type: missionInfo.business === 'any' ? null : missionInfo.business,
-        target_amount: targetAmount,
-        reward: reward,
-        time_limit_hours: 48,
-        risk_level: risk,
-        bonus_rewards: {
-          reputation: Math.floor(risk / 10)
+      const defaultMissions = [
+        {
+          mission_name: 'High Roller Weekend',
+          business_type_required: 'casino',
+          difficulty: 'easy',
+          dirty_money_amount: 100000,
+          time_limit_hours: 48,
+          reward_cash: 30000,
+          reward_reputation: 10,
+          risk_level: 30,
+          description: 'Launder money through weekend high-stakes poker games'
+        },
+        {
+          mission_name: 'Crypto Whale Transaction',
+          business_type_required: 'crypto_exchange',
+          difficulty: 'hard',
+          dirty_money_amount: 500000,
+          time_limit_hours: 24,
+          reward_cash: 125000,
+          reward_reputation: 30,
+          risk_level: 70,
+          description: 'Move large crypto volumes without triggering alerts',
+          special_requirements: ['Efficiency > 80%', 'Suspicion < 50%']
+        },
+        {
+          mission_name: 'Art Auction Cleanup',
+          business_type_required: 'art_gallery',
+          difficulty: 'medium',
+          dirty_money_amount: 250000,
+          time_limit_hours: 72,
+          reward_cash: 75000,
+          reward_reputation: 20,
+          risk_level: 45,
+          description: 'Clean money through fake art sales'
+        },
+        {
+          mission_name: 'Real Estate Flip',
+          business_type_required: 'real_estate',
+          difficulty: 'medium',
+          dirty_money_amount: 750000,
+          time_limit_hours: 96,
+          reward_cash: 200000,
+          reward_reputation: 25,
+          risk_level: 50,
+          description: 'Launder through rapid property transactions'
+        },
+        {
+          mission_name: 'VIP Club Night',
+          business_type_required: 'nightclub',
+          difficulty: 'easy',
+          dirty_money_amount: 150000,
+          time_limit_hours: 36,
+          reward_cash: 45000,
+          reward_reputation: 15,
+          risk_level: 35,
+          description: 'Clean cash through exclusive VIP events'
         }
-      });
+      ];
+
+      for (const mission of defaultMissions) {
+        await base44.entities.LaunderingMission.create(mission);
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['launderingMissions']);
-      toast.success('New mission generated!');
+      toast.success('Missions loaded!');
     }
   });
 
-  const startMissionMutation = useMutation({
+  const executeMissionMutation = useMutation({
     mutationFn: async ({ mission, business }) => {
-      if (mission.required_business_type && business.business_type !== mission.required_business_type) {
+      if (mission.business_type_required !== 'any' && 
+          business.business_type !== mission.business_type_required) {
         throw new Error('Wrong business type for this mission');
       }
 
-      await base44.entities.LaunderingMission.update(mission.id, {
-        business_id: business.id,
-        status: 'active',
-        started_at: new Date().toISOString()
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['launderingMissions']);
-      toast.success('Mission started!');
-    },
-    onError: (error) => toast.error(error.message)
-  });
+      if (business.capacity_per_hour < mission.dirty_money_amount / mission.time_limit_hours) {
+        throw new Error('Business capacity too low');
+      }
 
-  const completeMissionMutation = useMutation({
-    mutationFn: async (mission) => {
-      const business = businesses.find(b => b.id === mission.business_id);
-      const success = Math.random() * 100 > mission.risk_level;
+      // Check special requirements
+      if (mission.special_requirements?.includes('Efficiency > 80%') && business.efficiency < 80) {
+        throw new Error('Efficiency too low');
+      }
+      if (mission.special_requirements?.includes('Suspicion < 50%') && business.suspicion_level >= 50) {
+        throw new Error('Suspicion too high');
+      }
+
+      const successRoll = Math.random() * 100;
+      const baseSuccessRate = 100 - mission.risk_level + (business.efficiency - 70);
+      const success = successRoll < baseSuccessRate;
 
       if (success) {
-        await base44.entities.LaunderingMission.update(mission.id, {
-          status: 'completed',
-          completed_at: new Date().toISOString()
-        });
-
         await base44.entities.Player.update(playerData.id, {
-          balance: playerData.balance + mission.reward,
-          reputation: (playerData.reputation || 0) + (mission.bonus_rewards?.reputation || 0)
+          balance: playerData.balance + mission.reward_cash,
+          reputation: (playerData.reputation || 0) + mission.reward_reputation
         });
 
         await base44.entities.MoneyLaunderingBusiness.update(business.id, {
-          clean_money_generated: (business.clean_money_generated || 0) + mission.target_amount
+          clean_money_generated: business.clean_money_generated + mission.dirty_money_amount,
+          suspicion_level: Math.min(100, business.suspicion_level + mission.risk_level / 10)
         });
 
-        toast.success(`Mission complete! +$${mission.reward.toLocaleString()}`);
+        toast.success(`Mission success! +$${mission.reward_cash.toLocaleString()}`);
       } else {
-        await base44.entities.LaunderingMission.update(mission.id, {
-          status: 'failed',
-          completed_at: new Date().toISOString()
-        });
-
         await base44.entities.MoneyLaunderingBusiness.update(business.id, {
-          suspicion_level: Math.min(100, business.suspicion_level + mission.risk_level * 0.5)
+          suspicion_level: Math.min(100, business.suspicion_level + mission.risk_level / 5)
         });
 
         await base44.entities.Player.update(playerData.id, {
-          heat: Math.min(100, (playerData.heat || 0) + mission.risk_level * 0.3)
+          heat: Math.min(100, (playerData.heat || 0) + 10)
         });
 
-        toast.error('Mission failed! Heat increased');
+        toast.error('Mission failed! Heat increased!');
       }
+
+      await base44.entities.LaunderingMission.update(mission.id, {
+        is_available: false
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['launderingMissions']);
       queryClient.invalidateQueries(['launderingBusinesses']);
       queryClient.invalidateQueries(['player']);
-    }
+    },
+    onError: (error) => toast.error(error.message)
   });
-
-  const availableMissions = missions.filter(m => m.status === 'available');
-  const activeMissions = missions.filter(m => m.status === 'active');
-  const completedMissions = missions.filter(m => ['completed', 'failed'].includes(m.status));
 
   return (
     <div className="space-y-4">
@@ -133,167 +155,124 @@ export default function LaunderingMissions({ playerData, businesses }) {
           <CardTitle className="flex items-center justify-between text-white text-sm">
             <span className="flex items-center gap-2">
               <Target className="w-4 h-4 text-cyan-400" />
-              Laundering Operations
+              Specialized Operations
             </span>
-            <Button
-              onClick={() => generateMissionMutation.mutate()}
-              disabled={generateMissionMutation.isPending || availableMissions.length >= 5}
-              className="bg-cyan-600 hover:bg-cyan-700 text-xs"
-            >
-              Generate Mission
-            </Button>
+            {missions.length === 0 && (
+              <Button
+                size="sm"
+                onClick={() => initMissionsMutation.mutate()}
+                disabled={initMissionsMutation.isPending}
+                className="bg-cyan-600 hover:bg-cyan-700"
+              >
+                Load Missions
+              </Button>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent className="text-xs text-gray-400">
-          Specialized laundering missions for bonus rewards and reputation
+          Execute high-stakes laundering operations for enhanced rewards
         </CardContent>
       </Card>
 
-      {/* Available Missions */}
-      {availableMissions.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="text-white text-sm font-semibold">Available Missions</h3>
-          {availableMissions.map(mission => {
-            const missionInfo = missionTypes[mission.mission_type];
-            
-            return (
-              <motion.div
-                key={mission.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-              >
-                <Card className="glass-panel border-green-500/20">
-                  <CardContent className="p-3 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">{missionInfo.icon}</span>
-                        <div>
-                          <p className="text-white text-xs font-semibold">{mission.mission_name}</p>
-                          <p className="text-gray-400 text-[10px]">{missionInfo.desc}</p>
-                        </div>
-                      </div>
-                      <Badge className={`${
-                        mission.risk_level > 70 ? 'bg-red-600' :
-                        mission.risk_level > 50 ? 'bg-orange-600' : 'bg-green-600'
-                      } text-[10px]`}>
-                        Risk: {mission.risk_level}
-                      </Badge>
+      {/* Missions */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {missions.map(mission => {
+          const compatibleBusinesses = businesses.filter(b => 
+            mission.business_type_required === 'any' || b.business_type === mission.business_type_required
+          );
+
+          const difficultyColors = {
+            easy: 'bg-green-600',
+            medium: 'bg-yellow-600',
+            hard: 'bg-orange-600',
+            extreme: 'bg-red-600'
+          };
+
+          return (
+            <motion.div
+              key={mission.id}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              <Card className="glass-panel border-purple-500/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between text-white text-sm">
+                    <span>{mission.mission_name}</span>
+                    <Badge className={difficultyColors[mission.difficulty]}>
+                      {mission.difficulty}
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+
+                <CardContent className="space-y-3">
+                  <p className="text-xs text-gray-300">{mission.description}</p>
+
+                  {/* Stats */}
+                  <div className="grid grid-cols-2 gap-2 text-xs">
+                    <div className="p-2 bg-slate-900/50 rounded">
+                      <p className="text-gray-400">Amount</p>
+                      <p className="text-yellow-400 font-semibold">${(mission.dirty_money_amount / 1000).toFixed(0)}k</p>
                     </div>
-
-                    <div className="grid grid-cols-3 gap-2 text-xs">
-                      <div className="p-1.5 bg-slate-800/50 rounded">
-                        <p className="text-gray-400 text-[10px]">Target</p>
-                        <p className="text-yellow-400 font-semibold">${(mission.target_amount / 1000).toFixed(0)}k</p>
-                      </div>
-                      <div className="p-1.5 bg-slate-800/50 rounded">
-                        <p className="text-gray-400 text-[10px]">Reward</p>
-                        <p className="text-green-400 font-semibold">${(mission.reward / 1000).toFixed(0)}k</p>
-                      </div>
-                      <div className="p-1.5 bg-slate-800/50 rounded">
-                        <p className="text-gray-400 text-[10px]">Time</p>
-                        <p className="text-blue-400 font-semibold">{mission.time_limit_hours}h</p>
-                      </div>
+                    <div className="p-2 bg-slate-900/50 rounded">
+                      <p className="text-gray-400">Time Limit</p>
+                      <p className="text-blue-400 font-semibold">{mission.time_limit_hours}h</p>
                     </div>
-
-                    {mission.required_business_type && (
-                      <Badge className="bg-purple-700 text-[10px] capitalize">
-                        Requires: {mission.required_business_type.replace(/_/g, ' ')}
-                      </Badge>
-                    )}
-
-                    <div className="grid grid-cols-2 gap-2">
-                      {businesses
-                        .filter(b => !mission.required_business_type || b.business_type === mission.required_business_type)
-                        .map(business => (
-                          <Button
-                            key={business.id}
-                            onClick={() => startMissionMutation.mutate({ mission, business })}
-                            disabled={startMissionMutation.isPending}
-                            className="bg-green-600 hover:bg-green-700 text-[10px]"
-                          >
-                            Use {business.business_name}
-                          </Button>
-                        ))
-                      }
+                    <div className="p-2 bg-slate-900/50 rounded">
+                      <p className="text-gray-400">Reward</p>
+                      <p className="text-green-400 font-semibold">${(mission.reward_cash / 1000).toFixed(0)}k</p>
                     </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Active Missions */}
-      {activeMissions.length > 0 && (
-        <div className="space-y-3">
-          <h3 className="text-white text-sm font-semibold">Active Operations</h3>
-          {activeMissions.map(mission => {
-            const business = businesses.find(b => b.id === mission.business_id);
-            const timeElapsed = Date.now() - new Date(mission.started_at).getTime();
-            const timeLimit = mission.time_limit_hours * 60 * 60 * 1000;
-            const progressPercent = Math.min(100, (timeElapsed / timeLimit) * 100);
-
-            return (
-              <Card key={mission.id} className="glass-panel border-blue-500/20">
-                <CardContent className="p-3 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <p className="text-white text-xs font-semibold">{mission.mission_name}</p>
-                    <Badge className="bg-blue-600 text-[10px]">In Progress</Badge>
+                    <div className="p-2 bg-slate-900/50 rounded">
+                      <p className="text-gray-400">Risk</p>
+                      <p className="text-red-400 font-semibold">{mission.risk_level}%</p>
+                    </div>
                   </div>
 
-                  <p className="text-gray-400 text-[10px]">Using: {business?.business_name}</p>
-
-                  <div>
-                    <div className="flex justify-between text-[10px] mb-1">
-                      <span className="text-gray-400">Progress</span>
-                      <span className="text-blue-400">{Math.round(progressPercent)}%</span>
-                    </div>
-                    <Progress value={progressPercent} className="h-1.5" />
-                  </div>
-
-                  <Button
-                    onClick={() => completeMissionMutation.mutate(mission)}
-                    disabled={completeMissionMutation.isPending || progressPercent < 100}
-                    className="w-full bg-green-600 hover:bg-green-700 text-xs"
-                  >
-                    {progressPercent >= 100 ? 'Complete Mission' : `Wait ${Math.round((100 - progressPercent) / 2)}h`}
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      )}
-
-      {/* Mission History */}
-      {completedMissions.length > 0 && (
-        <Card className="glass-panel border-slate-500/20">
-          <CardHeader>
-            <CardTitle className="text-white text-sm">Mission History</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-1 max-h-60 overflow-y-auto">
-              {completedMissions.slice(0, 10).map(mission => (
-                <div key={mission.id} className="flex items-center justify-between p-2 bg-slate-900/30 rounded text-xs">
-                  <span className="text-gray-400">{mission.mission_name}</span>
-                  {mission.status === 'completed' ? (
-                    <div className="flex items-center gap-1 text-green-400">
-                      <CheckCircle className="w-3 h-3" />
-                      +${(mission.reward / 1000).toFixed(0)}k
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-1 text-red-400">
-                      <XCircle className="w-3 h-3" />
-                      Failed
+                  {/* Requirements */}
+                  {mission.special_requirements?.length > 0 && (
+                    <div className="space-y-1">
+                      <p className="text-gray-400 text-[10px]">Requirements:</p>
+                      {mission.special_requirements.map((req, idx) => (
+                        <Badge key={idx} className="bg-slate-700 text-[10px] mr-1">
+                          {req}
+                        </Badge>
+                      ))}
                     </div>
                   )}
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+
+                  {/* Business Type */}
+                  <div className="p-2 bg-blue-900/20 rounded border border-blue-500/30">
+                    <p className="text-blue-400 text-[10px] uppercase font-semibold">
+                      Requires: {mission.business_type_required.replace(/_/g, ' ')}
+                    </p>
+                  </div>
+
+                  {/* Execute */}
+                  {compatibleBusinesses.length > 0 ? (
+                    <div className="space-y-2">
+                      <select
+                        className="w-full px-2 py-1.5 bg-slate-800 text-white rounded text-xs"
+                        onChange={(e) => {
+                          const business = compatibleBusinesses.find(b => b.id === e.target.value);
+                          if (business) {
+                            executeMissionMutation.mutate({ mission, business });
+                          }
+                        }}
+                      >
+                        <option value="">Select Business to Execute</option>
+                        {compatibleBusinesses.map(b => (
+                          <option key={b.id} value={b.id}>{b.business_name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  ) : (
+                    <p className="text-red-400 text-xs">No compatible businesses</p>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          );
+        })}
+      </div>
     </div>
   );
 }
