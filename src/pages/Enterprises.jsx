@@ -33,24 +33,28 @@ export default function Enterprises() {
       return players[0] || null;
     },
     enabled: !!currentUser,
+    staleTime: 30000
   });
 
   const { data: enterprises = [], refetch: refetchEnterprises } = useQuery({
     queryKey: ['enterprises', playerData?.id],
     queryFn: () => base44.entities.CriminalEnterprise.filter({ owner_id: playerData.id }),
     enabled: !!playerData?.id,
+    staleTime: 30000
   });
 
   const { data: supplyChains = [] } = useQuery({
     queryKey: ['supplyChains', selectedEnterprise?.id],
     queryFn: () => base44.entities.AdvancedSupplyChain.filter({ enterprise_id: selectedEnterprise.id }),
     enabled: !!selectedEnterprise?.id,
+    staleTime: 30000
   });
 
   const { data: enterpriseNPCs = [] } = useQuery({
     queryKey: ['enterpriseNPCs', selectedEnterprise?.id],
     queryFn: () => base44.entities.EnterpriseNPC.filter({ enterprise_id: selectedEnterprise.id }),
     enabled: !!selectedEnterprise?.id,
+    staleTime: 30000
   });
 
   const handleUpdate = () => {

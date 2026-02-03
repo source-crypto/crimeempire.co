@@ -39,12 +39,14 @@ export default function Territories() {
       return players[0] || null;
     },
     enabled: !!currentUser,
+    staleTime: 30000
   });
 
   const { data: territories = [] } = useQuery({
     queryKey: ['territories', playerData?.crew_id],
     queryFn: () => base44.entities.Territory.filter({ controlling_crew_id: playerData.crew_id }),
     enabled: !!playerData?.crew_id,
+    staleTime: 30000
   });
 
   const { data: crewData } = useQuery({
@@ -54,6 +56,7 @@ export default function Territories() {
       return crews[0];
     },
     enabled: !!playerData?.crew_id,
+    staleTime: 60000
   });
 
   const { data: permissions } = useQuery({
@@ -66,6 +69,7 @@ export default function Territories() {
       return perms[0];
     },
     enabled: !!playerData?.crew_id && !!playerData?.id,
+    staleTime: 60000
   });
 
   const { data: playerFaction } = useQuery({
@@ -82,7 +86,8 @@ export default function Territories() {
       }
       return null;
     },
-    enabled: !!playerData?.id
+    enabled: !!playerData?.id,
+    staleTime: 60000
   });
 
   const canManage = permissions?.permissions?.manage_territories || playerData?.crew_role === 'boss';
@@ -90,7 +95,8 @@ export default function Territories() {
 
   const { data: allTerritories = [] } = useQuery({
     queryKey: ['allTerritories'],
-    queryFn: () => base44.entities.Territory.list(),
+    queryFn: () => base44.entities.Territory.list('-created_date', 50),
+    staleTime: 30000
   });
 
   const attackTerritoryMutation = useMutation({

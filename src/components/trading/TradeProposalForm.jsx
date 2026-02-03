@@ -32,12 +32,14 @@ export default function TradeProposalForm({ playerData, onClose }) {
 
   const { data: allPlayers = [] } = useQuery({
     queryKey: ['allPlayers'],
-    queryFn: () => base44.entities.Player.list()
+    queryFn: () => base44.entities.Player.list('-created_date', 100),
+    staleTime: 60000
   });
 
   const { data: myItems = [] } = useQuery({
     queryKey: ['myItems', playerData.id],
-    queryFn: () => base44.entities.Item.filter({ owner_id: playerData.id })
+    queryFn: () => base44.entities.Item.filter({ owner_id: playerData.id }),
+    staleTime: 30000
   });
 
   const createTradeMutation = useMutation({

@@ -16,8 +16,9 @@ export default function OutgoingTrades({ playerData }) {
     queryFn: () => base44.entities.TradeOffer.filter({
       initiator_id: playerData.id,
       status: 'pending'
-    }),
-    refetchInterval: 5000
+    }, '-created_date', 20),
+    staleTime: 15000,
+    refetchInterval: 30000
   });
 
   const cancelTradeMutation = useMutation({

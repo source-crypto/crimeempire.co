@@ -13,14 +13,16 @@ export default function MessagesPage() {
 
   const { data: user } = useQuery({
     queryKey: ['user'],
-    queryFn: () => base44.auth.me()
+    queryFn: () => base44.auth.me(),
+    staleTime: 60000
   });
 
   const { data: playerData } = useQuery({
     queryKey: ['player', user?.email],
     queryFn: () => base44.entities.Player.filter({ created_by: user.email }),
     enabled: !!user?.email,
-    select: (data) => data[0]
+    select: (data) => data[0],
+    staleTime: 30000
   });
 
   const { data: unreadMessages = [] } = useQuery({
@@ -30,7 +32,8 @@ export default function MessagesPage() {
       is_read: false 
     }),
     enabled: !!playerData?.id,
-    refetchInterval: 10000
+    staleTime: 10000,
+    refetchInterval: 30000
   });
 
   const { data: unreadNotifications = [] } = useQuery({
@@ -40,7 +43,8 @@ export default function MessagesPage() {
       is_read: false 
     }),
     enabled: !!playerData?.id,
-    refetchInterval: 10000
+    staleTime: 10000,
+    refetchInterval: 30000
   });
 
   if (!playerData) {

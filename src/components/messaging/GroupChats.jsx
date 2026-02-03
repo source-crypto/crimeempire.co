@@ -18,7 +18,8 @@ export default function GroupChats({ playerData }) {
     queryKey: ['crew', playerData.crew_id],
     queryFn: () => base44.entities.Crew.filter({ id: playerData.crew_id }),
     enabled: !!playerData.crew_id,
-    select: (data) => data[0]
+    select: (data) => data[0],
+    staleTime: 60000
   });
 
   const { data: crewMessages = [] } = useQuery({
@@ -26,9 +27,10 @@ export default function GroupChats({ playerData }) {
     queryFn: () => base44.entities.Message.filter({
       conversation_type: 'crew',
       conversation_id: playerData.crew_id
-    }),
+    }, '-created_date', 50),
     enabled: !!playerData.crew_id,
-    refetchInterval: 5000,
+    staleTime: 5000,
+    refetchInterval: 15000,
     select: (data) => data.sort((a, b) => 
       new Date(a.created_date) - new Date(b.created_date)
     )

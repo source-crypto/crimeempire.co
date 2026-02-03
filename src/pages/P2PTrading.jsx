@@ -15,14 +15,16 @@ export default function P2PTrading() {
 
   const { data: user } = useQuery({
     queryKey: ['user'],
-    queryFn: () => base44.auth.me()
+    queryFn: () => base44.auth.me(),
+    staleTime: 60000
   });
 
   const { data: playerData } = useQuery({
     queryKey: ['player', user?.email],
     queryFn: () => base44.entities.Player.filter({ created_by: user.email }),
     enabled: !!user?.email,
-    select: (data) => data[0]
+    select: (data) => data[0],
+    staleTime: 30000
   });
 
   const { data: incomingTrades = [] } = useQuery({
@@ -30,9 +32,10 @@ export default function P2PTrading() {
     queryFn: () => base44.entities.TradeOffer.filter({
       recipient_id: playerData.id,
       status: 'pending'
-    }),
+    }, '-created_date', 20),
     enabled: !!playerData?.id,
-    refetchInterval: 5000
+    staleTime: 15000,
+    refetchInterval: 30000
   });
 
   const { data: outgoingTrades = [] } = useQuery({
@@ -40,9 +43,10 @@ export default function P2PTrading() {
     queryFn: () => base44.entities.TradeOffer.filter({
       initiator_id: playerData.id,
       status: 'pending'
-    }),
+    }, '-created_date', 20),
     enabled: !!playerData?.id,
-    refetchInterval: 5000
+    staleTime: 15000,
+    refetchInterval: 30000
   });
 
   if (!playerData) {

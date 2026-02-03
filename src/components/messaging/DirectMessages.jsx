@@ -18,7 +18,8 @@ export default function DirectMessages({ playerData }) {
 
   const { data: allPlayers = [] } = useQuery({
     queryKey: ['allPlayers'],
-    queryFn: () => base44.entities.Player.list()
+    queryFn: () => base44.entities.Player.list('-created_date', 100),
+    staleTime: 60000
   });
 
   const otherPlayers = allPlayers.filter(p => p.id !== playerData.id);
@@ -32,20 +33,21 @@ export default function DirectMessages({ playerData }) {
         sender_id: playerData.id,
         recipient_id: selectedPlayerId,
         conversation_type: 'direct'
-      }) || [];
+      }, '-created_date', 50) || [];
 
       const received = await base44.entities.Message.filter({
         sender_id: selectedPlayerId,
         recipient_id: playerData.id,
         conversation_type: 'direct'
-      }) || [];
+      }, '-created_date', 50) || [];
 
       return [...sent, ...received].sort((a, b) => 
         new Date(a.created_date) - new Date(b.created_date)
       );
     },
     enabled: !!selectedPlayerId,
-    refetchInterval: 5000
+    staleTime: 5000,
+    refetchInterval: 15000
   });
 
   const sendMessageMutation = useMutation({

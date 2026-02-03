@@ -26,7 +26,8 @@ export default function InvestmentPortfolio({ playerData }) {
   const { data: investments = [] } = useQuery({
     queryKey: ['investments', playerData?.id],
     queryFn: () => base44.entities.Investment.filter({ player_id: playerData.id }),
-    enabled: !!playerData
+    enabled: !!playerData,
+    staleTime: 30000
   });
 
   const { data: transactionLogs = [] } = useQuery({
@@ -34,8 +35,9 @@ export default function InvestmentPortfolio({ playerData }) {
     queryFn: () => base44.entities.TransactionLog.filter({ 
       player_id: playerData.id,
       transaction_type: 'investment_return'
-    }),
-    enabled: !!playerData
+    }, '-created_date', 100),
+    enabled: !!playerData,
+    staleTime: 30000
   });
 
   const createInvestmentMutation = useMutation({

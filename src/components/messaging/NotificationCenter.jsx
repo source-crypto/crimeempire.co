@@ -18,8 +18,9 @@ export default function NotificationCenter({ playerData }) {
 
   const { data: notifications = [] } = useQuery({
     queryKey: ['notifications', playerData.id],
-    queryFn: () => base44.entities.Notification.filter({ player_id: playerData.id }),
-    refetchInterval: 10000,
+    queryFn: () => base44.entities.Notification.filter({ player_id: playerData.id }, '-created_date', 50),
+    staleTime: 15000,
+    refetchInterval: 30000,
     select: (data) => data.sort((a, b) => 
       new Date(b.created_date) - new Date(a.created_date)
     )
