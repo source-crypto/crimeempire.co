@@ -66,16 +66,16 @@ import Heists from './pages/Heists';
 import Home from './pages/Home';
 import Metaverse from './pages/Metaverse';
 import MoneyLaundering from './pages/MoneyLaundering';
+import PlayerManagement from './pages/PlayerManagement';
 import PlayerSetup from './pages/PlayerSetup';
 import Reputation from './pages/Reputation';
 import Settings from './pages/Settings';
 import Skills from './pages/Skills';
+import Strategy from './pages/Strategy';
 import Syndicates from './pages/Syndicates';
 import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
-import PlayerManagement from './pages/PlayerManagement';
-import Strategy from './pages/Strategy';
 import __Layout from './Layout.jsx';
 
 
@@ -99,16 +99,16 @@ export const PAGES = {
     "Home": Home,
     "Metaverse": Metaverse,
     "MoneyLaundering": MoneyLaundering,
+    "PlayerManagement": PlayerManagement,
     "PlayerSetup": PlayerSetup,
     "Reputation": Reputation,
     "Settings": Settings,
     "Skills": Skills,
+    "Strategy": Strategy,
     "Syndicates": Syndicates,
     "Territories": Territories,
     "Trading": Trading,
     "Tutorial": Tutorial,
-    "PlayerManagement": PlayerManagement,
-    "Strategy": Strategy,
 }
 
 export const pagesConfig = {

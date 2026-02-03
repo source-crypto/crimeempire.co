@@ -14,6 +14,8 @@ import AIEmployeeManagement from '../components/enterprises/AIEmployeeManagement
 import BusinessManagementUI from '../components/enterprise/BusinessManagementUI';
 import AdvancedNPCManagement from '../components/enterprise/AdvancedNPCManagement';
 import SupplyChainOptimization from '../components/territory/SupplyChainOptimization';
+import EnterprisePvPSystem from '../components/enterprises/EnterprisePvPSystem';
+import EnterpriseLeaderboard from '../components/enterprises/EnterpriseLeaderboard';
 
 export default function Enterprises() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -72,6 +74,10 @@ export default function Enterprises() {
         </div>
         <div className="space-y-6">
           <BusinessManagementUI 
+            enterprise={selectedEnterprise}
+            playerData={playerData}
+          />
+          <EnterprisePvPSystem 
             enterprise={selectedEnterprise}
             playerData={playerData}
           />
@@ -136,6 +142,8 @@ export default function Enterprises() {
         onOpenChange={setCreateDialogOpen}
         playerData={playerData}
       />
+
+      <EnterpriseLeaderboard playerData={playerData} />
 
       {enterprises.length === 0 ? (
         <Card className="glass-panel border-purple-500/20">
