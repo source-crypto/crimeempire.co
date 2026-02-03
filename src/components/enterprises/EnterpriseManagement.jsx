@@ -24,11 +24,11 @@ export default function EnterpriseManagement({ playerData }) {
     enabled: !!selectedEnterprise?.id
   });
 
-  const { data: employees = [] } = useQuery({
+  const { data: employees = null } = useQuery({
     queryKey: ['employeeSatisfaction', selectedEnterprise?.id],
     queryFn: async () => {
       const emp = await base44.entities.EmployeeSatisfaction.filter({ enterprise_id: selectedEnterprise.id });
-      return emp[0];
+      return emp[0] || null;
     },
     enabled: !!selectedEnterprise?.id
   });

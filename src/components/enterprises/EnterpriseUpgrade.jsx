@@ -15,25 +15,43 @@ const upgradeTypes = {
     icon: TrendingUp,
     label: 'Production Rate',
     description: 'Increase output per hour',
-    color: 'from-green-600 to-emerald-600'
+    color: 'from-green-600 to-emerald-600',
+    multiplier: 1.5
   },
   storage: {
     icon: Package,
     label: 'Storage Capacity',
     description: 'Store more inventory',
-    color: 'from-blue-600 to-cyan-600'
+    color: 'from-blue-600 to-cyan-600',
+    multiplier: 1.0
   },
   security: {
     icon: Shield,
     label: 'Security Level',
     description: 'Reduce heat and raid risk',
-    color: 'from-purple-600 to-pink-600'
+    color: 'from-purple-600 to-pink-600',
+    multiplier: 1.3
   },
   efficiency: {
     icon: Zap,
     label: 'Efficiency',
     description: 'Lower costs, higher margins',
-    color: 'from-yellow-600 to-orange-600'
+    color: 'from-yellow-600 to-orange-600',
+    multiplier: 1.2
+  },
+  automation: {
+    icon: Sparkles,
+    label: 'Automation',
+    description: 'Automated production cycles',
+    color: 'from-cyan-600 to-blue-600',
+    multiplier: 1.8
+  },
+  stealth: {
+    icon: Lock,
+    label: 'Stealth Operations',
+    description: 'Reduce heat generation',
+    color: 'from-slate-600 to-gray-600',
+    multiplier: 1.4
   }
 };
 
@@ -122,14 +140,14 @@ Return JSON format.
         case 'production':
           upgradeCost = baseCost * 1.5;
           updateData = {
-            production_rate: enterprise.production_rate * 1.25,
+            production_rate: Math.floor(enterprise.production_rate * 1.25),
             level: enterprise.level + 1
           };
           break;
         case 'storage':
           upgradeCost = baseCost;
           updateData = {
-            storage_capacity: enterprise.storage_capacity * 1.5,
+            storage_capacity: Math.floor(enterprise.storage_capacity * 1.5),
             level: enterprise.level + 1
           };
           break;
@@ -144,7 +162,23 @@ Return JSON format.
         case 'efficiency':
           upgradeCost = baseCost * 1.2;
           updateData = {
-            production_rate: enterprise.production_rate * 1.15,
+            production_rate: Math.floor(enterprise.production_rate * 1.15),
+            level: enterprise.level + 1
+          };
+          break;
+        case 'automation':
+          upgradeCost = baseCost * 1.8;
+          updateData = {
+            production_rate: Math.floor(enterprise.production_rate * 1.4),
+            storage_capacity: Math.floor(enterprise.storage_capacity * 1.3),
+            level: enterprise.level + 1
+          };
+          break;
+        case 'stealth':
+          upgradeCost = baseCost * 1.4;
+          updateData = {
+            heat_level: Math.max(0, enterprise.heat_level - 20),
+            security_level: Math.min(10, enterprise.security_level + 2),
             level: enterprise.level + 1
           };
           break;
@@ -273,10 +307,10 @@ Return JSON format.
           <CardTitle className="text-white">Upgrade Enterprise</CardTitle>
         </CardHeader>
         <CardContent className="p-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {Object.entries(upgradeTypes).map(([type, config]) => {
               const Icon = config.icon;
-              const cost = enterprise.level * 5000 * (type === 'production' ? 1.5 : type === 'security' ? 1.3 : type === 'efficiency' ? 1.2 : 1);
+              const cost = Math.floor(enterprise.level * 5000 * config.multiplier);
               
               return (
                 <div key={type} className="p-4 rounded-lg bg-slate-900/30 border border-purple-500/10">
