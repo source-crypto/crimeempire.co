@@ -8,9 +8,10 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import EquipmentSystem from '../components/progression/EquipmentSystem';
 import { 
   User, TrendingUp, Star, Award, Settings, Crown,
-  Zap, Shield, Target, Brain, Users, DollarSign
+  Zap, Shield, Target, Brain, Users, DollarSign, Package
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -124,6 +125,10 @@ export default function PlayerManagement() {
         <TabsList className="glass-panel border border-purple-500/20 flex-wrap h-auto">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="skills">Skills</TabsTrigger>
+          <TabsTrigger value="equipment" className="flex items-center gap-2">
+            <Package className="w-4 h-4" />
+            Equipment
+          </TabsTrigger>
           <TabsTrigger value="stats">Statistics</TabsTrigger>
           <TabsTrigger value="customization">Customization</TabsTrigger>
         </TabsList>

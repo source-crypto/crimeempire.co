@@ -4,7 +4,9 @@ import { base44 } from '@/api/base44Client';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import FactionManagement from '../components/factions/FactionManagement';
 import AIDiplomacySystem from '../components/factions/AIDiplomacySystem';
-import { Users, Brain, Shield } from 'lucide-react';
+import FactionQuestBoard from '../components/factions/FactionQuestBoard';
+import FactionWarfare from '../components/factions/FactionWarfare';
+import { Users, Brain, Shield, Target, Swords } from 'lucide-react';
 
 export default function Factions() {
   const { data: user } = useQuery({
@@ -29,7 +31,7 @@ export default function Factions() {
         const factions = await base44.entities.Faction.filter({ 
           id: members[0].faction_id 
         });
-        return factions[0];
+        return { faction: factions[0], membership: members[0] };
       }
       return null;
     },
@@ -57,10 +59,18 @@ export default function Factions() {
       </div>
 
       <Tabs defaultValue="faction" className="space-y-6">
-        <TabsList className="glass-panel border-purple-500/30">
+        <TabsList className="glass-panel border-purple-500/30 flex-wrap h-auto">
           <TabsTrigger value="faction" className="flex items-center gap-2">
             <Users className="w-4 h-4" />
             My Faction
+          </TabsTrigger>
+          <TabsTrigger value="quests" className="flex items-center gap-2">
+            <Target className="w-4 h-4" />
+            Quests
+          </TabsTrigger>
+          <TabsTrigger value="warfare" className="flex items-center gap-2">
+            <Swords className="w-4 h-4" />
+            Warfare
           </TabsTrigger>
           <TabsTrigger value="diplomacy" className="flex items-center gap-2">
             <Brain className="w-4 h-4" />
@@ -72,9 +82,38 @@ export default function Factions() {
           <FactionManagement playerData={playerData} />
         </TabsContent>
 
+        <TabsContent value="quests">
+          {playerFactionData ? (
+            <FactionQuestBoard 
+              playerData={playerData} 
+              factionMembership={playerFactionData.membership}
+            />
+          ) : (
+            <div className="glass-panel border-purple-500/30 p-8 text-center">
+              <Shield className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+              <p className="text-gray-400">Join or create a faction to access quests</p>
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="warfare">
+          {playerFactionData ? (
+            <FactionWarfare 
+              playerData={playerData}
+              playerFaction={playerFactionData.faction}
+              factionMembership={playerFactionData.membership}
+            />
+          ) : (
+            <div className="glass-panel border-purple-500/30 p-8 text-center">
+              <Shield className="w-16 h-16 text-gray-500 mx-auto mb-4" />
+              <p className="text-gray-400">Join or create a faction to participate in warfare</p>
+            </div>
+          )}
+        </TabsContent>
+
         <TabsContent value="diplomacy">
           {playerFactionData ? (
-            <AIDiplomacySystem playerFaction={playerFactionData} />
+            <AIDiplomacySystem playerFaction={playerFactionData.faction} />
           ) : (
             <div className="glass-panel border-purple-500/30 p-8 text-center">
               <Shield className="w-16 h-16 text-gray-500 mx-auto mb-4" />

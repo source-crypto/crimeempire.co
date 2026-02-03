@@ -75,6 +75,7 @@ import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
 import PlayerManagement from './pages/PlayerManagement';
+import Strategy from './pages/Strategy';
 import __Layout from './Layout.jsx';
 
 
@@ -107,6 +108,7 @@ export const PAGES = {
     "Trading": Trading,
     "Tutorial": Tutorial,
     "PlayerManagement": PlayerManagement,
+    "Strategy": Strategy,
 }
 
 export const pagesConfig = {
