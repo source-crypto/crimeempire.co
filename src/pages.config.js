@@ -77,6 +77,7 @@ import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
 import ItemsCenter from './pages/ItemsCenter';
+import Messages from './pages/Messages';
 import __Layout from './Layout.jsx';
 
 
@@ -111,6 +112,7 @@ export const PAGES = {
     "Trading": Trading,
     "Tutorial": Tutorial,
     "ItemsCenter": ItemsCenter,
+    "Messages": Messages,
 }
 
 export const pagesConfig = {
