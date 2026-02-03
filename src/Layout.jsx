@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { 
         Home, Map, Users, Building2, Car, Gavel, 
-        Settings, Menu, X, Zap, Shield, Bell, Crown, BookOpen, DollarSign, User, Brain
+        Settings, Menu, X, Zap, Shield, Bell, Crown, BookOpen, DollarSign, User, Brain, Package
       } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
@@ -31,7 +31,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Base Management', page: 'BaseManagement', icon: Building2 },
     { name: 'AI Systems', page: 'AIManagement', icon: Zap },
     { name: 'Governance', page: 'Governance', icon: Crown },
-    { name: 'Items Center', page: 'ItemsCenter', icon: Building2 },
+    { name: 'Items Center', page: 'ItemsCenter', icon: Package },
     ];
 
   return (
