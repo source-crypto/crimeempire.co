@@ -4,12 +4,14 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Brain, Package, TrendingUp, MapPin, DollarSign, Users } from 'lucide-react';
+import { Brain, Package, TrendingUp, MapPin, DollarSign, Users, AlertTriangle, Shield, Route } from 'lucide-react';
 import { toast } from 'sonner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function AIContrabandManager({ playerData, territories, contrabandCaches }) {
   const queryClient = useQueryClient();
   const [distributionPlan, setDistributionPlan] = useState(null);
+  const [activeTab, setActiveTab] = useState('overview');
 
   const { data: playerCrew } = useQuery({
     queryKey: ['crew', playerData.crew_id],
@@ -162,6 +164,100 @@ Return ONLY valid JSON:`;
     onError: (error) => toast.error(error.message)
   });
 
+  const createDistributionOperationMutation = useMutation({
+    mutationFn: async ({ operationType, targetTerritory }) => {
+      const costs = {
+        street_dealers: 15000,
+        distribution_network: 35000,
+        wholesale_operation: 60000,
+        international_smuggling: 120000
+      };
+
+      const cost = costs[operationType];
+      if (playerData.crypto_balance < cost) {
+        throw new Error('Insufficient funds');
+      }
+
+      const operation = await base44.entities.ContrabandRoute.create({
+        route_type: operationType,
+        status: 'active',
+        start_point: { lat: 0, lng: 0 },
+        end_point: targetTerritory?.coordinates || { lat: 0, lng: 0 },
+        territory_id: targetTerritory?.id,
+        player_id: playerData.id,
+        crew_id: playerData.crew_id,
+        efficiency: 100,
+        risk_level: operationType === 'street_dealers' ? 30 : 
+                   operationType === 'distribution_network' ? 50 :
+                   operationType === 'wholesale_operation' ? 65 : 85,
+        revenue_per_hour: operationType === 'street_dealers' ? 500 : 
+                         operationType === 'distribution_network' ? 1500 :
+                         operationType === 'wholesale_operation' ? 3500 : 8000,
+        setup_cost: cost
+      });
+
+      await base44.entities.Player.update(playerData.id, {
+        crypto_balance: playerData.crypto_balance - cost
+      });
+
+      return { operation, type: operationType, cost };
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(['contrabandRoutes']);
+      queryClient.invalidateQueries(['player']);
+      toast.success(`${data.type.replace(/_/g, ' ')} operation established!`);
+    },
+    onError: (error) => toast.error(error.message)
+  });
+
+  const { data: activeOperations = [] } = useQuery({
+    queryKey: ['contrabandRoutes', playerData?.id],
+    queryFn: () => base44.entities.ContrabandRoute.filter({ 
+      player_id: playerData.id,
+      status: 'active'
+    }),
+    enabled: !!playerData?.id
+  });
+
+  const distributionOperations = [
+    {
+      type: 'street_dealers',
+      label: 'Street Dealers Network',
+      description: 'Small-scale street distribution',
+      cost: 15000,
+      revenue: 500,
+      risk: 30,
+      icon: Users
+    },
+    {
+      type: 'distribution_network',
+      label: 'Distribution Network',
+      description: 'Multi-territory distribution chain',
+      cost: 35000,
+      revenue: 1500,
+      risk: 50,
+      icon: MapPin
+    },
+    {
+      type: 'wholesale_operation',
+      label: 'Wholesale Operation',
+      description: 'Bulk distribution to buyers',
+      cost: 60000,
+      revenue: 3500,
+      risk: 65,
+      icon: Package
+    },
+    {
+      type: 'international_smuggling',
+      label: 'International Smuggling',
+      description: 'Cross-border operations',
+      cost: 120000,
+      revenue: 8000,
+      risk: 85,
+      icon: TrendingUp
+    }
+  ];
+
   return (
     <Card className="glass-panel border-cyan-500/30">
       <CardHeader className="border-b border-cyan-500/20">
@@ -171,6 +267,108 @@ Return ONLY valid JSON:`;
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4 space-y-4">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="bg-slate-900/50 grid grid-cols-3 w-full">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="operations">Operations</TabsTrigger>
+            <TabsTrigger value="strategy">AI Strategy</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="overview" className="space-y-4 mt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="p-3 rounded-lg bg-slate-900/30 border border-cyan-500/20">
+                <p className="text-xs text-gray-400 mb-1">Active Operations</p>
+                <p className="text-2xl font-bold text-cyan-400">{activeOperations.length}</p>
+              </div>
+              <div className="p-3 rounded-lg bg-slate-900/30 border border-green-500/20">
+                <p className="text-xs text-gray-400 mb-1">Total Hourly Revenue</p>
+                <p className="text-2xl font-bold text-green-400">
+                  ${activeOperations.reduce((sum, op) => sum + (op.revenue_per_hour || 0), 0).toLocaleString()}/hr
+                </p>
+              </div>
+            </div>
+
+            {activeOperations.length > 0 && (
+              <div className="space-y-2">
+                <h4 className="text-white font-semibold text-sm">Your Operations</h4>
+                {activeOperations.map((op) => (
+                  <div key={op.id} className="p-3 rounded-lg bg-slate-900/30 border border-purple-500/10">
+                    <div className="flex items-center justify-between mb-2">
+                      <h5 className="text-white font-semibold capitalize">{op.route_type.replace(/_/g, ' ')}</h5>
+                      <Badge className="bg-green-600">Active</Badge>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-xs">
+                      <div>
+                        <p className="text-gray-400">Revenue</p>
+                        <p className="text-green-400 font-semibold">${op.revenue_per_hour}/hr</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400">Risk</p>
+                        <p className={getRiskColor(op.risk_level)}>{op.risk_level}%</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400">Efficiency</p>
+                        <p className="text-cyan-400 font-semibold">{op.efficiency}%</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="operations" className="space-y-3 mt-4">
+            <h4 className="text-white font-semibold mb-3">Establish Distribution Operations</h4>
+            {distributionOperations.map((op) => {
+              const Icon = op.icon;
+              const canAfford = playerData?.crypto_balance >= op.cost;
+
+              return (
+                <div 
+                  key={op.type}
+                  className={`p-4 rounded-lg border transition-all ${
+                    canAfford 
+                      ? 'bg-slate-900/30 border-purple-500/20 hover:border-purple-500/40'
+                      : 'bg-slate-900/10 border-gray-700/20 opacity-60'
+                  }`}
+                >
+                  <div className="flex items-start gap-3 mb-3">
+                    <div className="p-2 rounded-lg bg-gradient-to-br from-cyan-600 to-blue-600">
+                      <Icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h5 className="text-white font-semibold">{op.label}</h5>
+                      <p className="text-xs text-gray-400 mb-2">{op.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge variant="outline" className="text-xs">
+                          <DollarSign className="w-3 h-3 mr-1" />
+                          ${op.revenue}/hr
+                        </Badge>
+                        <Badge variant="outline" className={`text-xs ${getRiskColor(op.risk)}`}>
+                          <AlertTriangle className="w-3 h-3 mr-1" />
+                          Risk: {op.risk}%
+                        </Badge>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Button
+                    size="sm"
+                    onClick={() => createDistributionOperationMutation.mutate({ 
+                      operationType: op.type,
+                      targetTerritory: crewTerritories[0]
+                    })}
+                    disabled={createDistributionOperationMutation.isPending || !canAfford}
+                    className="w-full bg-gradient-to-r from-cyan-600 to-blue-600"
+                  >
+                    Establish - ${op.cost.toLocaleString()}
+                  </Button>
+                </div>
+              );
+            })}
+          </TabsContent>
+
+          <TabsContent value="strategy" className="space-y-4 mt-4">
         {playerCrew && (
           <div className="p-3 rounded-lg bg-purple-900/20 border border-purple-500/30">
             <div className="flex items-center gap-2 mb-2">
@@ -300,7 +498,15 @@ Return ONLY valid JSON:`;
             </div>
           </div>
         )}
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );
+}
+
+function getRiskColor(risk) {
+  if (risk < 30) return 'text-green-400';
+  if (risk < 60) return 'text-yellow-400';
+  return 'text-red-400';
 }

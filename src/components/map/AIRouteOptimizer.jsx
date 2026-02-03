@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Brain, Route, TrendingUp, Shield, AlertTriangle, DollarSign } from 'lucide-react';
+import { Brain, Route, TrendingUp, Shield, AlertTriangle, DollarSign, Package, MapPin } from 'lucide-react';
 import { toast } from 'sonner';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useQuery } from '@tanstack/react-query';
 
 export default function AIRouteOptimizer({ 
   playerData, 
@@ -99,6 +101,15 @@ Return ONLY valid JSON:`;
     }
   });
 
+  const { data: establishedRoutes = [] } = useQuery({
+    queryKey: ['supplyRoutes', playerData?.id],
+    queryFn: () => base44.entities.SupplyRoute.filter({ 
+      player_id: playerData.id,
+      is_active: true
+    }),
+    enabled: !!playerData?.id
+  });
+
   const createRouteMutation = useMutation({
     mutationFn: async (route) => {
       const cost = 5000;
@@ -149,26 +160,33 @@ Return ONLY valid JSON:`;
         </CardTitle>
       </CardHeader>
       <CardContent className="p-4 space-y-4">
-        <Button
-          onClick={() => optimizeRoutesMutation.mutate()}
-          disabled={optimizeRoutesMutation.isPending}
-          className="w-full bg-gradient-to-r from-purple-600 to-blue-600"
-        >
-          {optimizeRoutesMutation.isPending ? (
-            <>
-              <Brain className="w-4 h-4 mr-2 animate-pulse" />
-              Analyzing Intelligence...
-            </>
-          ) : (
-            <>
-              <Brain className="w-4 h-4 mr-2" />
-              Optimize Smuggling Routes
-            </>
-          )}
-        </Button>
+        <Tabs defaultValue="suggest">
+          <TabsList className="bg-slate-900/50 grid grid-cols-2 w-full">
+            <TabsTrigger value="suggest">AI Suggestions</TabsTrigger>
+            <TabsTrigger value="active">Active Routes</TabsTrigger>
+          </TabsList>
 
-        {optimizedRoutes.length > 0 && (
-          <div className="space-y-3 max-h-96 overflow-y-auto">
+          <TabsContent value="suggest" className="space-y-4 mt-4">
+            <Button
+              onClick={() => optimizeRoutesMutation.mutate()}
+              disabled={optimizeRoutesMutation.isPending}
+              className="w-full bg-gradient-to-r from-purple-600 to-blue-600"
+            >
+              {optimizeRoutesMutation.isPending ? (
+                <>
+                  <Brain className="w-4 h-4 mr-2 animate-pulse" />
+                  Analyzing Intelligence...
+                </>
+              ) : (
+                <>
+                  <Brain className="w-4 h-4 mr-2" />
+                  Optimize Smuggling Routes
+                </>
+              )}
+            </Button>
+
+            {optimizedRoutes.length > 0 && (
+              <div className="space-y-3 max-h-96 overflow-y-auto">
             {optimizedRoutes.map((route, idx) => (
               <div
                 key={idx}
@@ -232,8 +250,66 @@ Return ONLY valid JSON:`;
                 </Button>
               </div>
             ))}
-          </div>
-        )}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="active" className="space-y-3 mt-4">
+            {establishedRoutes.length === 0 ? (
+              <div className="text-center py-8 text-gray-400">
+                <Route className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                <p>No established routes yet</p>
+                <p className="text-xs mt-1">Use AI suggestions to create optimal routes</p>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                {establishedRoutes.map((route) => (
+                  <div key={route.id} className="p-4 rounded-lg bg-slate-900/30 border border-purple-500/20">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <h5 className="text-white font-semibold capitalize flex items-center gap-2">
+                          <Route className="w-4 h-4" />
+                          {route.cargo_type || route.route_type}
+                        </h5>
+                        {route.ai_optimized && (
+                          <Badge className="bg-purple-600 mt-1">AI Optimized</Badge>
+                        )}
+                      </div>
+                      <Badge className={route.is_active ? 'bg-green-600' : 'bg-gray-600'}>
+                        {route.is_active ? 'Active' : 'Inactive'}
+                      </Badge>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
+                      <div className="p-2 rounded bg-slate-900/50">
+                        <p className="text-xs text-gray-400">Revenue/Trip</p>
+                        <p className="text-green-400 font-semibold text-sm">
+                          ${route.revenue_per_trip?.toLocaleString()}
+                        </p>
+                      </div>
+                      <div className="p-2 rounded bg-slate-900/50">
+                        <p className="text-xs text-gray-400">Risk</p>
+                        <p className={`font-semibold text-sm ${getRiskColor(route.risk_level)}`}>
+                          {route.risk_level}%
+                        </p>
+                      </div>
+                      <div className="p-2 rounded bg-slate-900/50">
+                        <p className="text-xs text-gray-400">Efficiency</p>
+                        <p className="text-cyan-400 font-semibold text-sm">{route.efficiency}%</p>
+                      </div>
+                      <div className="p-2 rounded bg-slate-900/50">
+                        <p className="text-xs text-gray-400">Status</p>
+                        <p className="text-white font-semibold text-sm capitalize">
+                          {route.status}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );
