@@ -21,11 +21,14 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 const enterpriseTypes = [
-  { value: 'marijuana_farm', label: 'Marijuana Farm', cost: 50000 },
-  { value: 'chop_shop', label: 'Chop Shop', cost: 75000 },
-  { value: 'money_laundering', label: 'Money Laundering', cost: 100000 },
-  { value: 'material_production', label: 'Material Production', cost: 60000 },
-  { value: 'weapons_cache', label: 'Weapons Cache', cost: 80000 }
+  { value: 'marijuana_farm', label: 'Marijuana Farm', cost: 50000, description: 'Grow and distribute cannabis' },
+  { value: 'chop_shop', label: 'Chop Shop', cost: 75000, description: 'Steal and dismantle vehicles' },
+  { value: 'money_laundering', label: 'Money Laundering', cost: 100000, description: 'Clean dirty money' },
+  { value: 'material_production', label: 'Material Production', cost: 60000, description: 'Produce raw materials' },
+  { value: 'weapons_cache', label: 'Weapons Cache', cost: 80000, description: 'Store and distribute weapons' },
+  { value: 'arms_manufacturing', label: 'Arms Manufacturing', cost: 150000, description: 'Manufacture illegal weapons', heat: 15 },
+  { value: 'counterfeiting_operation', label: 'Counterfeiting Operation', cost: 120000, description: 'Produce counterfeit currency and documents', heat: 12 },
+  { value: 'human_trafficking_ring', label: 'Human Trafficking Ring', cost: 200000, description: 'High-risk, high-reward operation', heat: 25 }
 ];
 
 export default function CreateEnterpriseDialog({ open, onOpenChange, playerData }) {
@@ -57,10 +60,13 @@ export default function CreateEnterpriseDialog({ open, onOpenChange, playerData 
         production_rate: 100,
         storage_capacity: 1000,
         current_stock: 0,
-        heat_level: 0,
+        heat_level: selectedType.heat || 0,
         security_level: 1,
         is_active: true,
-        total_revenue: 0
+        total_revenue: 0,
+        specialized_equipment: type === 'arms_manufacturing' || type === 'counterfeiting_operation' ? [] : undefined,
+        security_measures: [],
+        alliance_status: 'neutral'
       });
 
       if (playerData.crew_id) {
@@ -119,7 +125,10 @@ export default function CreateEnterpriseDialog({ open, onOpenChange, playerData 
               <SelectContent>
                 {enterpriseTypes.map((t) => (
                   <SelectItem key={t.value} value={t.value}>
-                    {t.label} - ${t.cost.toLocaleString()}
+                    <div className="flex flex-col">
+                      <span>{t.label} - ${t.cost.toLocaleString()}</span>
+                      <span className="text-xs text-gray-500">{t.description}</span>
+                    </div>
                   </SelectItem>
                 ))}
               </SelectContent>
