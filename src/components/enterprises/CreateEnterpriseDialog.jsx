@@ -90,9 +90,12 @@ export default function CreateEnterpriseDialog({ open, onOpenChange, playerData 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="glass-panel border-purple-500/20 max-w-md">
+      <DialogContent className="glass-panel border-purple-500/20 max-w-md" aria-describedby="enterprise-description">
         <DialogHeader>
           <DialogTitle className="text-white">Create New Enterprise</DialogTitle>
+          <p id="enterprise-description" className="text-gray-400 text-sm">
+            Establish a new criminal operation to generate income
+          </p>
         </DialogHeader>
         
         <div className="space-y-4">
