@@ -14,6 +14,11 @@ import BattleInterface from '../components/battle/BattleInterface';
 import PlayerTerritoryManager from '../components/territory/PlayerTerritoryManager';
 import TerritoryCreator from '../components/territory/TerritoryCreator';
 import TerritoryOutpostManager from '../components/territory/TerritoryOutpostManager';
+import TerritoryUpgradeSystem from '../components/territory/TerritoryUpgradeSystem';
+import TerritoryAnalytics from '../components/territory/TerritoryAnalytics';
+import TerritoryResourceManager from '../components/territory/TerritoryResourceManager';
+import TerritoryWarRoomStrategy from '../components/territory/TerritoryWarRoomStrategy';
+import TerritoryInfluenceSystem from '../components/territory/TerritoryInfluenceSystem';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
@@ -183,15 +188,29 @@ export default function Territories() {
         </div>
       </div>
 
+      <TerritoryAnalytics 
+        territories={territories}
+        crewData={crewData}
+        playerData={playerData}
+      />
+
       <Tabs defaultValue="manage" className="space-y-4">
         <TabsList className="glass-panel border border-purple-500/20">
           <TabsTrigger value="manage">Manage</TabsTrigger>
           <TabsTrigger value="owned">Your Territories</TabsTrigger>
+          <TabsTrigger value="warroom">War Room</TabsTrigger>
           <TabsTrigger value="all">All Territories</TabsTrigger>
         </TabsList>
 
         <TabsContent value="manage">
           <PlayerTerritoryManager playerData={playerData} />
+        </TabsContent>
+
+        <TabsContent value="warroom">
+          <TerritoryWarRoomStrategy 
+            playerData={playerData}
+            crewData={crewData}
+          />
         </TabsContent>
 
         <TabsContent value="owned">
@@ -265,16 +284,31 @@ export default function Territories() {
                   </TabsList>
 
                   <TabsContent value="benefits">
-                    <TerritoryBenefits
-                      territoryId={selectedTerritory.id}
-                      canManage={canManage}
-                    />
+                    <div className="space-y-4">
+                      <TerritoryBenefits
+                        territoryId={selectedTerritory.id}
+                        canManage={canManage}
+                      />
+                      <TerritoryUpgradeSystem
+                        territory={selectedTerritory}
+                        playerData={playerData}
+                        crewData={crewData}
+                      />
+                    </div>
                   </TabsContent>
 
                   <TabsContent value="events">
                     <div className="space-y-4">
                       <TerritoryEventSystem
                         territoryId={selectedTerritory.id}
+                        playerData={playerData}
+                      />
+                      <TerritoryResourceManager
+                        territory={selectedTerritory}
+                        playerData={playerData}
+                      />
+                      <TerritoryInfluenceSystem
+                        territory={selectedTerritory}
                         playerData={playerData}
                       />
                       {playerFaction && (
