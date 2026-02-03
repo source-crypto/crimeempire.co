@@ -76,6 +76,7 @@ import Syndicates from './pages/Syndicates';
 import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
+import ItemsCenter from './pages/ItemsCenter';
 import __Layout from './Layout.jsx';
 
 
@@ -109,6 +110,7 @@ export const PAGES = {
     "Territories": Territories,
     "Trading": Trading,
     "Tutorial": Tutorial,
+    "ItemsCenter": ItemsCenter,
 }
 
 export const pagesConfig = {
