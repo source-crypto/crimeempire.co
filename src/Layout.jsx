@@ -24,7 +24,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Earnings', page: 'Earnings', icon: Bell },
     { name: 'Reputation', page: 'Reputation', icon: Crown },
     { name: 'Syndicates', page: 'Syndicates', icon: Users },
-    { name: 'Trading', page: 'Trading', icon: Gavel },
+    { name: 'P2P Trading', page: 'P2PTrading', icon: Gavel },
     { name: 'Territories', page: 'Territories', icon: Map },
     { name: 'Enterprises', page: 'Enterprises', icon: Building2 },
     { name: 'Black Market', page: 'BlackMarket', icon: Zap },

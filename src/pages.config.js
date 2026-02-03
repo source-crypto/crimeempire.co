@@ -78,6 +78,7 @@ import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
 import ItemsCenter from './pages/ItemsCenter';
 import Messages from './pages/Messages';
+import P2PTrading from './pages/P2PTrading';
 import __Layout from './Layout.jsx';
 
 
@@ -113,6 +114,7 @@ export const PAGES = {
     "Tutorial": Tutorial,
     "ItemsCenter": ItemsCenter,
     "Messages": Messages,
+    "P2PTrading": P2PTrading,
 }
 
 export const pagesConfig = {
