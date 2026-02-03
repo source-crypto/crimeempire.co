@@ -31,7 +31,8 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Base Management', page: 'BaseManagement', icon: Building2 },
     { name: 'AI Systems', page: 'AIManagement', icon: Zap },
     { name: 'Governance', page: 'Governance', icon: Crown },
-  ];
+    { name: 'Items Center', page: 'ItemsCenter', icon: Building2 },
+    ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
