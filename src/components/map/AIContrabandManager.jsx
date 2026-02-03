@@ -369,135 +369,135 @@ Return ONLY valid JSON:`;
           </TabsContent>
 
           <TabsContent value="strategy" className="space-y-4 mt-4">
-        {playerCrew && (
-          <div className="p-3 rounded-lg bg-purple-900/20 border border-purple-500/30">
-            <div className="flex items-center gap-2 mb-2">
-              <Users className="w-4 h-4 text-purple-400" />
-              <span className="text-sm font-semibold text-white">{playerCrew.name}</span>
-            </div>
-            <div className="text-xs text-gray-400 space-y-1">
-              <p>Territories: {crewTerritories.length}</p>
-              <p>Total Power: {playerCrew.total_power}</p>
-            </div>
-          </div>
-        )}
-
-        <Button
-          onClick={() => optimizeDistributionMutation.mutate()}
-          disabled={optimizeDistributionMutation.isPending}
-          className="w-full bg-gradient-to-r from-cyan-600 to-blue-600"
-        >
-          {optimizeDistributionMutation.isPending ? (
-            <>
-              <Brain className="w-4 h-4 mr-2 animate-pulse" />
-              Analyzing Markets...
-            </>
-          ) : (
-            <>
-              <Brain className="w-4 h-4 mr-2" />
-              Generate Distribution Plan
-            </>
-          )}
-        </Button>
-
-        {distributionPlan && (
-          <div className="space-y-3">
-            <div className="p-3 rounded-lg bg-green-900/20 border border-green-500/30">
-              <div className="text-sm space-y-1">
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Projected Revenue:</span>
-                  <span className="text-green-400 font-bold">
-                    ${distributionPlan.total_projected_revenue?.toLocaleString()}
-                  </span>
+            {playerCrew && (
+              <div className="p-3 rounded-lg bg-purple-900/20 border border-purple-500/30">
+                <div className="flex items-center gap-2 mb-2">
+                  <Users className="w-4 h-4 text-purple-400" />
+                  <span className="text-sm font-semibold text-white">{playerCrew.name}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Overall Risk:</span>
-                  <span className={`font-semibold ${
-                    distributionPlan.overall_risk < 40 ? 'text-green-400' :
-                    distributionPlan.overall_risk < 70 ? 'text-yellow-400' : 'text-red-400'
-                  }`}>
-                    {distributionPlan.overall_risk}%
-                  </span>
+                <div className="text-xs text-gray-400 space-y-1">
+                  <p>Territories: {crewTerritories.length}</p>
+                  <p>Total Power: {playerCrew.total_power}</p>
                 </div>
               </div>
-            </div>
+            )}
 
-            <p className="text-xs text-gray-400 italic p-2 bg-slate-900/50 rounded">
-              {distributionPlan.strategic_insights}
-            </p>
+            <Button
+              onClick={() => optimizeDistributionMutation.mutate()}
+              disabled={optimizeDistributionMutation.isPending}
+              className="w-full bg-gradient-to-r from-cyan-600 to-blue-600"
+            >
+              {optimizeDistributionMutation.isPending ? (
+                <>
+                  <Brain className="w-4 h-4 mr-2 animate-pulse" />
+                  Analyzing Markets...
+                </>
+              ) : (
+                <>
+                  <Brain className="w-4 h-4 mr-2" />
+                  Generate AI Distribution Plan
+                </>
+              )}
+            </Button>
 
-            <div className="space-y-2 max-h-80 overflow-y-auto">
-              {distributionPlan.distribution_strategy?.map((strategy, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 rounded-lg bg-slate-900/50 border border-cyan-500/30 space-y-2"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h4 className="font-semibold text-white flex items-center gap-2">
-                        <Package className="w-4 h-4" />
-                        {strategy.contraband_type}
-                      </h4>
-                      <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
-                        <MapPin className="w-3 h-3" />
-                        {strategy.target_territory}
-                      </p>
-                    </div>
-                    <Badge className="bg-cyan-600">
-                      #{idx + 1}
-                    </Badge>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2 text-xs">
-                    <div>
-                      <span className="text-gray-400">Quantity:</span>
-                      <span className="text-white ml-1 font-semibold">
-                        {strategy.quantity_to_distribute}
+            {distributionPlan && (
+              <div className="space-y-3">
+                <div className="p-3 rounded-lg bg-green-900/20 border border-green-500/30">
+                  <div className="text-sm space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Projected Revenue:</span>
+                      <span className="text-green-400 font-bold">
+                        ${distributionPlan.total_projected_revenue?.toLocaleString()}
                       </span>
                     </div>
-                    <div>
-                      <span className="text-gray-400">Price:</span>
-                      <span className="text-green-400 ml-1 font-semibold">
-                        ${strategy.recommended_price}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-gray-400">Revenue:</span>
-                      <span className="text-green-400 ml-1 font-semibold">
-                        ${strategy.estimated_revenue?.toLocaleString()}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-gray-400">Crew:</span>
-                      <span className="text-purple-400 ml-1 font-semibold">
-                        {strategy.crew_members_needed}
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Overall Risk:</span>
+                      <span className={`font-semibold ${
+                        distributionPlan.overall_risk < 40 ? 'text-green-400' :
+                        distributionPlan.overall_risk < 70 ? 'text-yellow-400' : 'text-red-400'
+                      }`}>
+                        {distributionPlan.overall_risk}%
                       </span>
                     </div>
                   </div>
-
-                  <div className="text-xs space-y-1 border-t border-cyan-500/20 pt-2">
-                    <p className="text-gray-400">
-                      <strong>Method:</strong> {strategy.distribution_method}
-                    </p>
-                    <p className="text-gray-400">
-                      <strong>Timing:</strong> {strategy.timing_recommendation}
-                    </p>
-                    <p className="text-gray-400 italic">{strategy.reasoning}</p>
-                  </div>
-
-                  <Button
-                    size="sm"
-                    onClick={() => executeDistributionMutation.mutate(strategy)}
-                    disabled={executeDistributionMutation.isPending}
-                    className="w-full bg-cyan-600 hover:bg-cyan-700"
-                  >
-                    Execute Distribution ($10,000)
-                  </Button>
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
+
+                <p className="text-xs text-gray-400 italic p-2 bg-slate-900/50 rounded">
+                  {distributionPlan.strategic_insights}
+                </p>
+
+                <div className="space-y-2 max-h-80 overflow-y-auto">
+                  {distributionPlan.distribution_strategy?.map((strategy, idx) => (
+                    <div
+                      key={idx}
+                      className="p-3 rounded-lg bg-slate-900/50 border border-cyan-500/30 space-y-2"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <h4 className="font-semibold text-white flex items-center gap-2">
+                            <Package className="w-4 h-4" />
+                            {strategy.contraband_type}
+                          </h4>
+                          <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
+                            <MapPin className="w-3 h-3" />
+                            {strategy.target_territory}
+                          </p>
+                        </div>
+                        <Badge className="bg-cyan-600">
+                          #{idx + 1}
+                        </Badge>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                          <span className="text-gray-400">Quantity:</span>
+                          <span className="text-white ml-1 font-semibold">
+                            {strategy.quantity_to_distribute}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400">Price:</span>
+                          <span className="text-green-400 ml-1 font-semibold">
+                            ${strategy.recommended_price}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400">Revenue:</span>
+                          <span className="text-green-400 ml-1 font-semibold">
+                            ${strategy.estimated_revenue?.toLocaleString()}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-400">Crew:</span>
+                          <span className="text-purple-400 ml-1 font-semibold">
+                            {strategy.crew_members_needed}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="text-xs space-y-1 border-t border-cyan-500/20 pt-2">
+                        <p className="text-gray-400">
+                          <strong>Method:</strong> {strategy.distribution_method}
+                        </p>
+                        <p className="text-gray-400">
+                          <strong>Timing:</strong> {strategy.timing_recommendation}
+                        </p>
+                        <p className="text-gray-400 italic">{strategy.reasoning}</p>
+                      </div>
+
+                      <Button
+                        size="sm"
+                        onClick={() => executeDistributionMutation.mutate(strategy)}
+                        disabled={executeDistributionMutation.isPending}
+                        className="w-full bg-cyan-600 hover:bg-cyan-700"
+                      >
+                        Execute Distribution ($10,000)
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </TabsContent>
         </Tabs>
       </CardContent>
