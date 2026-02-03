@@ -42,6 +42,10 @@ export default function InvestmentPortfolio({ playerData }) {
     mutationFn: async () => {
       const investAmount = parseInt(amount);
       
+      if (investAmount <= 0) {
+        throw new Error('Invalid amount');
+      }
+      
       if (investAmount > playerData.crypto_balance) {
         throw new Error('Insufficient funds');
       }
@@ -62,6 +66,15 @@ export default function InvestmentPortfolio({ playerData }) {
         maturity_date: maturityDate.toISOString(),
         daily_return: investAmount * (type.return / 100) / 30,
         total_earned: 0
+      });
+
+      // Create initial transaction log
+      await base44.entities.TransactionLog.create({
+        player_id: playerData.id,
+        transaction_type: 'investment_created',
+        amount: -investAmount,
+        balance_after: playerData.crypto_balance - investAmount,
+        description: `Invested in ${type.label}`
       });
 
       await base44.entities.Player.update(playerData.id, {
@@ -91,9 +104,18 @@ export default function InvestmentPortfolio({ playerData }) {
         status: 'liquidated'
       });
 
+      // Log liquidation transaction
+      await base44.entities.TransactionLog.create({
+        player_id: playerData.id,
+        transaction_type: 'investment_liquidated',
+        amount: investment.current_value,
+        balance_after: playerData.crypto_balance + investment.current_value,
+        description: `Liquidated ${investment.asset_name} - ROI: ${((investment.current_value - investment.amount_invested) / investment.amount_invested * 100).toFixed(2)}%`
+      });
+
       await base44.entities.Player.update(playerData.id, {
         crypto_balance: playerData.crypto_balance + investment.current_value,
-        total_earnings: playerData.total_earnings + investment.total_earned
+        total_earnings: (playerData.total_earnings || 0) + investment.total_earned
       });
     },
     onSuccess: () => {

@@ -165,18 +165,20 @@ export default function ItemInventory({ items = [], playerData, enterprises, ter
                 </div>
               )}
 
-              <div className="flex gap-2 pt-2">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => deleteItemMutation.mutate(item.id)}
-                  disabled={deleteItemMutation.isPending}
-                  className="flex-1 border-red-500/30 text-red-400 hover:bg-red-900/20"
-                >
-                  <Trash2 className="w-3 h-3 mr-1" />
-                  Delete
-                </Button>
-              </div>
+              {item.owner_type === 'player' && item.quantity > 0 && (
+                <div className="flex gap-2 pt-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => deleteItemMutation.mutate(item.id)}
+                    disabled={deleteItemMutation.isPending}
+                    className="flex-1 border-red-500/30 text-red-400 hover:bg-red-900/20"
+                  >
+                    <Trash2 className="w-3 h-3 mr-1" />
+                    Delete
+                  </Button>
+                </div>
+              )}
             </CardContent>
           </Card>
         ))}

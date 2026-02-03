@@ -314,9 +314,18 @@ Be specific and tactical.`,
                   <Button
                     size="sm"
                     onClick={() => {
-                      setTargetType(rec.target_type);
-                      setTargetId(rec.target_id);
-                      setQuantity(rec.quantity);
+                      const validTarget = rec.target_type === 'enterprise' 
+                        ? enterprises.find(e => e.name === rec.target_name)
+                        : territories.find(t => t.name === rec.target_name);
+                      
+                      if (validTarget) {
+                        setTargetType(rec.target_type);
+                        setTargetId(validTarget.id);
+                        setQuantity(rec.quantity);
+                        toast.success('Recommendation applied');
+                      } else {
+                        toast.error('Target location not found');
+                      }
                     }}
                     className="w-full bg-cyan-600 hover:bg-cyan-700"
                   >

@@ -12,6 +12,7 @@ import {
 import CreateItemDialog from '../components/items/CreateItemDialog';
 import ItemInventory from '../components/items/ItemInventory';
 import ItemDistributor from '../components/items/ItemDistributor';
+import ItemMarketDistributor from '../components/items/ItemMarketDistributor';
 import { toast } from 'sonner';
 
 export default function ItemsCenter() {
@@ -38,13 +39,21 @@ export default function ItemsCenter() {
 
   const { data: enterprises = [] } = useQuery({
     queryKey: ['enterprises', playerData?.id],
-    queryFn: () => base44.entities.CriminalEnterprise.filter({ owner_id: playerData.id }),
+    queryFn: async () => {
+      if (!playerData?.id) return [];
+      const data = await base44.entities.CriminalEnterprise.filter({ owner_id: playerData.id });
+      return data || [];
+    },
     enabled: !!playerData?.id
   });
 
   const { data: territories = [] } = useQuery({
     queryKey: ['territories', playerData?.crew_id],
-    queryFn: () => base44.entities.Territory.filter({ owner_crew_id: playerData.crew_id }),
+    queryFn: async () => {
+      if (!playerData?.crew_id) return [];
+      const data = await base44.entities.Territory.filter({ owner_crew_id: playerData.crew_id });
+      return data || [];
+    },
     enabled: !!playerData?.crew_id
   });
 
@@ -167,6 +176,10 @@ export default function ItemsCenter() {
             <Send className="w-4 h-4 mr-2" />
             Distribute
           </TabsTrigger>
+          <TabsTrigger value="market">
+            <TrendingUp className="w-4 h-4 mr-2" />
+            Market
+          </TabsTrigger>
           <TabsTrigger value="categories">
             <Package className="w-4 h-4 mr-2" />
             By Category
@@ -188,6 +201,13 @@ export default function ItemsCenter() {
             items={allItems}
             enterprises={enterprises}
             territories={territories}
+          />
+        </TabsContent>
+
+        <TabsContent value="market" className="space-y-4">
+          <ItemMarketDistributor
+            playerData={playerData}
+            items={allItems}
           />
         </TabsContent>
 
