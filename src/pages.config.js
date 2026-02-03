@@ -79,6 +79,7 @@ import Tutorial from './pages/Tutorial';
 import ItemsCenter from './pages/ItemsCenter';
 import Messages from './pages/Messages';
 import P2PTrading from './pages/P2PTrading';
+import Performance from './pages/Performance';
 import __Layout from './Layout.jsx';
 
 
@@ -115,6 +116,7 @@ export const PAGES = {
     "ItemsCenter": ItemsCenter,
     "Messages": Messages,
     "P2PTrading": P2PTrading,
+    "Performance": Performance,
 }
 
 export const pagesConfig = {

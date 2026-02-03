@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
+import LazyLoadWrapper from '../components/performance/LazyLoadWrapper';
 import GameEngine from '../components/engine/GameEngine';
 import StatCard from '../components/dashboard/StatCard';
 import ActiveBattles from '../components/dashboard/ActiveBattles';
 import ActiveHeists from '../components/dashboard/ActiveHeists';
 import QuickActions from '../components/dashboard/QuickActions';
 import SystemStatus from '../components/dashboard/SystemStatus';
-import AIProgressionAnalyzer from '../components/progression/AIProgressionAnalyzer';
-import PlayerMarketplace from '../components/trading/PlayerMarketplace';
-import InvestmentPortfolio from '../components/investments/InvestmentPortfolio';
-import AIContractBoard from '../components/contracts/AIContractBoard';
-import EventBroadcastSystem from '../components/events/EventBroadcastSystem';
-import LiveMarketTracker from '../components/marketplace/LiveMarketTracker';
-import TransparentInvestmentSystem from '../components/economy/TransparentInvestmentSystem';
-import EconomyDashboard from '../components/economy/EconomyDashboard';
-import PlayerActionEventSystem from '../components/economy/PlayerActionEventSystem';
+
+// Lazy load heavy components
+const AIProgressionAnalyzer = lazy(() => import('../components/progression/AIProgressionAnalyzer'));
+const PlayerMarketplace = lazy(() => import('../components/trading/PlayerMarketplace'));
+const InvestmentPortfolio = lazy(() => import('../components/investments/InvestmentPortfolio'));
+const AIContractBoard = lazy(() => import('../components/contracts/AIContractBoard'));
+const EventBroadcastSystem = lazy(() => import('../components/events/EventBroadcastSystem'));
+const LiveMarketTracker = lazy(() => import('../components/marketplace/LiveMarketTracker'));
+const TransparentInvestmentSystem = lazy(() => import('../components/economy/TransparentInvestmentSystem'));
+const EconomyDashboard = lazy(() => import('../components/economy/EconomyDashboard'));
+const PlayerActionEventSystem = lazy(() => import('../components/economy/PlayerActionEventSystem'));
 import { 
   Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle, Building2, Target, Zap, ShoppingCart
 } from 'lucide-react';
@@ -337,39 +340,51 @@ export default function Dashboard() {
         </TabsContent>
 
         <TabsContent value="progression">
-          <AIProgressionAnalyzer 
-            playerData={playerData} 
-            onUpdate={refetchPlayer}
-          />
+          <LazyLoadWrapper fallbackText="Loading AI Progression...">
+            <AIProgressionAnalyzer 
+              playerData={playerData} 
+              onUpdate={refetchPlayer}
+            />
+          </LazyLoadWrapper>
         </TabsContent>
 
         <TabsContent value="marketplace">
-          <div className="space-y-4">
-            <LiveMarketTracker playerData={playerData} />
-            <PlayerMarketplace playerData={playerData} />
-          </div>
+          <LazyLoadWrapper fallbackText="Loading Marketplace...">
+            <div className="space-y-4">
+              <LiveMarketTracker playerData={playerData} />
+              <PlayerMarketplace playerData={playerData} />
+            </div>
+          </LazyLoadWrapper>
         </TabsContent>
 
         <TabsContent value="investments">
-          <div className="space-y-4">
-            <TransparentInvestmentSystem playerData={playerData} />
-            <InvestmentPortfolio playerData={playerData} />
-          </div>
+          <LazyLoadWrapper fallbackText="Loading Investments...">
+            <div className="space-y-4">
+              <TransparentInvestmentSystem playerData={playerData} />
+              <InvestmentPortfolio playerData={playerData} />
+            </div>
+          </LazyLoadWrapper>
         </TabsContent>
 
         <TabsContent value="contracts">
-          <AIContractBoard playerData={playerData} />
+          <LazyLoadWrapper fallbackText="Loading Contracts...">
+            <AIContractBoard playerData={playerData} />
+          </LazyLoadWrapper>
         </TabsContent>
 
         <TabsContent value="broadcasts">
-          <EventBroadcastSystem playerData={playerData} />
+          <LazyLoadWrapper fallbackText="Loading Events...">
+            <EventBroadcastSystem playerData={playerData} />
+          </LazyLoadWrapper>
         </TabsContent>
 
         <TabsContent value="economy">
-          <div className="space-y-4">
-            <PlayerActionEventSystem playerData={playerData} />
-            <EconomyDashboard playerData={playerData} />
-          </div>
+          <LazyLoadWrapper fallbackText="Loading Economy Dashboard...">
+            <div className="space-y-4">
+              <PlayerActionEventSystem playerData={playerData} />
+              <EconomyDashboard playerData={playerData} />
+            </div>
+          </LazyLoadWrapper>
         </TabsContent>
       </Tabs>
     </div>

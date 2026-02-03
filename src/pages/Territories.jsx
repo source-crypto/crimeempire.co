@@ -1,24 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { MapPin, TrendingUp, Link as LinkIcon, Swords, Loader2, Zap } from 'lucide-react';
-import TerritoryBenefits from '../components/territory/TerritoryBenefits';
-import SupplyLineManager from '../components/territory/SupplyLineManager';
-import TerritoryDevelopmentSystem from '../components/territory/TerritoryDevelopmentSystem';
-import TerritoryEventSystem from '../components/territory/TerritoryEventSystem';
-import SmartRouteOptimizer from '../components/territory/SmartRouteOptimizer';
-import BattleInterface from '../components/battle/BattleInterface';
-import PlayerTerritoryManager from '../components/territory/PlayerTerritoryManager';
+import LazyLoadWrapper from '../components/performance/LazyLoadWrapper';
 import TerritoryCreator from '../components/territory/TerritoryCreator';
-import TerritoryOutpostManager from '../components/territory/TerritoryOutpostManager';
-import TerritoryUpgradeSystem from '../components/territory/TerritoryUpgradeSystem';
 import TerritoryAnalytics from '../components/territory/TerritoryAnalytics';
-import TerritoryResourceManager from '../components/territory/TerritoryResourceManager';
-import TerritoryWarRoomStrategy from '../components/territory/TerritoryWarRoomStrategy';
-import TerritoryInfluenceSystem from '../components/territory/TerritoryInfluenceSystem';
+
+// Lazy load heavy territory components
+const TerritoryBenefits = lazy(() => import('../components/territory/TerritoryBenefits'));
+const SupplyLineManager = lazy(() => import('../components/territory/SupplyLineManager'));
+const TerritoryDevelopmentSystem = lazy(() => import('../components/territory/TerritoryDevelopmentSystem'));
+const TerritoryEventSystem = lazy(() => import('../components/territory/TerritoryEventSystem'));
+const SmartRouteOptimizer = lazy(() => import('../components/territory/SmartRouteOptimizer'));
+const BattleInterface = lazy(() => import('../components/battle/BattleInterface'));
+const PlayerTerritoryManager = lazy(() => import('../components/territory/PlayerTerritoryManager'));
+const TerritoryOutpostManager = lazy(() => import('../components/territory/TerritoryOutpostManager'));
+const TerritoryUpgradeSystem = lazy(() => import('../components/territory/TerritoryUpgradeSystem'));
+const TerritoryResourceManager = lazy(() => import('../components/territory/TerritoryResourceManager'));
+const TerritoryWarRoomStrategy = lazy(() => import('../components/territory/TerritoryWarRoomStrategy'));
+const TerritoryInfluenceSystem = lazy(() => import('../components/territory/TerritoryInfluenceSystem'));
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
@@ -169,15 +172,17 @@ export default function Territories() {
             </Button>
           </div>
         </div>
-        <BattleInterface 
-          battle={activeBattle} 
-          playerData={playerData}
-          onComplete={() => {
-            setActiveBattle(null);
-            queryClient.invalidateQueries(['territories']);
-            queryClient.invalidateQueries(['allTerritories']);
-          }}
-        />
+        <LazyLoadWrapper fallbackText="Loading Battle Interface...">
+          <BattleInterface 
+            battle={activeBattle} 
+            playerData={playerData}
+            onComplete={() => {
+              setActiveBattle(null);
+              queryClient.invalidateQueries(['territories']);
+              queryClient.invalidateQueries(['allTerritories']);
+            }}
+          />
+        </LazyLoadWrapper>
       </div>
     );
   }
@@ -209,14 +214,18 @@ export default function Territories() {
         </TabsList>
 
         <TabsContent value="manage">
-          <PlayerTerritoryManager playerData={playerData} />
+          <LazyLoadWrapper fallbackText="Loading Territory Manager...">
+            <PlayerTerritoryManager playerData={playerData} />
+          </LazyLoadWrapper>
         </TabsContent>
 
         <TabsContent value="warroom">
-          <TerritoryWarRoomStrategy 
-            playerData={playerData}
-            crewData={crewData}
-          />
+          <LazyLoadWrapper fallbackText="Loading War Room...">
+            <TerritoryWarRoomStrategy 
+              playerData={playerData}
+              crewData={crewData}
+            />
+          </LazyLoadWrapper>
         </TabsContent>
 
         <TabsContent value="owned">
@@ -290,54 +299,60 @@ export default function Territories() {
                   </TabsList>
 
                   <TabsContent value="benefits">
-                    <div className="space-y-4">
-                      <TerritoryBenefits
-                        territoryId={selectedTerritory.id}
-                        canManage={canManage}
-                      />
-                      <TerritoryUpgradeSystem
-                        territory={selectedTerritory}
-                        playerData={playerData}
-                        crewData={crewData}
-                      />
-                    </div>
+                    <LazyLoadWrapper fallbackText="Loading Territory Benefits...">
+                      <div className="space-y-4">
+                        <TerritoryBenefits
+                          territoryId={selectedTerritory.id}
+                          canManage={canManage}
+                        />
+                        <TerritoryUpgradeSystem
+                          territory={selectedTerritory}
+                          playerData={playerData}
+                          crewData={crewData}
+                        />
+                      </div>
+                    </LazyLoadWrapper>
                   </TabsContent>
 
                   <TabsContent value="events">
-                    <div className="space-y-4">
-                      <TerritoryEventSystem
-                        territoryId={selectedTerritory.id}
-                        playerData={playerData}
-                      />
-                      <TerritoryResourceManager
-                        territory={selectedTerritory}
-                        playerData={playerData}
-                      />
-                      <TerritoryInfluenceSystem
-                        territory={selectedTerritory}
-                        playerData={playerData}
-                      />
-                      {playerFaction && (
-                        <TerritoryOutpostManager
-                          territory={selectedTerritory}
-                          playerFaction={playerFaction}
+                    <LazyLoadWrapper fallbackText="Loading Territory Events...">
+                      <div className="space-y-4">
+                        <TerritoryEventSystem
+                          territoryId={selectedTerritory.id}
+                          playerData={playerData}
                         />
-                      )}
-                    </div>
+                        <TerritoryResourceManager
+                          territory={selectedTerritory}
+                          playerData={playerData}
+                        />
+                        <TerritoryInfluenceSystem
+                          territory={selectedTerritory}
+                          playerData={playerData}
+                        />
+                        {playerFaction && (
+                          <TerritoryOutpostManager
+                            territory={selectedTerritory}
+                            playerFaction={playerFaction}
+                          />
+                        )}
+                      </div>
+                    </LazyLoadWrapper>
                   </TabsContent>
 
                   <TabsContent value="supply">
-                    <SupplyLineManager
-                      crewId={playerData?.crew_id}
-                      playerData={playerData}
-                      canManage={canManage}
-                    />
-                    <div className="mt-4">
-                      <SmartRouteOptimizer
+                    <LazyLoadWrapper fallbackText="Loading Supply Routes...">
+                      <SupplyLineManager
                         crewId={playerData?.crew_id}
                         playerData={playerData}
+                        canManage={canManage}
                       />
-                    </div>
+                      <div className="mt-4">
+                        <SmartRouteOptimizer
+                          crewId={playerData?.crew_id}
+                          playerData={playerData}
+                        />
+                      </div>
+                    </LazyLoadWrapper>
                   </TabsContent>
                 </Tabs>
               ) : (

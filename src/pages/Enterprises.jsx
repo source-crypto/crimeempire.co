@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Building2, AlertTriangle, ChevronRight, Plus } from 'lucide-react';
-import EnterpriseUpgrade from '../components/enterprises/EnterpriseUpgrade';
+import LazyLoadWrapper from '../components/performance/LazyLoadWrapper';
 import CreateEnterpriseDialog from '../components/enterprises/CreateEnterpriseDialog';
-import EnterpriseManagementSystem from '../components/enterprises/EnterpriseManagementSystem';
-import ResearchTreeSystem from '../components/enterprises/ResearchTreeSystem';
-import ProductionChainManager from '../components/enterprises/ProductionChainManager';
-import AIEmployeeManagement from '../components/enterprises/AIEmployeeManagement';
-import BusinessManagementUI from '../components/enterprise/BusinessManagementUI';
-import AdvancedNPCManagement from '../components/enterprise/AdvancedNPCManagement';
-import SupplyChainOptimization from '../components/territory/SupplyChainOptimization';
-import EnterprisePvPSystem from '../components/enterprises/EnterprisePvPSystem';
 import EnterpriseLeaderboard from '../components/enterprises/EnterpriseLeaderboard';
+
+// Lazy load heavy enterprise components
+const EnterpriseUpgrade = lazy(() => import('../components/enterprises/EnterpriseUpgrade'));
+const EnterpriseManagementSystem = lazy(() => import('../components/enterprises/EnterpriseManagementSystem'));
+const ResearchTreeSystem = lazy(() => import('../components/enterprises/ResearchTreeSystem'));
+const ProductionChainManager = lazy(() => import('../components/enterprises/ProductionChainManager'));
+const AIEmployeeManagement = lazy(() => import('../components/enterprises/AIEmployeeManagement'));
+const BusinessManagementUI = lazy(() => import('../components/enterprise/BusinessManagementUI'));
+const AdvancedNPCManagement = lazy(() => import('../components/enterprise/AdvancedNPCManagement'));
+const SupplyChainOptimization = lazy(() => import('../components/territory/SupplyChainOptimization'));
+const EnterprisePvPSystem = lazy(() => import('../components/enterprises/EnterprisePvPSystem'));
 
 export default function Enterprises() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -77,47 +80,63 @@ export default function Enterprises() {
           </div>
         </div>
         <div className="space-y-6">
-          <BusinessManagementUI 
-            enterprise={selectedEnterprise}
-            playerData={playerData}
-          />
-          <EnterprisePvPSystem 
-            enterprise={selectedEnterprise}
-            playerData={playerData}
-          />
-          <AdvancedNPCManagement 
-            enterpriseData={selectedEnterprise}
-            playerData={playerData}
-          />
-          <SupplyChainOptimization
-            supplyChains={supplyChains}
-            enterpriseData={selectedEnterprise}
-            playerData={playerData}
-            enterpriseNPCs={enterpriseNPCs}
-          />
-          <ResearchTreeSystem
-            enterprise={selectedEnterprise}
-            playerData={playerData}
-          />
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <ProductionChainManager
+          <LazyLoadWrapper fallbackText="Loading Business Management...">
+            <BusinessManagementUI 
               enterprise={selectedEnterprise}
               playerData={playerData}
             />
-            <AIEmployeeManagement
+          </LazyLoadWrapper>
+          <LazyLoadWrapper fallbackText="Loading PvP Systems...">
+            <EnterprisePvPSystem 
               enterprise={selectedEnterprise}
               playerData={playerData}
             />
-          </div>
-          <EnterpriseUpgrade 
-            enterprise={selectedEnterprise} 
-            playerData={playerData}
-            onUpdate={handleUpdate}
-          />
-          <EnterpriseManagementSystem 
-            enterprise={selectedEnterprise}
-            playerData={playerData}
-          />
+          </LazyLoadWrapper>
+          <LazyLoadWrapper fallbackText="Loading NPC Management...">
+            <AdvancedNPCManagement 
+              enterpriseData={selectedEnterprise}
+              playerData={playerData}
+            />
+          </LazyLoadWrapper>
+          <LazyLoadWrapper fallbackText="Loading Supply Chains...">
+            <SupplyChainOptimization
+              supplyChains={supplyChains}
+              enterpriseData={selectedEnterprise}
+              playerData={playerData}
+              enterpriseNPCs={enterpriseNPCs}
+            />
+          </LazyLoadWrapper>
+          <LazyLoadWrapper fallbackText="Loading Research Tree...">
+            <ResearchTreeSystem
+              enterprise={selectedEnterprise}
+              playerData={playerData}
+            />
+          </LazyLoadWrapper>
+          <LazyLoadWrapper fallbackText="Loading Production Systems...">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ProductionChainManager
+                enterprise={selectedEnterprise}
+                playerData={playerData}
+              />
+              <AIEmployeeManagement
+                enterprise={selectedEnterprise}
+                playerData={playerData}
+              />
+            </div>
+          </LazyLoadWrapper>
+          <LazyLoadWrapper fallbackText="Loading Upgrades...">
+            <EnterpriseUpgrade 
+              enterprise={selectedEnterprise} 
+              playerData={playerData}
+              onUpdate={handleUpdate}
+            />
+          </LazyLoadWrapper>
+          <LazyLoadWrapper fallbackText="Loading Management System...">
+            <EnterpriseManagementSystem 
+              enterprise={selectedEnterprise}
+              playerData={playerData}
+            />
+          </LazyLoadWrapper>
         </div>
       </div>
     );
