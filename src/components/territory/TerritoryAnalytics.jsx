@@ -10,10 +10,12 @@ import {
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-export default function TerritoryAnalytics({ territories, crewData, playerData }) {
+export default function TerritoryAnalytics({ territories = [], crewData, playerData }) {
   const { data: revenueHistory = [] } = useQuery({
-    queryKey: ['territoryRevenue', crewData?.id],
+    queryKey: ['territoryRevenue', crewData?.id, playerData?.id],
     queryFn: async () => {
+      if (!playerData?.id) return [];
+      
       const logs = await base44.entities.TransactionLog.filter({
         player_id: playerData.id,
         transaction_type: 'territory_income'
@@ -40,10 +42,10 @@ export default function TerritoryAnalytics({ territories, crewData, playerData }
     enabled: !!crewData?.id && !!playerData?.id
   });
 
-  const totalRevenue = territories.reduce((sum, t) => sum + (t.revenue_multiplier || 1) * 1000, 0);
-  const avgControl = territories.reduce((sum, t) => sum + (t.control_percentage || 0), 0) / (territories.length || 1);
-  const contestedCount = territories.filter(t => t.is_contested).length;
-  const avgDefense = territories.reduce((sum, t) => sum + (t.defense_rating || 50), 0) / (territories.length || 1);
+  const totalRevenue = (territories || []).reduce((sum, t) => sum + (t.revenue_multiplier || 1) * 1000, 0);
+  const avgControl = (territories || []).reduce((sum, t) => sum + (t.control_percentage || 0), 0) / (territories.length || 1);
+  const contestedCount = (territories || []).filter(t => t.is_contested).length;
+  const avgDefense = (territories || []).reduce((sum, t) => sum + (t.defense_rating || 50), 0) / (territories.length || 1);
 
   const stats = [
     {
