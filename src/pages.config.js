@@ -60,11 +60,14 @@ import Dashboard from './pages/Dashboard';
 import Earnings from './pages/Earnings';
 import Enterprises from './pages/Enterprises';
 import Factions from './pages/Factions';
+import GameDocumentation from './pages/GameDocumentation';
 import Garage from './pages/Garage';
+import GettingStarted from './pages/GettingStarted';
 import Governance from './pages/Governance';
 import Heists from './pages/Heists';
 import Home from './pages/Home';
 import ItemsCenter from './pages/ItemsCenter';
+import MacroEconomics from './pages/MacroEconomics';
 import Messages from './pages/Messages';
 import Metaverse from './pages/Metaverse';
 import MoneyLaundering from './pages/MoneyLaundering';
@@ -80,9 +83,6 @@ import Syndicates from './pages/Syndicates';
 import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
-import MacroEconomics from './pages/MacroEconomics';
-import GettingStarted from './pages/GettingStarted';
-import GameDocumentation from './pages/GameDocumentation';
 import __Layout from './Layout.jsx';
 
 
@@ -100,11 +100,14 @@ export const PAGES = {
     "Earnings": Earnings,
     "Enterprises": Enterprises,
     "Factions": Factions,
+    "GameDocumentation": GameDocumentation,
     "Garage": Garage,
+    "GettingStarted": GettingStarted,
     "Governance": Governance,
     "Heists": Heists,
     "Home": Home,
     "ItemsCenter": ItemsCenter,
+    "MacroEconomics": MacroEconomics,
     "Messages": Messages,
     "Metaverse": Metaverse,
     "MoneyLaundering": MoneyLaundering,
@@ -120,9 +123,6 @@ export const PAGES = {
     "Territories": Territories,
     "Trading": Trading,
     "Tutorial": Tutorial,
-    "MacroEconomics": MacroEconomics,
-    "GettingStarted": GettingStarted,
-    "GameDocumentation": GameDocumentation,
 }
 
 export const pagesConfig = {

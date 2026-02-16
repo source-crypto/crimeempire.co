@@ -13,18 +13,20 @@ export default function P2PTrading() {
   const [activeTab, setActiveTab] = useState('incoming');
   const [showProposalForm, setShowProposalForm] = useState(false);
 
-  const { data: user } = useQuery({
+  const { data: user, isLoading: userLoading } = useQuery({
     queryKey: ['user'],
     queryFn: () => base44.auth.me(),
-    staleTime: 60000
+    staleTime: 300000
   });
 
-  const { data: playerData } = useQuery({
+  const { data: playerData, isLoading: playerLoading } = useQuery({
     queryKey: ['player', user?.email],
-    queryFn: () => base44.entities.Player.filter({ created_by: user.email }),
+    queryFn: async () => {
+      const players = await base44.entities.Player.filter({ created_by: user.email });
+      return players[0];
+    },
     enabled: !!user?.email,
-    select: (data) => data[0],
-    staleTime: 30000
+    staleTime: 300000
   });
 
   const { data: incomingTrades = [] } = useQuery({
@@ -49,12 +51,23 @@ export default function P2PTrading() {
     refetchInterval: 30000
   });
 
-  if (!playerData) {
+  if (userLoading || playerLoading) {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
           <ArrowLeftRight className="w-16 h-16 text-purple-500 mx-auto mb-4 animate-pulse" />
           <p className="text-gray-400">Loading Trading System...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!playerData) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="text-center glass-panel p-8 rounded-lg">
+          <p className="text-gray-300 mb-4">No player profile found</p>
+          <p className="text-sm text-gray-500">Please complete player setup first</p>
         </div>
       </div>
     );
