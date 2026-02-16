@@ -24,6 +24,8 @@ export default function Layout({ children, currentPageName }) {
   ];
 
   const moreNavigation = [
+    { name: 'Getting Started', page: 'GettingStarted', icon: BookOpen },
+    { name: 'Game Guide', page: 'GameDocumentation', icon: BookOpen },
     { name: 'Combat', page: 'Combat', icon: Shield },
     { name: 'Trading', page: 'Trading', icon: Gavel },
     { name: 'P2P Trading', page: 'P2PTrading', icon: Gavel },
@@ -34,7 +36,6 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Items Center', page: 'ItemsCenter', icon: Package },
     { name: 'Macro Economics', page: 'MacroEconomics', icon: TrendingUp },
     { name: 'Performance', page: 'Performance', icon: Activity },
-    { name: 'Tutorial', page: 'Tutorial', icon: BookOpen },
     { name: 'Metaverse', page: 'Metaverse', icon: Zap },
     { name: 'Earnings', page: 'Earnings', icon: Bell },
     { name: 'Reputation', page: 'Reputation', icon: Crown },

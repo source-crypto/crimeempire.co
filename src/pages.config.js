@@ -81,6 +81,8 @@ import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
 import MacroEconomics from './pages/MacroEconomics';
+import GettingStarted from './pages/GettingStarted';
+import GameDocumentation from './pages/GameDocumentation';
 import __Layout from './Layout.jsx';
 
 
@@ -119,6 +121,8 @@ export const PAGES = {
     "Trading": Trading,
     "Tutorial": Tutorial,
     "MacroEconomics": MacroEconomics,
+    "GettingStarted": GettingStarted,
+    "GameDocumentation": GameDocumentation,
 }
 
 export const pagesConfig = {
