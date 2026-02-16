@@ -24,7 +24,6 @@ export default function Layout({ children, currentPageName }) {
   ];
 
   const moreNavigation = [
-    { name: 'Story Arcs', page: 'StoryArcs', icon: BookOpen },
     { name: 'Getting Started', page: 'GettingStarted', icon: BookOpen },
     { name: 'Game Guide', page: 'GameDocumentation', icon: BookOpen },
     { name: 'Combat', page: 'Combat', icon: Shield },
