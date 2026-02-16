@@ -64,8 +64,12 @@ import Garage from './pages/Garage';
 import Governance from './pages/Governance';
 import Heists from './pages/Heists';
 import Home from './pages/Home';
+import ItemsCenter from './pages/ItemsCenter';
+import Messages from './pages/Messages';
 import Metaverse from './pages/Metaverse';
 import MoneyLaundering from './pages/MoneyLaundering';
+import P2PTrading from './pages/P2PTrading';
+import Performance from './pages/Performance';
 import PlayerManagement from './pages/PlayerManagement';
 import PlayerSetup from './pages/PlayerSetup';
 import Reputation from './pages/Reputation';
@@ -76,10 +80,7 @@ import Syndicates from './pages/Syndicates';
 import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
-import ItemsCenter from './pages/ItemsCenter';
-import Messages from './pages/Messages';
-import P2PTrading from './pages/P2PTrading';
-import Performance from './pages/Performance';
+import MacroEconomics from './pages/MacroEconomics';
 import __Layout from './Layout.jsx';
 
 
@@ -101,8 +102,12 @@ export const PAGES = {
     "Governance": Governance,
     "Heists": Heists,
     "Home": Home,
+    "ItemsCenter": ItemsCenter,
+    "Messages": Messages,
     "Metaverse": Metaverse,
     "MoneyLaundering": MoneyLaundering,
+    "P2PTrading": P2PTrading,
+    "Performance": Performance,
     "PlayerManagement": PlayerManagement,
     "PlayerSetup": PlayerSetup,
     "Reputation": Reputation,
@@ -113,10 +118,7 @@ export const PAGES = {
     "Territories": Territories,
     "Trading": Trading,
     "Tutorial": Tutorial,
-    "ItemsCenter": ItemsCenter,
-    "Messages": Messages,
-    "P2PTrading": P2PTrading,
-    "Performance": Performance,
+    "MacroEconomics": MacroEconomics,
 }
 
 export const pagesConfig = {
