@@ -6,6 +6,7 @@ import { Card, CardHeader, CardTitle } from '@/components/ui/card';
 import BlackMarketUI from '../components/blackmarket/BlackMarketUI';
 import ContrabandSmugglingManager from '../components/blackmarket/ContrabandSmugglingManager';
 import MarketTrendAnalyzer from '../components/blackmarket/MarketTrendAnalyzer';
+import AIDynamicPricing from '../components/blackmarket/AIDynamicPricing';
 import { ShoppingCart, Truck, TrendingUp } from 'lucide-react';
 
 export default function BlackMarket() {
@@ -72,7 +73,10 @@ export default function BlackMarket() {
         </TabsList>
 
         <TabsContent value="marketplace">
-          <BlackMarketUI playerData={playerData} />
+          <div className="space-y-4">
+            <AIDynamicPricing playerData={playerData} />
+            <BlackMarketUI playerData={playerData} />
+          </div>
         </TabsContent>
 
         <TabsContent value="smuggling">

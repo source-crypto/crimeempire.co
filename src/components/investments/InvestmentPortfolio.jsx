@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { TrendingUp, DollarSign, PiggyBank, Loader2, Sparkles, TrendingDown, BarChart3, Activity } from 'lucide-react';
 import { toast } from 'sonner';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import PredictiveInvestmentAnalysis from './PredictiveInvestmentAnalysis';
 
 const investmentTypes = [
   { value: 'crypto_staking', label: 'Crypto Staking', risk: 'low', return: 5 },
@@ -178,14 +179,17 @@ export default function InvestmentPortfolio({ playerData }) {
   });
 
   return (
-    <Card className="glass-panel border-green-500/20">
-      <CardHeader className="border-b border-green-500/20">
-        <CardTitle className="flex items-center gap-2 text-white">
-          <PiggyBank className="w-5 h-5 text-green-400" />
-          Investment Portfolio
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="p-4 space-y-4">
+    <div className="space-y-4">
+      <PredictiveInvestmentAnalysis playerData={playerData} />
+      
+      <Card className="glass-panel border-green-500/20">
+        <CardHeader className="border-b border-green-500/20">
+          <CardTitle className="flex items-center gap-2 text-white">
+            <PiggyBank className="w-5 h-5 text-green-400" />
+            Investment Portfolio
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="p-4 space-y-4">
         {/* Portfolio Summary */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="p-3 rounded-lg bg-green-900/20 border border-green-500/30 text-center">
@@ -411,5 +415,6 @@ export default function InvestmentPortfolio({ playerData }) {
         </div>
       </CardContent>
     </Card>
+    </div>
   );
 }
