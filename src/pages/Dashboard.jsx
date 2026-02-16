@@ -9,11 +9,9 @@ import ActiveHeists from '../components/dashboard/ActiveHeists';
 import QuickActions from '../components/dashboard/QuickActions';
 import SystemStatus from '../components/dashboard/SystemStatus';
 
-// Import transparent components
-import TransparentWallet from '../components/economy/TransparentWallet';
-import AutomatedIncomeWorkflows from '../components/economy/AutomatedIncomeWorkflows';
-
 // Lazy load heavy components
+const TransparentWallet = lazy(() => import('../components/economy/TransparentWallet'));
+const AutomatedIncomeWorkflows = lazy(() => import('../components/economy/AutomatedIncomeWorkflows'));
 const AIProgressionAnalyzer = lazy(() => import('../components/progression/AIProgressionAnalyzer'));
 const PlayerMarketplace = lazy(() => import('../components/trading/PlayerMarketplace'));
 const InvestmentPortfolio = lazy(() => import('../components/investments/InvestmentPortfolio'));
@@ -175,10 +173,12 @@ export default function Dashboard() {
       </div>
 
       {/* Transparent Finance Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <TransparentWallet playerData={playerData} />
-        <AutomatedIncomeWorkflows playerData={playerData} />
-      </div>
+      <LazyLoadWrapper fallbackText="Loading wallet...">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <TransparentWallet playerData={playerData} />
+          <AutomatedIncomeWorkflows playerData={playerData} />
+        </div>
+      </LazyLoadWrapper>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

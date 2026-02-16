@@ -15,28 +15,30 @@ export default function TransparentWallet({ playerData }) {
     queryKey: ['recentTransactions', playerData?.id],
     queryFn: () => base44.entities.TransactionLog.filter({ 
       player_id: playerData.id 
-    }, '-created_date', 50),
+    }, '-created_date', 25),
     enabled: !!playerData,
-    staleTime: 10000
+    staleTime: 60000
   });
 
   const { data: enterprises = [] } = useQuery({
     queryKey: ['playerEnterprises', playerData?.id],
     queryFn: () => base44.entities.CriminalEnterprise.filter({ 
       owner_id: playerData.id 
-    }),
+    }, '-updated_date', 20),
     enabled: !!playerData,
-    staleTime: 30000
+    staleTime: 120000
   });
 
   const { data: territories = [] } = useQuery({
     queryKey: ['playerTerritories', playerData?.id],
     queryFn: async () => {
-      const allTerritories = await base44.entities.Territory.list();
-      return allTerritories.filter(t => t.owner_id === playerData.id);
+      const allTerritories = await base44.entities.Territory.filter({
+        owner_id: playerData.id
+      }, '-updated_date', 10);
+      return allTerritories;
     },
     enabled: !!playerData,
-    staleTime: 30000
+    staleTime: 120000
   });
 
   const { data: investments = [] } = useQuery({
@@ -44,9 +46,9 @@ export default function TransparentWallet({ playerData }) {
     queryFn: () => base44.entities.Investment.filter({ 
       player_id: playerData.id,
       status: 'active'
-    }),
+    }, '-updated_date', 10),
     enabled: !!playerData,
-    staleTime: 30000
+    staleTime: 120000
   });
 
   const totalBalance = (playerData?.crypto_balance || 0) + (playerData?.buy_power || 0);
