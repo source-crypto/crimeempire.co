@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Crown, Building, Users, TrendingUp, Shield, Eye } from 'lucide-react';
 import GovernancePreview from '../components/governance/GovernancePreview';
+import PolicySystem from '../components/governance/PolicySystem';
 
 export default function Governance() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -174,19 +175,7 @@ export default function Governance() {
         </TabsContent>
 
         <TabsContent value="policies">
-          <Card className="glass-panel border-purple-500/20">
-            <CardHeader className="border-b border-purple-500/20">
-              <CardTitle className="flex items-center gap-2 text-white">
-                <Shield className="w-5 h-5 text-purple-400" />
-                Active Policies
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="p-6">
-              <p className="text-gray-400 text-center py-8">
-                Policy system coming soon - governors will be able to enact laws that affect territories and factions
-              </p>
-            </CardContent>
-          </Card>
+          <PolicySystem playerData={playerData} />
         </TabsContent>
       </Tabs>
     </div>
