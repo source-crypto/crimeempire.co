@@ -83,6 +83,7 @@ import Tutorial from './pages/Tutorial';
 import MacroEconomics from './pages/MacroEconomics';
 import GettingStarted from './pages/GettingStarted';
 import GameDocumentation from './pages/GameDocumentation';
+import StoryArcs from './pages/StoryArcs';
 import __Layout from './Layout.jsx';
 
 
@@ -123,6 +124,7 @@ export const PAGES = {
     "MacroEconomics": MacroEconomics,
     "GettingStarted": GettingStarted,
     "GameDocumentation": GameDocumentation,
+    "StoryArcs": StoryArcs,
 }
 
 export const pagesConfig = {
