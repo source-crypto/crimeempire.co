@@ -4,7 +4,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Settings as SettingsIcon, LogOut, Mail, Lock, Shield, UserPlus } from 'lucide-react';
+import { Settings as SettingsIcon, LogOut, Mail, Lock, Shield, UserPlus, Clock, CheckCircle } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
 import { toast } from 'sonner';
 
 export default function Settings() {
@@ -12,6 +13,9 @@ export default function Settings() {
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [sessionTimeout, setSessionTimeout] = useState('30');
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+  const [rememberDevice, setRememberDevice] = useState(true);
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
@@ -68,6 +72,15 @@ export default function Settings() {
 
   const handleInviteUser = () => {
     toast.info('Contact admin to invite new users to the platform');
+  };
+
+  const handleSaveLoginConfig = () => {
+    localStorage.setItem('loginConfig', JSON.stringify({
+      sessionTimeout,
+      twoFactorEnabled,
+      rememberDevice
+    }));
+    toast.success('Login configuration saved');
   };
 
   return (
@@ -181,6 +194,79 @@ export default function Settings() {
             >
               <Lock className="w-4 h-4 mr-2" />
               Change Password
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card className="glass-panel border-orange-500/20">
+          <CardHeader className="border-b border-orange-500/20">
+            <CardTitle className="flex items-center gap-2 text-white">
+              <Shield className="w-5 h-5 text-orange-400" />
+              Login Configuration
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6 space-y-4">
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="sessionTimeout" className="text-white">Session Timeout</Label>
+                <select
+                  id="sessionTimeout"
+                  value={sessionTimeout}
+                  onChange={(e) => setSessionTimeout(e.target.value)}
+                  className="w-full mt-2 bg-slate-900/50 border border-purple-500/30 text-white rounded-md px-3 py-2"
+                >
+                  <option value="15">15 minutes</option>
+                  <option value="30">30 minutes</option>
+                  <option value="60">1 hour</option>
+                  <option value="120">2 hours</option>
+                  <option value="480">8 hours</option>
+                </select>
+                <p className="text-xs text-gray-400 mt-1">Automatically logout after inactivity</p>
+              </div>
+
+              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900/30 border border-purple-500/20">
+                <div>
+                  <p className="text-white font-medium">Two-Factor Authentication</p>
+                  <p className="text-xs text-gray-400">Extra security layer for login</p>
+                </div>
+                <Switch
+                  checked={twoFactorEnabled}
+                  onCheckedChange={setTwoFactorEnabled}
+                />
+              </div>
+
+              <div className="flex items-center justify-between p-3 rounded-lg bg-slate-900/30 border border-purple-500/20">
+                <div>
+                  <p className="text-white font-medium">Remember This Device</p>
+                  <p className="text-xs text-gray-400">Stay logged in on this device</p>
+                </div>
+                <Switch
+                  checked={rememberDevice}
+                  onCheckedChange={setRememberDevice}
+                />
+              </div>
+
+              <div className="p-3 rounded-lg bg-orange-900/20 border border-orange-500/30">
+                <div className="flex items-start gap-2">
+                  <CheckCircle className="w-4 h-4 text-orange-400 mt-0.5" />
+                  <div>
+                    <p className="text-sm text-gray-300 font-medium">Security Tips</p>
+                    <ul className="text-xs text-gray-400 space-y-1 mt-1">
+                      <li>• Use a strong, unique password</li>
+                      <li>• Enable 2FA for maximum security</li>
+                      <li>• Don't share login credentials</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Button
+              onClick={handleSaveLoginConfig}
+              className="w-full bg-gradient-to-r from-orange-600 to-red-600"
+            >
+              <CheckCircle className="w-4 h-4 mr-2" />
+              Save Configuration
             </Button>
           </CardContent>
         </Card>
