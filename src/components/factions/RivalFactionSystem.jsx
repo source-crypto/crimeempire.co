@@ -328,9 +328,9 @@ Return JSON.`;
                 </div>
 
                 <Badge className={`w-full justify-center mb-3 bg-gradient-to-r ${
-                  strategyColors[faction.strategy]
+                  strategyColors[faction.strategy] || 'from-gray-600 to-gray-700'
                 }`}>
-                  {faction.strategy.replace('_', ' ')}
+                  {faction.strategy ? faction.strategy.replace('_', ' ') : 'Unknown'}
                 </Badge>
 
                 <Button
