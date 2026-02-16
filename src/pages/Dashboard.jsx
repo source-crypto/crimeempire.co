@@ -79,27 +79,31 @@ export default function Dashboard() {
       return players[0];
     },
     enabled: !!currentUser,
-    staleTime: 30000
+    staleTime: 300000,
+    gcTime: 600000
   });
 
   const { data: crewData } = useQuery({
     queryKey: ['crew', playerData?.crew_id],
     queryFn: () => base44.entities.Crew.filter({ id: playerData.crew_id }),
     enabled: !!playerData?.crew_id,
-    staleTime: 60000
+    staleTime: 300000,
+    gcTime: 600000
   });
 
   const { data: battles = [] } = useQuery({
     queryKey: ['battles'],
-    queryFn: () => base44.entities.Battle.filter({ status: 'active' }, '-created_date', 5),
-    staleTime: 30000
+    queryFn: () => base44.entities.Battle.filter({ status: 'active' }, '-created_date', 3),
+    staleTime: 180000,
+    gcTime: 360000
   });
 
   const { data: enterprises = [] } = useQuery({
     queryKey: ['enterprises', playerData?.id],
-    queryFn: () => base44.entities.CriminalEnterprise.filter({ owner_id: playerData.id }),
+    queryFn: () => base44.entities.CriminalEnterprise.filter({ owner_id: playerData.id }, '-created_date', 10),
     enabled: !!playerData?.id,
-    staleTime: 30000
+    staleTime: 240000,
+    gcTime: 480000
   });
 
   const { data: activeHeists = [] } = useQuery({
@@ -107,9 +111,10 @@ export default function Dashboard() {
     queryFn: () => base44.entities.Heist.filter({ 
       crew_id: playerData.crew_id,
       status: 'in_progress'
-    }, '-created_date', 5),
+    }, '-created_date', 3),
     enabled: !!playerData?.crew_id,
-    staleTime: 30000
+    staleTime: 180000,
+    gcTime: 360000
   });
 
   const { data: recentActivity = [] } = useQuery({
@@ -117,11 +122,11 @@ export default function Dashboard() {
     queryFn: () => base44.entities.CrewActivity.filter(
       { crew_id: playerData.crew_id },
       '-created_date',
-      10
+      5
     ),
     enabled: !!playerData?.crew_id,
-    staleTime: 20000,
-    refetchInterval: 30000
+    staleTime: 180000,
+    gcTime: 360000
   });
 
   const crew = crewData?.[0];
