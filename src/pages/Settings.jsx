@@ -4,8 +4,9 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Settings as SettingsIcon, LogOut, Mail, Lock, Shield, UserPlus, Clock, CheckCircle } from 'lucide-react';
+import { LogOut, Mail, Lock, Shield, UserPlus, CheckCircle } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 
 export default function Settings() {
@@ -19,6 +20,15 @@ export default function Settings() {
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
+    
+    // Load saved login config
+    const savedConfig = localStorage.getItem('loginConfig');
+    if (savedConfig) {
+      const config = JSON.parse(savedConfig);
+      setSessionTimeout(config.sessionTimeout || '30');
+      setTwoFactorEnabled(config.twoFactorEnabled || false);
+      setRememberDevice(config.rememberDevice !== false);
+    }
   }, []);
 
   const handleLogout = () => {
