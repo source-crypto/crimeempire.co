@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import AIEventGenerator from './AIEventGenerator';
 
 export default function MacroEconomicDashboard({ playerData }) {
   const [loading, setLoading] = useState(false);
@@ -123,6 +124,7 @@ Format the response with current values and recent trends.
 
   return (
     <div className="space-y-4">
+      <AIEventGenerator playerData={playerData} />
       {/* Header */}
       <Card className="glass-panel border-purple-500/20">
         <CardContent className="p-6">
