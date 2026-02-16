@@ -3,40 +3,46 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { 
         Home, Map, Users, Building2, Car, Gavel, 
-        Settings, Menu, X, Zap, Shield, Bell, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp
+        Settings, Menu, X, Zap, Shield, Bell, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown
       } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
 
-  const navigation = [
+  const mainNavigation = [
     { name: 'Dashboard', page: 'Dashboard', icon: Home },
     { name: 'Messages', page: 'Messages', icon: MessageCircle },
     { name: 'Player', page: 'PlayerManagement', icon: User },
     { name: 'Strategy', page: 'Strategy', icon: Brain },
-    { name: 'Tutorial', page: 'Tutorial', icon: BookOpen },
-    { name: 'Metaverse', page: 'Metaverse', icon: Zap },
     { name: 'Crime Map', page: 'CrimeMap', icon: Map },
     { name: 'Factions', page: 'Factions', icon: Users },
-    { name: 'Combat', page: 'Combat', icon: Shield },
-    { name: 'Earnings', page: 'Earnings', icon: Bell },
-    { name: 'Reputation', page: 'Reputation', icon: Crown },
-    { name: 'Syndicates', page: 'Syndicates', icon: Users },
-    { name: 'Trading', page: 'Trading', icon: Gavel },
-  { name: 'P2P Trading', page: 'P2PTrading', icon: Gavel },
     { name: 'Territories', page: 'Territories', icon: Map },
     { name: 'Enterprises', page: 'Enterprises', icon: Building2 },
+  ];
+
+  const moreNavigation = [
+    { name: 'Combat', page: 'Combat', icon: Shield },
+    { name: 'Trading', page: 'Trading', icon: Gavel },
+    { name: 'P2P Trading', page: 'P2PTrading', icon: Gavel },
     { name: 'Black Market', page: 'BlackMarket', icon: Zap },
     { name: 'Money Laundering', page: 'MoneyLaundering', icon: DollarSign },
     { name: 'Base Management', page: 'BaseManagement', icon: Building2 },
     { name: 'AI Systems', page: 'AIManagement', icon: Zap },
-    { name: 'Governance', page: 'Governance', icon: Crown },
     { name: 'Items Center', page: 'ItemsCenter', icon: Package },
-    { name: 'Performance', page: 'Performance', icon: Activity },
     { name: 'Macro Economics', page: 'MacroEconomics', icon: TrendingUp },
-    ];
+    { name: 'Performance', page: 'Performance', icon: Activity },
+    { name: 'Tutorial', page: 'Tutorial', icon: BookOpen },
+    { name: 'Metaverse', page: 'Metaverse', icon: Zap },
+    { name: 'Earnings', page: 'Earnings', icon: Bell },
+    { name: 'Reputation', page: 'Reputation', icon: Crown },
+    { name: 'Syndicates', page: 'Syndicates', icon: Users },
+    { name: 'Governance', page: 'Governance', icon: Crown },
+  ];
+
+  const allNavigation = [...mainNavigation, ...moreNavigation];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-900">
@@ -76,14 +82,14 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-1">
-              {navigation.map((item) => {
+              {mainNavigation.map((item) => {
                 const isActive = currentPageName === item.page;
                 const Icon = item.icon;
                 return (
                   <Link
                     key={item.page}
                     to={createPageUrl(item.page)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-sm ${
                       isActive
                         ? 'bg-purple-600/30 text-purple-300 neon-border'
                         : 'text-gray-400 hover:text-purple-300 hover:bg-purple-900/20'
@@ -94,6 +100,48 @@ export default function Layout({ children, currentPageName }) {
                   </Link>
                 );
               })}
+              
+              {/* More Menu */}
+              <div className="relative">
+                <button
+                  onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-sm ${
+                    moreNavigation.some(item => item.page === currentPageName)
+                      ? 'bg-purple-600/30 text-purple-300 neon-border'
+                      : 'text-gray-400 hover:text-purple-300 hover:bg-purple-900/20'
+                  }`}
+                >
+                  <Menu className="w-4 h-4" />
+                  <span className="font-medium">More</span>
+                  <ChevronDown className="w-3 h-3" />
+                </button>
+
+                {moreMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-56 glass-panel border border-purple-500/30 rounded-lg shadow-lg z-50">
+                    <div className="p-2 space-y-1 max-h-96 overflow-y-auto">
+                      {moreNavigation.map((item) => {
+                        const isActive = currentPageName === item.page;
+                        const Icon = item.icon;
+                        return (
+                          <Link
+                            key={item.page}
+                            to={createPageUrl(item.page)}
+                            onClick={() => setMoreMenuOpen(false)}
+                            className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all text-sm ${
+                              isActive
+                                ? 'bg-purple-600/30 text-purple-300'
+                                : 'text-gray-400 hover:text-purple-300 hover:bg-purple-900/20'
+                            }`}
+                          >
+                            <Icon className="w-4 h-4" />
+                            <span className="font-medium">{item.name}</span>
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Right Actions */}
@@ -128,8 +176,8 @@ export default function Layout({ children, currentPageName }) {
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-purple-500/20 glass-panel">
-            <div className="px-4 py-4 space-y-2">
-              {navigation.map((item) => {
+            <div className="px-4 py-4 space-y-2 max-h-96 overflow-y-auto">
+              {allNavigation.map((item) => {
                 const isActive = currentPageName === item.page;
                 const Icon = item.icon;
                 return (
