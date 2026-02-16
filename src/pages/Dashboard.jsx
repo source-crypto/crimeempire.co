@@ -40,9 +40,9 @@ export default function Dashboard() {
   const { data: playerData, refetch: refetchPlayer } = useQuery({
     queryKey: ['player', currentUser?.email],
     queryFn: async () => {
+      if (!currentUser?.email) return null;
       const players = await base44.entities.Player.filter({ created_by: currentUser.email });
       if (players.length === 0) {
-        // Create initial player with welcome bonus
         const newPlayer = await base44.entities.Player.create({
           username: currentUser.full_name || currentUser.email.split('@')[0],
           crypto_balance: 50000,
@@ -53,24 +53,11 @@ export default function Dashboard() {
           wanted_level: 0,
           experience: 0,
           skill_points: 5,
-          skills: {
-            combat: 0,
-            stealth: 0,
-            driving: 0,
-            hacking: 0,
-            leadership: 0,
-            negotiation: 0
-          },
+          skills: { combat: 0, stealth: 0, driving: 0, hacking: 0, leadership: 0, negotiation: 0 },
           stats: {
-            heists_completed: 0,
-            heists_failed: 0,
-            battles_won: 0,
-            battles_lost: 0,
-            territories_captured: 0,
-            total_loot: 0,
-            contracts_completed: 0,
-            items_traded: 0,
-            investments_made: 0
+            heists_completed: 0, heists_failed: 0, battles_won: 0, battles_lost: 0,
+            territories_captured: 0, total_loot: 0, contracts_completed: 0,
+            items_traded: 0, investments_made: 0
           },
           playstyle: 'balanced'
         });
@@ -79,31 +66,35 @@ export default function Dashboard() {
       return players[0];
     },
     enabled: !!currentUser,
-    staleTime: 300000,
-    gcTime: 600000
+    staleTime: 600000,
+    gcTime: 1200000,
+    refetchOnWindowFocus: false
   });
 
   const { data: crewData } = useQuery({
     queryKey: ['crew', playerData?.crew_id],
     queryFn: () => base44.entities.Crew.filter({ id: playerData.crew_id }),
     enabled: !!playerData?.crew_id,
-    staleTime: 300000,
-    gcTime: 600000
+    staleTime: 600000,
+    gcTime: 1200000,
+    refetchOnWindowFocus: false
   });
 
   const { data: battles = [] } = useQuery({
     queryKey: ['battles'],
     queryFn: () => base44.entities.Battle.filter({ status: 'active' }, '-created_date', 3),
-    staleTime: 180000,
-    gcTime: 360000
+    staleTime: 300000,
+    gcTime: 600000,
+    refetchOnWindowFocus: false
   });
 
   const { data: enterprises = [] } = useQuery({
     queryKey: ['enterprises', playerData?.id],
-    queryFn: () => base44.entities.CriminalEnterprise.filter({ owner_id: playerData.id }, '-created_date', 10),
+    queryFn: () => base44.entities.CriminalEnterprise.filter({ owner_id: playerData.id }, '-created_date', 5),
     enabled: !!playerData?.id,
-    staleTime: 240000,
-    gcTime: 480000
+    staleTime: 600000,
+    gcTime: 1200000,
+    refetchOnWindowFocus: false
   });
 
   const { data: activeHeists = [] } = useQuery({
@@ -113,8 +104,9 @@ export default function Dashboard() {
       status: 'in_progress'
     }, '-created_date', 3),
     enabled: !!playerData?.crew_id,
-    staleTime: 180000,
-    gcTime: 360000
+    staleTime: 300000,
+    gcTime: 600000,
+    refetchOnWindowFocus: false
   });
 
   const { data: recentActivity = [] } = useQuery({
@@ -122,11 +114,12 @@ export default function Dashboard() {
     queryFn: () => base44.entities.CrewActivity.filter(
       { crew_id: playerData.crew_id },
       '-created_date',
-      5
+      3
     ),
     enabled: !!playerData?.crew_id,
-    staleTime: 180000,
-    gcTime: 360000
+    staleTime: 300000,
+    gcTime: 600000,
+    refetchOnWindowFocus: false
   });
 
   const crew = crewData?.[0];
