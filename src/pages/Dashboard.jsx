@@ -9,6 +9,10 @@ import ActiveHeists from '../components/dashboard/ActiveHeists';
 import QuickActions from '../components/dashboard/QuickActions';
 import SystemStatus from '../components/dashboard/SystemStatus';
 
+// Import transparent components
+import TransparentWallet from '../components/economy/TransparentWallet';
+import AutomatedIncomeWorkflows from '../components/economy/AutomatedIncomeWorkflows';
+
 // Lazy load heavy components
 const AIProgressionAnalyzer = lazy(() => import('../components/progression/AIProgressionAnalyzer'));
 const PlayerMarketplace = lazy(() => import('../components/trading/PlayerMarketplace'));
@@ -168,6 +172,12 @@ export default function Dashboard() {
           </div>
           <Progress value={levelProgress} className="h-2" />
         </div>
+      </div>
+
+      {/* Transparent Finance Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <TransparentWallet playerData={playerData} />
+        <AutomatedIncomeWorkflows playerData={playerData} />
       </div>
 
       {/* Stats Grid */}
