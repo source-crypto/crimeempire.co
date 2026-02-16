@@ -52,13 +52,13 @@ export default function GameEngine({ playerData }) {
       state.yieldMetrics.operations++;
     };
 
-    // Self-optimization engine (adapts every 5 minutes)
+    // Self-optimization engine (adapts every 10 minutes)
     const optimizationLoop = setInterval(() => {
       const state = engineStateRef.current;
       const now = Date.now();
       const timeSinceOptimization = now - state.lastOptimization;
       
-      if (timeSinceOptimization > 300000) { // 5 minutes
+      if (timeSinceOptimization > 600000) { // 10 minutes
         optimizeEngine();
         state.lastOptimization = now;
         broadcastEngineIntent('self_optimization', { 
@@ -66,9 +66,9 @@ export default function GameEngine({ playerData }) {
           metrics: state.yieldMetrics 
         });
       }
-    }, 60000);
+    }, 120000);
 
-    // High-yield runtime loop (runs every 30 seconds for efficiency)
+    // High-yield runtime loop (runs every 3 minutes for efficiency)
     const runtimeLoop = setInterval(async () => {
       const startTime = performance.now();
       
@@ -90,7 +90,7 @@ export default function GameEngine({ playerData }) {
         const state = engineStateRef.current;
         state.yieldMetrics.successRate = Math.max(0, state.yieldMetrics.successRate - 1);
       }
-    }, 30000); // High-speed: 30 seconds
+    }, 180000); // Runtime: 3 minutes
 
     // Event assimilation function
     const assimilateEvent = async (event) => {
