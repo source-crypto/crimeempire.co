@@ -111,8 +111,29 @@ export default function Settings() {
               <p className="text-sm text-gray-400">Role</p>
               <p className="text-white font-semibold capitalize">{currentUser?.role}</p>
             </div>
-            
-            <div className="pt-4 border-t border-purple-500/20">
+
+            <div className="pt-4 border-t border-purple-500/20 space-y-3">
+              <div className="p-3 rounded-lg bg-slate-900/30 border border-purple-500/20">
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-sm text-white font-medium">Login Status</p>
+                  <Badge className="bg-green-600">Active</Badge>
+                </div>
+                <div className="space-y-1 text-xs text-gray-400">
+                  <p>• Session Timeout: {sessionTimeout} minutes</p>
+                  <p>• 2FA: {twoFactorEnabled ? 'Enabled' : 'Disabled'}</p>
+                  <p>• Remember Device: {rememberDevice ? 'Yes' : 'No'}</p>
+                </div>
+              </div>
+
+              <Button
+                variant="outline"
+                onClick={() => base44.auth.redirectToLogin()}
+                className="w-full border-purple-500/30 text-purple-300 hover:bg-purple-900/20"
+              >
+                <Shield className="w-4 h-4 mr-2" />
+                Request Login Link
+              </Button>
+
               <Button
                 variant="destructive"
                 onClick={handleLogout}
