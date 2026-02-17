@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline, Circle, Tooltip } from 'react-leaflet';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
   MapPin, Package, Shield, DollarSign, Truck, 
-  Users, Car, AlertTriangle, Target 
+  Users, Car, AlertTriangle, Target, Crown, Swords 
 } from 'lucide-react';
 import { toast } from 'sonner';
 import 'leaflet/dist/leaflet.css';
@@ -24,6 +24,18 @@ export default function InteractiveCrimeMap({
 }) {
   const queryClient = useQueryClient();
   const [selectedEntity, setSelectedEntity] = useState(null);
+
+  // Fetch faction diplomacy data for map visualization
+  const { data: factionRelations = [] } = useQuery({
+    queryKey: ['factionDiplomacy'],
+    queryFn: () => base44.entities.FactionDiplomacy.filter({ status: 'negotiating' }),
+    refetchInterval: 30000
+  });
+
+  const { data: factions = [] } = useQuery({
+    queryKey: ['rivalFactions'],
+    queryFn: () => base44.entities.RivalFaction.list()
+  });
 
   const claimContrabandMutation = useMutation({
     mutationFn: async (cache) => {
@@ -106,6 +118,74 @@ export default function InteractiveCrimeMap({
           url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
           attribution='&copy; OpenStreetMap contributors &copy; CARTO'
         />
+
+        {/* Faction Diplomacy Relations - Visualized on Map */}
+        {factionRelations.map((relation) => {
+          const faction = factions.find(f => f.id === relation.target_faction_id);
+          if (!faction?.territory_coordinates) return null;
+          
+          const playerTerritory = territories.find(t => t.owner_id === playerData?.id);
+          if (!playerTerritory) return null;
+
+          return (
+            <React.Fragment key={relation.id}>
+              <Polyline
+                positions={[
+                  [playerTerritory.coordinates.lat, playerTerritory.coordinates.lng],
+                  [faction.territory_coordinates.lat, faction.territory_coordinates.lng]
+                ]}
+                pathOptions={{
+                  color: relation.action_type === 'declare_war' ? '#EF4444' :
+                         relation.action_type === 'form_alliance' ? '#10B981' : '#3B82F6',
+                  weight: 2,
+                  opacity: 0.6,
+                  dashArray: '5, 10'
+                }}
+              >
+                <Popup>
+                  <div className="p-2">
+                    <h4 className="font-bold text-sm flex items-center gap-2 mb-2">
+                      <Crown className="w-4 h-4" />
+                      Diplomatic Action
+                    </h4>
+                    <p className="text-xs"><strong>Type:</strong> {relation.action_type.replace('_', ' ')}</p>
+                    <p className="text-xs"><strong>Target:</strong> {relation.target_faction_name}</p>
+                    <Badge className={relation.status === 'negotiating' ? 'bg-yellow-600' : 'bg-green-600'}>
+                      {relation.status}
+                    </Badge>
+                  </div>
+                </Popup>
+              </Polyline>
+              
+              <Marker
+                position={[faction.territory_coordinates.lat, faction.territory_coordinates.lng]}
+                icon={L.divIcon({
+                  className: 'custom-marker',
+                  html: `<div class="${
+                    relation.action_type === 'declare_war' ? 'bg-red-600' :
+                    relation.action_type === 'form_alliance' ? 'bg-green-600' : 'bg-blue-600'
+                  } rounded-full p-2 border-2 border-white">
+                    <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/>
+                    </svg>
+                  </div>`
+                })}
+              >
+                <Popup>
+                  <div className="p-2">
+                    <h4 className="font-bold mb-2">{faction.name}</h4>
+                    <p className="text-sm mb-1">Diplomatic Status:</p>
+                    <Badge className={
+                      relation.relationship_change > 0 ? 'bg-green-600' : 'bg-red-600'
+                    }>
+                      {relation.relationship_change > 0 ? 'Improving' : 'Deteriorating'}
+                    </Badge>
+                  </div>
+                </Popup>
+              </Marker>
+            </React.Fragment>
+          );
+        })}
 
         {/* Territories */}
         {activeLayers.territories && territories.map((territory) => (

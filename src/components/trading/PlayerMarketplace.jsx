@@ -12,6 +12,12 @@ import { toast } from 'sonner';
 export default function PlayerMarketplace({ playerData }) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [offerAmount, setOfferAmount] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [rarityFilter, setRarityFilter] = useState('all');
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 1000000 });
+  const [typeFilter, setTypeFilter] = useState('all');
+  const [proposeTrade, setProposeTrade] = useState(null);
+  const [tradeMessage, setTradeMessage] = useState('');
   const queryClient = useQueryClient();
 
   const { data: myItems = [] } = useQuery({
@@ -54,6 +60,41 @@ export default function PlayerMarketplace({ playerData }) {
       setSelectedItem(null);
       setOfferAmount('');
     }
+  });
+
+  const proposeP2PTradeMutation = useMutation({
+    mutationFn: async ({ offer, proposedPrice, message }) => {
+      return await base44.entities.TradeOffer.create({
+        initiator_id: playerData.id,
+        initiator_username: playerData.username,
+        recipient_id: offer.seller_id,
+        recipient_username: offer.seller_username,
+        trade_type: 'negotiation',
+        status: 'pending',
+        initiator_offer: {
+          crypto: proposedPrice,
+          message: message
+        },
+        recipient_offer: {
+          items: [{
+            id: offer.item_id,
+            name: offer.item_name,
+            quantity: offer.item_quantity
+          }]
+        },
+        original_asking_price: offer.asking_price,
+        proposed_price: proposedPrice,
+        message: message,
+        expires_at: new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString()
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['tradeOffers']);
+      toast.success('Trade proposal sent!');
+      setProposeTrade(null);
+      setTradeMessage('');
+    },
+    onError: (error) => toast.error(error.message)
   });
 
   const buyItemMutation = useMutation({
@@ -107,6 +148,17 @@ export default function PlayerMarketplace({ playerData }) {
     }
   });
 
+  // Filter logic
+  const filteredOffers = tradeOffers
+    .filter(o => o.seller_id !== playerData?.id)
+    .filter(o => {
+      const matchesSearch = o.item_name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesPrice = o.asking_price >= priceRange.min && o.asking_price <= priceRange.max;
+      const matchesRarity = rarityFilter === 'all' || o.item_rarity === rarityFilter;
+      const matchesType = typeFilter === 'all' || o.item_type === typeFilter;
+      return matchesSearch && matchesPrice && matchesRarity && matchesType;
+    });
+
   return (
     <Card className="glass-panel border-cyan-500/20">
       <CardHeader className="border-b border-cyan-500/20">
@@ -127,40 +179,165 @@ export default function PlayerMarketplace({ playerData }) {
           </TabsList>
 
           <TabsContent value="browse">
-            {tradeOffers.filter(o => o.seller_id !== playerData?.id).length === 0 ? (
+            {/* Search and Filters */}
+            <div className="space-y-3 mb-4 p-3 rounded-lg bg-slate-900/50 border border-cyan-500/20">
+              <Input
+                placeholder="Search items..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="bg-slate-900/50 border-cyan-500/20 text-white"
+              />
+              
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Rarity</label>
+                  <select
+                    value={rarityFilter}
+                    onChange={(e) => setRarityFilter(e.target.value)}
+                    className="w-full p-2 text-sm rounded bg-slate-900/50 border border-cyan-500/20 text-white"
+                  >
+                    <option value="all">All</option>
+                    <option value="common">Common</option>
+                    <option value="uncommon">Uncommon</option>
+                    <option value="rare">Rare</option>
+                    <option value="epic">Epic</option>
+                    <option value="legendary">Legendary</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Type</label>
+                  <select
+                    value={typeFilter}
+                    onChange={(e) => setTypeFilter(e.target.value)}
+                    className="w-full p-2 text-sm rounded bg-slate-900/50 border border-cyan-500/20 text-white"
+                  >
+                    <option value="all">All</option>
+                    <option value="weapon">Weapon</option>
+                    <option value="equipment">Equipment</option>
+                    <option value="material">Material</option>
+                    <option value="contraband">Contraband</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Min Price</label>
+                  <Input
+                    type="number"
+                    value={priceRange.min}
+                    onChange={(e) => setPriceRange({ ...priceRange, min: parseInt(e.target.value) || 0 })}
+                    className="bg-slate-900/50 border-cyan-500/20 text-white text-sm h-9"
+                  />
+                </div>
+                
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">Max Price</label>
+                  <Input
+                    type="number"
+                    value={priceRange.max}
+                    onChange={(e) => setPriceRange({ ...priceRange, max: parseInt(e.target.value) || 1000000 })}
+                    className="bg-slate-900/50 border-cyan-500/20 text-white text-sm h-9"
+                  />
+                </div>
+              </div>
+              
+              <div className="text-xs text-gray-400">
+                Showing {filteredOffers.length} of {tradeOffers.filter(o => o.seller_id !== playerData?.id).length} items
+              </div>
+            </div>
+            {filteredOffers.length === 0 ? (
               <div className="text-center py-8">
                 <Package className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-                <p className="text-gray-400">No items for sale</p>
+                <p className="text-gray-400">No items match your filters</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                {tradeOffers.filter(o => o.seller_id !== playerData?.id).map((offer) => (
+                {filteredOffers.map((offer) => (
                   <div key={offer.id} className="p-3 rounded-lg bg-slate-900/50 border border-cyan-500/30">
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <h4 className="font-semibold text-white">{offer.item_name}</h4>
                         <p className="text-xs text-gray-400">Seller: {offer.seller_username}</p>
+                        {offer.item_rarity && (
+                          <Badge className={`text-xs mt-1 ${
+                            offer.item_rarity === 'legendary' ? 'bg-yellow-600' :
+                            offer.item_rarity === 'epic' ? 'bg-purple-600' :
+                            offer.item_rarity === 'rare' ? 'bg-blue-600' : 'bg-gray-600'
+                          }`}>
+                            {offer.item_rarity}
+                          </Badge>
+                        )}
                       </div>
                       <Badge className="bg-green-600">
                         ${offer.asking_price.toLocaleString()}
                       </Badge>
                     </div>
                     <p className="text-xs text-gray-400 mb-2">Qty: {offer.item_quantity}</p>
-                    <Button
-                      size="sm"
-                      className="w-full bg-gradient-to-r from-green-600 to-emerald-600"
-                      onClick={() => buyItemMutation.mutate(offer)}
-                      disabled={buyItemMutation.isPending}
-                    >
-                      {buyItemMutation.isPending ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <>
-                          <DollarSign className="w-4 h-4 mr-2" />
-                          Buy Now
-                        </>
-                      )}
-                    </Button>
+                    
+                    {proposeTrade === offer.id ? (
+                      <div className="space-y-2">
+                        <Input
+                          type="number"
+                          placeholder="Your offer amount"
+                          value={offerAmount}
+                          onChange={(e) => setOfferAmount(e.target.value)}
+                          className="bg-slate-900/50 border-cyan-500/20 text-white text-sm"
+                        />
+                        <Input
+                          placeholder="Message to seller"
+                          value={tradeMessage}
+                          onChange={(e) => setTradeMessage(e.target.value)}
+                          className="bg-slate-900/50 border-cyan-500/20 text-white text-sm"
+                        />
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            className="flex-1 bg-blue-600"
+                            onClick={() => proposeP2PTradeMutation.mutate({
+                              offer,
+                              proposedPrice: parseInt(offerAmount),
+                              message: tradeMessage
+                            })}
+                            disabled={!offerAmount || proposeP2PTradeMutation.isPending}
+                          >
+                            Send Offer
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setProposeTrade(null)}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600"
+                          onClick={() => buyItemMutation.mutate(offer)}
+                          disabled={buyItemMutation.isPending}
+                        >
+                          {buyItemMutation.isPending ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <>
+                              <DollarSign className="w-4 h-4 mr-2" />
+                              Buy Now
+                            </>
+                          )}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="border-cyan-500/30"
+                          onClick={() => setProposeTrade(offer.id)}
+                        >
+                          Propose Trade
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
