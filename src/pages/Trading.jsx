@@ -9,16 +9,18 @@ import { useQuery } from '@tanstack/react-query';
 export default function Trading() {
   const { data: user } = useQuery({
     queryKey: ['user'],
-    queryFn: () => base44.auth.me()
+    queryFn: () => base44.auth.me(),
+    staleTime: 30000
   });
 
   const { data: playerData } = useQuery({
     queryKey: ['player', user?.email],
     queryFn: async () => {
       const players = await base44.entities.Player.filter({ created_by: user.email });
-      return players[0];
+      return players[0] || null;
     },
-    enabled: !!user
+    enabled: !!user,
+    staleTime: 30000
   });
 
   if (!playerData) {

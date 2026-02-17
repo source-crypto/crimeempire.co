@@ -27,6 +27,7 @@ export default function AIManagement() {
       return players[0] || null;
     },
     enabled: !!currentUser?.email,
+    staleTime: 30000
   });
 
   const { data: playerReputation } = useQuery({
@@ -35,29 +36,37 @@ export default function AIManagement() {
       const reps = await base44.entities.PlayerReputation.filter({ player_id: playerData.id });
       return reps[0] || {};
     },
-    enabled: !!playerData?.id
+    enabled: !!playerData?.id,
+    staleTime: 30000
   });
 
   const { data: enterpriseNPCs = [] } = useQuery({
     queryKey: ['enterpriseNPCs'],
-    queryFn: () => base44.entities.EnterpriseNPC.list()
+    queryFn: () => base44.entities.EnterpriseNPC.list(),
+    staleTime: 30000
   });
 
   const { data: factions = [] } = useQuery({
     queryKey: ['factions'],
-    queryFn: () => base44.entities.Faction.list()
+    queryFn: () => base44.entities.Faction.list(),
+    staleTime: 30000
   });
 
   const { data: leResponse } = useQuery({
     queryKey: ['lawEnforcementResponse', playerData?.id],
-    queryFn: () => base44.entities.LawEnforcementResponse.filter({ player_id: playerData.id }).then(r => r[0]),
-    enabled: !!playerData?.id
+    queryFn: async () => {
+      const responses = await base44.entities.LawEnforcementResponse.filter({ player_id: playerData.id });
+      return responses[0] || null;
+    },
+    enabled: !!playerData?.id,
+    staleTime: 30000
   });
 
   const { data: bases = [] } = useQuery({
     queryKey: ['playerBases', playerData?.id],
     queryFn: () => base44.entities.PlayerBase.filter({ player_id: playerData.id }),
-    enabled: !!playerData?.id
+    enabled: !!playerData?.id,
+    staleTime: 30000
   });
 
   if (!playerData) {

@@ -93,42 +93,49 @@ export default function MoneyLaundering() {
 
       {/* Tabs */}
       <Tabs defaultValue="businesses" className="space-y-4">
-        <TabsList className="glass-panel border border-green-500/20 flex-wrap h-auto">
-          <TabsTrigger value="businesses" className="flex items-center gap-2">
+        <TabsList className="glass-panel border border-green-500/20 flex-wrap h-auto p-1 w-full">
+          <TabsTrigger value="businesses" className="flex items-center gap-2 text-xs md:text-sm">
             <Database className="w-4 h-4" />
-            Businesses
+            <span className="hidden sm:inline">Businesses</span>
+            <span className="sm:hidden">Biz</span>
           </TabsTrigger>
-          <TabsTrigger value="risk" className="flex items-center gap-2">
+          <TabsTrigger value="risk" className="flex items-center gap-2 text-xs md:text-sm">
             <AlertTriangle className="w-4 h-4" />
             Risk
           </TabsTrigger>
-          <TabsTrigger value="missions" className="flex items-center gap-2">
+          <TabsTrigger value="missions" className="flex items-center gap-2 text-xs md:text-sm">
             <Target className="w-4 h-4" />
-            Missions
+            <span className="hidden sm:inline">Missions</span>
+            <span className="sm:hidden">Jobs</span>
           </TabsTrigger>
-          <TabsTrigger value="expansion" className="flex items-center gap-2">
+          <TabsTrigger value="expansion" className="flex items-center gap-2 text-xs md:text-sm">
             <Building2 className="w-4 h-4" />
-            Expansion
+            <span className="hidden sm:inline">Expansion</span>
+            <span className="sm:hidden">Exp</span>
           </TabsTrigger>
-          <TabsTrigger value="marketplace" className="flex items-center gap-2">
+          <TabsTrigger value="marketplace" className="flex items-center gap-2 text-xs md:text-sm">
             <TrendingUp className="w-4 h-4" />
-            Exchange
+            <span className="hidden sm:inline">Currency Exchange</span>
+            <span className="sm:hidden">Exchange</span>
           </TabsTrigger>
-          <TabsTrigger value="darkweb" className="flex items-center gap-2">
+          <TabsTrigger value="darkweb" className="flex items-center gap-2 text-xs md:text-sm">
             <Skull className="w-4 h-4" />
-            Dark Web
+            <span className="hidden sm:inline">Dark Web</span>
+            <span className="sm:hidden">Dark</span>
           </TabsTrigger>
-          <TabsTrigger value="accessories" className="flex items-center gap-2">
+          <TabsTrigger value="accessories" className="flex items-center gap-2 text-xs md:text-sm">
             <ShoppingBag className="w-4 h-4" />
             Shop
           </TabsTrigger>
-          <TabsTrigger value="market" className="flex items-center gap-2">
+          <TabsTrigger value="market" className="flex items-center gap-2 text-xs md:text-sm">
             <Wrench className="w-4 h-4" />
-            Trades
+            <span className="hidden sm:inline">Player Market</span>
+            <span className="sm:hidden">Trades</span>
           </TabsTrigger>
-          <TabsTrigger value="analytics" className="flex items-center gap-2">
+          <TabsTrigger value="analytics" className="flex items-center gap-2 text-xs md:text-sm">
             <BarChart3 className="w-4 h-4" />
-            Analytics
+            <span className="hidden sm:inline">Analytics</span>
+            <span className="sm:hidden">Stats</span>
           </TabsTrigger>
         </TabsList>
 

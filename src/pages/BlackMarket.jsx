@@ -59,18 +59,21 @@ export default function BlackMarket() {
 
       {/* Main Tabs */}
       <Tabs defaultValue="marketplace" className="space-y-4">
-        <TabsList className="glass-panel border border-red-500/20">
-          <TabsTrigger value="marketplace" className="flex items-center gap-2">
+        <TabsList className="glass-panel border border-red-500/20 w-full flex-wrap h-auto p-1">
+          <TabsTrigger value="marketplace" className="flex items-center gap-2 text-xs md:text-sm">
             <ShoppingCart className="w-4 h-4" />
-            Black Market
+            <span className="hidden sm:inline">Available on Black Market</span>
+            <span className="sm:hidden">Market</span>
           </TabsTrigger>
-          <TabsTrigger value="smuggling" className="flex items-center gap-2">
+          <TabsTrigger value="smuggling" className="flex items-center gap-2 text-xs md:text-sm">
             <Truck className="w-4 h-4" />
-            Smuggling
+            <span className="hidden sm:inline">Smuggling Routes</span>
+            <span className="sm:hidden">Smuggling</span>
           </TabsTrigger>
-          <TabsTrigger value="trends" className="flex items-center gap-2">
+          <TabsTrigger value="trends" className="flex items-center gap-2 text-xs md:text-sm">
             <TrendingUp className="w-4 h-4" />
-            Market Intel
+            <span className="hidden sm:inline">Market Intelligence</span>
+            <span className="sm:hidden">Intel</span>
           </TabsTrigger>
         </TabsList>
 

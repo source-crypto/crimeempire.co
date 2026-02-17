@@ -26,57 +26,68 @@ export default function CrimeMap() {
   const { data: user } = useQuery({
     queryKey: ['user'],
     queryFn: () => base44.auth.me(),
+    staleTime: 30000
   });
 
   const { data: playerData } = useQuery({
     queryKey: ['player', user?.email],
-    queryFn: () => base44.entities.Player.filter({ created_by: user.email }),
+    queryFn: async () => {
+      const players = await base44.entities.Player.filter({ created_by: user.email });
+      return players[0] || null;
+    },
     enabled: !!user?.email,
-    select: (data) => data[0]
+    staleTime: 30000
   });
 
   const { data: territories = [] } = useQuery({
     queryKey: ['territories'],
-    queryFn: () => base44.entities.Territory.list()
+    queryFn: () => base44.entities.Territory.list(),
+    staleTime: 30000
   });
 
   const { data: supplyRoutes = [] } = useQuery({
     queryKey: ['supplyRoutes'],
     queryFn: () => base44.entities.SupplyRoute.list(),
-    enabled: mapLayers.smugglingRoutes || mapLayers.supplyLines
+    enabled: mapLayers.smugglingRoutes || mapLayers.supplyLines,
+    staleTime: 30000
   });
 
   const { data: lawEnforcement = [] } = useQuery({
     queryKey: ['lawEnforcement'],
     queryFn: () => base44.entities.LawEnforcement.list(),
     enabled: mapLayers.lawEnforcement,
-    refetchInterval: 10000
+    refetchInterval: 10000,
+    staleTime: 5000
   });
 
   const { data: contrabandCaches = [] } = useQuery({
     queryKey: ['contrabandCaches'],
     queryFn: () => base44.entities.ContrabandCache.filter({ is_claimed: false }),
     enabled: mapLayers.contraband,
-    refetchInterval: 15000
+    refetchInterval: 15000,
+    staleTime: 10000
   });
 
   const { data: materialDeposits = [] } = useQuery({
     queryKey: ['materialDeposits'],
     queryFn: () => base44.entities.MaterialDeposit.filter({ is_active: true }),
-    enabled: mapLayers.materials
+    enabled: mapLayers.materials,
+    staleTime: 30000
   });
 
   const { data: vehicles = [] } = useQuery({
     queryKey: ['vehicles'],
     queryFn: () => base44.entities.Vehicle.list(),
-    enabled: mapLayers.vehicles
+    enabled: mapLayers.vehicles,
+    staleTime: 30000
   });
 
   const { data: allPlayers = [] } = useQuery({
     queryKey: ['allPlayers'],
     queryFn: () => base44.entities.Player.list(),
     enabled: mapLayers.players,
-    refetchInterval: 20000
+    refetchInterval: 20000,
+    staleTime: 15000
   });
 
   const toggleLayer = (layer) => {

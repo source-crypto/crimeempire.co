@@ -174,22 +174,25 @@ export default function ItemsCenter() {
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="inventory" className="space-y-4">
-        <TabsList className="glass-panel border-purple-500/20">
-          <TabsTrigger value="inventory">
+        <TabsList className="glass-panel border-purple-500/20 w-full flex-wrap h-auto p-1">
+          <TabsTrigger value="inventory" className="text-xs md:text-sm">
             <Boxes className="w-4 h-4 mr-2" />
-            Inventory
+            <span className="hidden sm:inline">Item Inventory</span>
+            <span className="sm:hidden">Inventory</span>
           </TabsTrigger>
-          <TabsTrigger value="distribute">
+          <TabsTrigger value="distribute" className="text-xs md:text-sm">
             <Send className="w-4 h-4 mr-2" />
-            Distribute
+            <span className="hidden sm:inline">Distribute Resources</span>
+            <span className="sm:hidden">Distribute</span>
           </TabsTrigger>
-          <TabsTrigger value="market">
+          <TabsTrigger value="market" className="text-xs md:text-sm">
             <TrendingUp className="w-4 h-4 mr-2" />
             Market
           </TabsTrigger>
-          <TabsTrigger value="categories">
+          <TabsTrigger value="categories" className="text-xs md:text-sm">
             <Package className="w-4 h-4 mr-2" />
-            By Category
+            <span className="hidden sm:inline">By Category</span>
+            <span className="sm:hidden">Categories</span>
           </TabsTrigger>
         </TabsList>
 

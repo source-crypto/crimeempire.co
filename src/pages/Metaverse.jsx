@@ -63,24 +63,28 @@ export default function Metaverse() {
       </div>
 
       <Tabs defaultValue="missions" className="space-y-4">
-        <TabsList className="glass-panel border border-purple-500/20">
-          <TabsTrigger value="missions" className="flex items-center gap-2">
+        <TabsList className="glass-panel border border-purple-500/20 w-full flex-wrap h-auto p-1">
+          <TabsTrigger value="missions" className="flex items-center gap-2 text-xs md:text-sm">
             <Target className="w-4 h-4" />
-            Missions
+            <span className="hidden sm:inline">AI Mission Generator</span>
+            <span className="sm:hidden">Missions</span>
           </TabsTrigger>
-          <TabsTrigger value="market" className="flex items-center gap-2">
+          <TabsTrigger value="market" className="flex items-center gap-2 text-xs md:text-sm">
             <BarChart3 className="w-4 h-4" />
-            Market
+            <span className="hidden sm:inline">Dynamic Market</span>
+            <span className="sm:hidden">Market</span>
           </TabsTrigger>
-          <TabsTrigger value="factions" className="flex items-center gap-2">
+          <TabsTrigger value="factions" className="flex items-center gap-2 text-xs md:text-sm">
             <Shield className="w-4 h-4" />
-            Rival Factions
+            <span className="hidden sm:inline">Rival Factions</span>
+            <span className="sm:hidden">Factions</span>
           </TabsTrigger>
-          <TabsTrigger value="events" className="flex items-center gap-2">
+          <TabsTrigger value="events" className="flex items-center gap-2 text-xs md:text-sm">
             <Globe className="w-4 h-4" />
-            World Events
+            <span className="hidden sm:inline">World Events</span>
+            <span className="sm:hidden">Events</span>
           </TabsTrigger>
-          <TabsTrigger value="escalation" className="flex items-center gap-2">
+          <TabsTrigger value="escalation" className="flex items-center gap-2 text-xs md:text-sm">
             <Zap className="w-4 h-4" />
             Escalation
           </TabsTrigger>
