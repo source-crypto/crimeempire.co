@@ -157,36 +157,34 @@ export default function Dashboard() {
     <div className="space-y-6">
       <GameEngine playerData={playerData} />
       {/* Welcome Section */}
-      <div className="glass-panel border border-purple-500/20 p-6 rounded-xl">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="glass-panel border border-purple-500/20 p-4 md:p-6 rounded-xl">
+        <div className="flex flex-col gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">
+            <h1 className="text-xl md:text-3xl font-bold text-white mb-2">
               Welcome back, <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 {playerData?.username || 'Rookie'}
               </span>
             </h1>
-            <p className="text-gray-400">Your criminal empire awaits</p>
+            <p className="text-sm md:text-base text-gray-400">Your criminal empire awaits</p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="text-right">
-              <p className="text-sm text-gray-400">Level {playerData?.level || 1}</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs md:text-sm text-gray-400">Level {playerData?.level || 1}</p>
               <div className="flex gap-0.5 mt-1">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${
+                    className={`w-3 h-3 md:w-4 md:h-4 ${
                       i < wantedStars ? 'text-red-500 fill-red-500' : 'text-gray-600'
                     }`}
                   />
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-        <div className="mt-4">
-          <div className="flex justify-between text-sm text-gray-400 mb-2">
-            <span>Progress to Level {(playerData?.level || 1) + 1}</span>
-            <span>{levelProgress.toFixed(0)}%</span>
+            <div className="text-right">
+              <p className="text-xs md:text-sm text-gray-400">{levelProgress.toFixed(0)}%</p>
+              <p className="text-xs text-gray-500">to next level</p>
+            </div>
           </div>
           <Progress value={levelProgress} className="h-2" />
         </div>
@@ -194,14 +192,14 @@ export default function Dashboard() {
 
       {/* Transparent Finance Section */}
       <LazyLoadWrapper fallbackText="Loading wallet...">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <TransparentWallet playerData={playerData} />
           <AutomatedIncomeWorkflows playerData={playerData} />
         </div>
       </LazyLoadWrapper>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         <StatCard
           title="Crypto Balance"
           value={`$${(playerData?.crypto_balance || 0).toLocaleString()}`}
@@ -242,7 +240,7 @@ export default function Dashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-3 md:gap-4">
               <div>
                 <p className="text-sm text-gray-400">Role</p>
                 <p className="text-lg font-semibold text-white capitalize">{playerData?.crew_role}</p>
@@ -274,8 +272,8 @@ export default function Dashboard() {
               <Badge className="ml-auto bg-purple-600">{enterprises.length}</Badge>
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <CardContent className="p-3 md:p-6">
+            <div className="grid grid-cols-1 gap-3">
               {enterprises.slice(0, 4).map((enterprise) => (
                 <div
                   key={enterprise.id}
@@ -303,23 +301,23 @@ export default function Dashboard() {
 
       {/* Main Tabs */}
       <Tabs defaultValue="overview" className="space-y-4">
-        <TabsList className="glass-panel border border-purple-500/20">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="progression">AI Progression</TabsTrigger>
-          <TabsTrigger value="marketplace">Marketplace</TabsTrigger>
-          <TabsTrigger value="investments">Investments</TabsTrigger>
-          <TabsTrigger value="contracts">Contracts</TabsTrigger>
-          <TabsTrigger value="broadcasts">Event Broadcasts</TabsTrigger>
-          <TabsTrigger value="economy">Economy</TabsTrigger>
+        <TabsList className="glass-panel border border-purple-500/20 w-full flex-wrap h-auto p-1">
+          <TabsTrigger value="overview" className="text-xs md:text-sm">Overview</TabsTrigger>
+          <TabsTrigger value="progression" className="text-xs md:text-sm">Progression</TabsTrigger>
+          <TabsTrigger value="marketplace" className="text-xs md:text-sm">Market</TabsTrigger>
+          <TabsTrigger value="investments" className="text-xs md:text-sm">Invest</TabsTrigger>
+          <TabsTrigger value="contracts" className="text-xs md:text-sm">Contracts</TabsTrigger>
+          <TabsTrigger value="broadcasts" className="text-xs md:text-sm">Events</TabsTrigger>
+          <TabsTrigger value="economy" className="text-xs md:text-sm">Economy</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
+        <TabsContent value="overview" className="space-y-4 md:space-y-6">
+          <div className="grid grid-cols-1 gap-4 md:gap-6">
+            <div className="space-y-4 md:space-y-6">
               <ActiveBattles battles={battles} onJoinBattle={handleJoinBattle} />
               <ActiveHeists heists={activeHeists} />
             </div>
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               <QuickActions />
               <SystemStatus 
                 playerData={playerData} 
