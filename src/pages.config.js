@@ -83,6 +83,12 @@ import Syndicates from './pages/Syndicates';
 import Territories from './pages/Territories';
 import Trading from './pages/Trading';
 import Tutorial from './pages/Tutorial';
+import PlayerHideout from './pages/PlayerHideout';
+import ContrabandCaches from './pages/ContrabandCaches';
+import SupplyChainNetwork from './pages/SupplyChainNetwork';
+import ProductionManagement from './pages/ProductionManagement';
+import AIEmployees from './pages/AIEmployees';
+import TeamManagement from './pages/TeamManagement';
 import __Layout from './Layout.jsx';
 
 
@@ -123,6 +129,12 @@ export const PAGES = {
     "Territories": Territories,
     "Trading": Trading,
     "Tutorial": Tutorial,
+    "PlayerHideout": PlayerHideout,
+    "ContrabandCaches": ContrabandCaches,
+    "SupplyChainNetwork": SupplyChainNetwork,
+    "ProductionManagement": ProductionManagement,
+    "AIEmployees": AIEmployees,
+    "TeamManagement": TeamManagement,
 }
 
 export const pagesConfig = {
