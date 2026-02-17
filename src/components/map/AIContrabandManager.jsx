@@ -318,16 +318,21 @@ Return ONLY valid JSON:`;
           </TabsContent>
 
           <TabsContent value="operations" className="space-y-3 mt-4">
-            <h4 className="text-white font-semibold mb-3">Establish Distribution Operations</h4>
+            <div className="mb-4">
+              <h4 className="text-white font-semibold mb-2">Establish Distribution Operations</h4>
+              <p className="text-xs text-gray-400">Use AI suggestions to create optimal routes</p>
+            </div>
+            
             {distributionOperations.map((op) => {
               const Icon = op.icon;
               const canAfford = playerData?.crypto_balance >= op.cost;
+              const hasTerritory = crewTerritories.length > 0;
 
               return (
                 <div 
                   key={op.type}
                   className={`p-4 rounded-lg border transition-all ${
-                    canAfford 
+                    canAfford && hasTerritory
                       ? 'bg-slate-900/30 border-purple-500/20 hover:border-purple-500/40'
                       : 'bg-slate-900/10 border-gray-700/20 opacity-60'
                   }`}
@@ -342,7 +347,7 @@ Return ONLY valid JSON:`;
                       <div className="flex flex-wrap gap-2">
                         <Badge variant="outline" className="text-xs">
                           <DollarSign className="w-3 h-3 mr-1" />
-                          ${op.revenue}/hr
+                          ${op.revenue.toLocaleString()}/hr
                         </Badge>
                         <Badge variant="outline" className={`text-xs ${getRiskColor(op.risk)}`}>
                           <AlertTriangle className="w-3 h-3 mr-1" />
@@ -352,20 +357,46 @@ Return ONLY valid JSON:`;
                     </div>
                   </div>
 
+                  {!hasTerritory && (
+                    <p className="text-xs text-yellow-400 mb-2">
+                      Requires controlled territory
+                    </p>
+                  )}
+                  
+                  {!canAfford && hasTerritory && (
+                    <p className="text-xs text-red-400 mb-2">
+                      Insufficient funds (need ${op.cost.toLocaleString()})
+                    </p>
+                  )}
+
                   <Button
                     size="sm"
                     onClick={() => createDistributionOperationMutation.mutate({ 
                       operationType: op.type,
                       targetTerritory: crewTerritories[0]
                     })}
-                    disabled={createDistributionOperationMutation.isPending || !canAfford}
-                    className="w-full bg-gradient-to-r from-cyan-600 to-blue-600"
+                    disabled={createDistributionOperationMutation.isPending || !canAfford || !hasTerritory}
+                    className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 disabled:opacity-50"
                   >
-                    Establish - ${op.cost.toLocaleString()}
+                    {createDistributionOperationMutation.isPending ? (
+                      <>Establishing...</>
+                    ) : (
+                      <>Establish - ${op.cost.toLocaleString()}</>
+                    )}
                   </Button>
                 </div>
               );
             })}
+
+            {crewTerritories.length === 0 && (
+              <div className="p-4 rounded-lg bg-yellow-900/20 border border-yellow-500/30 text-center">
+                <AlertTriangle className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
+                <p className="text-sm text-yellow-400 font-semibold mb-1">No Controlled Territories</p>
+                <p className="text-xs text-gray-400">
+                  Join a crew and control territories to establish distribution operations
+                </p>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="strategy" className="space-y-4 mt-4">
