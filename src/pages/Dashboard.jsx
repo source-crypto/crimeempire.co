@@ -37,7 +37,7 @@ export default function Dashboard() {
     base44.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
 
-  const { data: playerData, refetch: refetchPlayer } = useQuery({
+  const { data: playerData, refetch: refetchPlayer, isLoading: isLoadingPlayer } = useQuery({
     queryKey: ['player', currentUser?.email],
     queryFn: async () => {
       if (!currentUser?.email) return null;
@@ -66,35 +66,36 @@ export default function Dashboard() {
       return players[0];
     },
     enabled: !!currentUser,
-    staleTime: 600000,
-    gcTime: 1200000,
-    refetchOnWindowFocus: false
+    staleTime: 30000,
+    gcTime: 60000,
+    refetchOnWindowFocus: true,
+    retry: 1
   });
 
   const { data: crewData } = useQuery({
     queryKey: ['crew', playerData?.crew_id],
     queryFn: () => base44.entities.Crew.filter({ id: playerData.crew_id }),
     enabled: !!playerData?.crew_id,
-    staleTime: 600000,
-    gcTime: 1200000,
-    refetchOnWindowFocus: false
+    staleTime: 30000,
+    gcTime: 60000,
+    retry: 1
   });
 
   const { data: battles = [] } = useQuery({
     queryKey: ['battles'],
     queryFn: () => base44.entities.Battle.filter({ status: 'active' }, '-created_date', 3),
-    staleTime: 300000,
-    gcTime: 600000,
-    refetchOnWindowFocus: false
+    staleTime: 30000,
+    gcTime: 60000,
+    retry: 1
   });
 
   const { data: enterprises = [] } = useQuery({
     queryKey: ['enterprises', playerData?.id],
     queryFn: () => base44.entities.CriminalEnterprise.filter({ owner_id: playerData.id }, '-created_date', 5),
     enabled: !!playerData?.id,
-    staleTime: 600000,
-    gcTime: 1200000,
-    refetchOnWindowFocus: false
+    staleTime: 30000,
+    gcTime: 60000,
+    retry: 1
   });
 
   const { data: activeHeists = [] } = useQuery({
@@ -104,9 +105,9 @@ export default function Dashboard() {
       status: 'in_progress'
     }, '-created_date', 3),
     enabled: !!playerData?.crew_id,
-    staleTime: 300000,
-    gcTime: 600000,
-    refetchOnWindowFocus: false
+    staleTime: 30000,
+    gcTime: 60000,
+    retry: 1
   });
 
   const { data: recentActivity = [] } = useQuery({
@@ -117,9 +118,9 @@ export default function Dashboard() {
       3
     ),
     enabled: !!playerData?.crew_id,
-    staleTime: 300000,
-    gcTime: 600000,
-    refetchOnWindowFocus: false
+    staleTime: 30000,
+    gcTime: 60000,
+    retry: 1
   });
 
   const crew = crewData?.[0];
@@ -130,6 +131,27 @@ export default function Dashboard() {
 
   const wantedStars = playerData?.wanted_level || 0;
   const levelProgress = ((playerData?.endgame_points || 0) % 1000) / 10;
+
+  if (isLoadingPlayer) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-white text-lg">Loading your criminal empire...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!playerData) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-white text-lg">Unable to load player data. Please refresh.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
