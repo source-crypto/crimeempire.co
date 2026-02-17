@@ -9,7 +9,8 @@ import { Users, TrendingUp, MapPin, Shield, Crown } from 'lucide-react';
 export default function Syndicates() {
   const { data: user } = useQuery({
     queryKey: ['user'],
-    queryFn: () => base44.auth.me()
+    queryFn: () => base44.auth.me(),
+    staleTime: 30000
   });
 
   const { data: playerData } = useQuery({
@@ -18,21 +19,25 @@ export default function Syndicates() {
       const players = await base44.entities.Player.filter({ created_by: user.email });
       return players[0];
     },
-    enabled: !!user
+    enabled: !!user,
+    staleTime: 30000
   });
 
   const { data: crews = [] } = useQuery({
     queryKey: ['allCrews'],
-    queryFn: () => base44.entities.Crew.list('-reputation', 20)
+    queryFn: () => base44.entities.Crew.list('-reputation', 20),
+    staleTime: 30000
   });
 
   const { data: myCrew } = useQuery({
     queryKey: ['myCrew', playerData?.crew_id],
     queryFn: async () => {
+      if (!playerData?.crew_id) return null;
       const crew = await base44.entities.Crew.filter({ id: playerData.crew_id });
-      return crew[0];
+      return crew[0] || null;
     },
-    enabled: !!playerData?.crew_id
+    enabled: !!playerData?.crew_id,
+    staleTime: 30000
   });
 
   if (!playerData) {

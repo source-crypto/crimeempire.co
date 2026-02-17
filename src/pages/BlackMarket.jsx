@@ -23,6 +23,7 @@ export default function BlackMarket() {
       return players[0] || null;
     },
     enabled: !!currentUser?.email,
+    staleTime: 30000
   });
 
   const { data: enterpriseNPCs = [] } = useQuery({
@@ -33,6 +34,7 @@ export default function BlackMarket() {
       return allNPCs.filter(npc => npc.enterprise_id);
     },
     enabled: !!playerData?.id,
+    staleTime: 30000
   });
 
   if (!playerData) {

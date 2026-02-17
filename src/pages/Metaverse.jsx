@@ -30,15 +30,18 @@ export default function Metaverse() {
       return players[0] || null;
     },
     enabled: !!currentUser,
+    staleTime: 30000
   });
 
   const { data: crewData } = useQuery({
     queryKey: ['crew', playerData?.crew_id],
     queryFn: async () => {
+      if (!playerData?.crew_id) return null;
       const crews = await base44.entities.Crew.filter({ id: playerData.crew_id });
-      return crews[0];
+      return crews[0] || null;
     },
     enabled: !!playerData?.crew_id,
+    staleTime: 30000
   });
 
   if (!playerData) {

@@ -27,13 +27,15 @@ export default function MoneyLaundering() {
       const players = await base44.entities.Player.filter({ created_by: currentUser.email });
       return players[0] || null;
     },
-    enabled: !!currentUser?.email
+    enabled: !!currentUser?.email,
+    staleTime: 30000
   });
 
   const { data: businesses = [] } = useQuery({
     queryKey: ['launderingBusinesses', playerData?.id],
     queryFn: () => base44.entities.MoneyLaunderingBusiness.filter({ owner_id: playerData.id }),
-    enabled: !!playerData?.id
+    enabled: !!playerData?.id,
+    staleTime: 30000
   });
 
   if (!playerData) {

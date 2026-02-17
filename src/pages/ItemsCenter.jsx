@@ -21,20 +21,25 @@ export default function ItemsCenter() {
 
   const { data: user } = useQuery({
     queryKey: ['user'],
-    queryFn: () => base44.auth.me()
+    queryFn: () => base44.auth.me(),
+    staleTime: 30000
   });
 
   const { data: playerData } = useQuery({
     queryKey: ['player', user?.email],
-    queryFn: () => base44.entities.Player.filter({ created_by: user.email }),
+    queryFn: async () => {
+      const players = await base44.entities.Player.filter({ created_by: user.email });
+      return players[0] || null;
+    },
     enabled: !!user?.email,
-    select: (data) => data[0]
+    staleTime: 30000
   });
 
   const { data: allItems = [] } = useQuery({
     queryKey: ['allItems', playerData?.id],
     queryFn: () => base44.entities.Item.filter({ owner_id: playerData.id }),
-    enabled: !!playerData?.id
+    enabled: !!playerData?.id,
+    staleTime: 30000
   });
 
   const { data: enterprises = [] } = useQuery({
@@ -44,7 +49,8 @@ export default function ItemsCenter() {
       const data = await base44.entities.CriminalEnterprise.filter({ owner_id: playerData.id });
       return data || [];
     },
-    enabled: !!playerData?.id
+    enabled: !!playerData?.id,
+    staleTime: 30000
   });
 
   const { data: territories = [] } = useQuery({
@@ -54,7 +60,8 @@ export default function ItemsCenter() {
       const data = await base44.entities.Territory.filter({ owner_crew_id: playerData.crew_id });
       return data || [];
     },
-    enabled: !!playerData?.crew_id
+    enabled: !!playerData?.crew_id,
+    staleTime: 30000
   });
 
   const categorizedItems = {
