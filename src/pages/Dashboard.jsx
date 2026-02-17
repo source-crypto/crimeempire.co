@@ -8,6 +8,7 @@ import ActiveBattles from '../components/dashboard/ActiveBattles';
 import ActiveHeists from '../components/dashboard/ActiveHeists';
 import QuickActions from '../components/dashboard/QuickActions';
 import SystemStatus from '../components/dashboard/SystemStatus';
+import ActiveInvestigations from '../components/dashboard/ActiveInvestigations';
 
 // Lazy load heavy components
 const TransparentWallet = lazy(() => import('../components/economy/TransparentWallet'));
