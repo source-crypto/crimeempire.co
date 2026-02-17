@@ -313,19 +313,22 @@ export default function Dashboard() {
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4 md:space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            <ActiveBattles battles={battles} onJoinBattle={handleJoinBattle} />
+            <ActiveHeists heists={activeHeists} />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+            <ActiveInvestigations playerData={playerData} />
+            <QuickActions />
+          </div>
+
           <div className="grid grid-cols-1 gap-4 md:gap-6">
-            <div className="space-y-4 md:space-y-6">
-              <ActiveBattles battles={battles} onJoinBattle={handleJoinBattle} />
-              <ActiveHeists heists={activeHeists} />
-            </div>
-            <div className="space-y-4 md:space-y-6">
-              <QuickActions />
-              <SystemStatus 
-                playerData={playerData} 
-                crew={crew} 
-                enterprises={enterprises}
-              />
-            </div>
+            <SystemStatus 
+              playerData={playerData} 
+              crew={crew} 
+              enterprises={enterprises}
+            />
           </div>
 
           {/* Recent Activity Feed */}
