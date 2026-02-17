@@ -98,6 +98,8 @@ export default function GameEngine({ playerData }) {
       
       // Create event broadcast
       await base44.entities.EventBroadcast.create({
+        event_id: `${type}_${Date.now()}_${playerData.id}`,
+        event_name: type.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
         player_id: playerData.id,
         event_type: type,
         event_data: data,
