@@ -26,7 +26,6 @@ export default function Layout({ children, currentPageName }) {
   const moreNavigation = [
     { name: 'Getting Started', page: 'GettingStarted', icon: BookOpen },
     { name: 'Game Guide', page: 'GameDocumentation', icon: BookOpen },
-    { name: 'Investigations', page: 'Investigations', icon: Shield },
     { name: 'Combat', page: 'Combat', icon: Shield },
     { name: 'Trading', page: 'Trading', icon: Gavel },
     { name: 'P2P Trading', page: 'P2PTrading', icon: Gavel },
