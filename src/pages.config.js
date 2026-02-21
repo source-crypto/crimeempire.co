@@ -89,6 +89,7 @@ import SupplyChainNetwork from './pages/SupplyChainNetwork';
 import ProductionManagement from './pages/ProductionManagement';
 import AIEmployees from './pages/AIEmployees';
 import TeamManagement from './pages/TeamManagement';
+import Investigations from './pages/Investigations';
 import __Layout from './Layout.jsx';
 
 
@@ -135,6 +136,7 @@ export const PAGES = {
     "ProductionManagement": ProductionManagement,
     "AIEmployees": AIEmployees,
     "TeamManagement": TeamManagement,
+    "Investigations": Investigations,
 }
 
 export const pagesConfig = {
