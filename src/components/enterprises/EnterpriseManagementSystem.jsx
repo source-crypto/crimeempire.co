@@ -143,6 +143,8 @@ Make it relevant to the enterprise type. Return JSON.`;
     }
   });
 
+  if (!enterprise || !playerData) return null;
+
   const autoTradeProductionMutation = useMutation({
     mutationFn: async () => {
       const surplusThreshold = enterprise.storage_capacity * 0.8;
