@@ -200,9 +200,9 @@ Return JSON format.
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries(['enterprises']);
-      queryClient.invalidateQueries(['currentPlayer']);
+      queryClient.invalidateQueries(['player']);
       toast.success(`${data.upgradeType} upgraded for $${data.cost.toLocaleString()}`);
-      onUpdate();
+      if (onUpdate) onUpdate();
     },
     onError: (error) => {
       toast.error(error.message);
