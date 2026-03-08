@@ -94,21 +94,9 @@ Provide strategic HR recommendations to optimize productivity while managing cos
       if (playerData.crypto_balance < cost) {
         throw new Error('Insufficient funds');
       }
-
-      const updates = {
-        unionization_risk: action === 'accept' ? 0 : Math.max(0, (aiManager.unionization_risk || 0) - 20),
-        union_demands: []
-      };
-
-      if (action === 'accept') {
-        updates.avg_wage_per_employee = (aiManager.avg_wage_per_employee || 500) * 1.2;
-      }
-
-      await base44.entities.AIEmployeeManager.update(aiManager.id, updates);
       await base44.entities.Player.update(playerData.id, {
         crypto_balance: playerData.crypto_balance - cost
       });
-
       if (satisfaction) {
         await base44.entities.EmployeeSatisfaction.update(satisfaction.id, {
           overall_morale: Math.min(100, (satisfaction.overall_morale || 75) + 15),
@@ -117,7 +105,6 @@ Provide strategic HR recommendations to optimize productivity while managing cos
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['aiEmployeeManager']);
       queryClient.invalidateQueries(['employeeSatisfaction']);
       queryClient.invalidateQueries(['player']);
       toast.success('Union demand handled');
