@@ -66,10 +66,13 @@ export default function SystemStatus({ playerData, crew, enterprises }) {
                   </div>
                 </div>
                 <Badge className={
-                  system.status === 'active' ? 'bg-green-600' : 'bg-gray-600'
+                  system.status === 'active' ? 'bg-green-600' :
+                  system.status === 'limited' ? 'bg-yellow-600' : 'bg-gray-600'
                 }>
                   {system.status === 'active' ? (
                     <CheckCircle className="w-3 h-3 mr-1" />
+                  ) : system.status === 'limited' ? (
+                    <AlertTriangle className="w-3 h-3 mr-1" />
                   ) : (
                     <AlertTriangle className="w-3 h-3 mr-1" />
                   )}
