@@ -65,30 +65,33 @@ export default function BaseManagement() {
 
       {/* Tabs */}
       <Tabs defaultValue="builder" className="space-y-4">
-        <TabsList className="glass-panel border border-green-500/20">
-          <TabsTrigger value="builder" className="flex items-center gap-2">
-            <Building2 className="w-4 h-4" />
-            Build
+        <TabsList className="glass-panel border border-green-500/20 flex flex-wrap gap-1 h-auto p-1">
+          <TabsTrigger value="builder" className="flex items-center gap-1.5 text-xs">
+            <Building2 className="w-3.5 h-3.5" />Build
           </TabsTrigger>
-          <TabsTrigger value="design" className="flex items-center gap-2">
-            <Palette className="w-4 h-4" />
-            Design
+          <TabsTrigger value="design" className="flex items-center gap-1.5 text-xs">
+            <Palette className="w-3.5 h-3.5" />Design
           </TabsTrigger>
-          <TabsTrigger value="staff" className="flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            Staff
+          <TabsTrigger value="staff" className="flex items-center gap-1.5 text-xs">
+            <Users className="w-3.5 h-3.5" />Staff
           </TabsTrigger>
-          <TabsTrigger value="defense" className="flex items-center gap-2">
-            <Shield className="w-4 h-4" />
-            Defense
+          <TabsTrigger value="missions" className="flex items-center gap-1.5 text-xs">
+            <Target className="w-3.5 h-3.5" />Missions
           </TabsTrigger>
-          <TabsTrigger value="intel" className="flex items-center gap-2">
-            <Eye className="w-4 h-4" />
-            Intel
+          <TabsTrigger value="ai_staff" className="flex items-center gap-1.5 text-xs">
+            <Brain className="w-3.5 h-3.5" />AI Staff
           </TabsTrigger>
-          <TabsTrigger value="map" className="flex items-center gap-2">
-            <Map className="w-4 h-4" />
-            Territory
+          <TabsTrigger value="security" className="flex items-center gap-1.5 text-xs">
+            <Lock className="w-3.5 h-3.5" />Security
+          </TabsTrigger>
+          <TabsTrigger value="defense" className="flex items-center gap-1.5 text-xs">
+            <Shield className="w-3.5 h-3.5" />Defense
+          </TabsTrigger>
+          <TabsTrigger value="intel" className="flex items-center gap-1.5 text-xs">
+            <Eye className="w-3.5 h-3.5" />Intel
+          </TabsTrigger>
+          <TabsTrigger value="map" className="flex items-center gap-1.5 text-xs">
+            <Map className="w-3.5 h-3.5" />Territory
           </TabsTrigger>
         </TabsList>
 
@@ -113,6 +116,51 @@ export default function BaseManagement() {
             </Card>
           ) : (
             <NPCFacilityManager selectedBase={selectedBase || bases[0]} playerData={playerData} />
+          )}
+        </TabsContent>
+
+        <TabsContent value="missions">
+          {bases.length === 0 ? (
+            <Card className="glass-panel border-blue-500/20 p-6 text-center">
+              <p className="text-gray-400">Establish a base first to host missions</p>
+            </Card>
+          ) : (
+            <Card className="glass-panel border-blue-500/20">
+              <CardHeader><CardTitle className="text-white flex items-center gap-2"><Target className="w-5 h-5 text-blue-400" />Base Mission Center</CardTitle></CardHeader>
+              <div className="p-4">
+                <BaseMissionCenter currentBase={bases[0]} baseFacilities={baseFacilities} playerData={playerData} />
+              </div>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="ai_staff">
+          {bases.length === 0 ? (
+            <Card className="glass-panel border-pink-500/20 p-6 text-center">
+              <p className="text-gray-400">Establish a base first to hire AI staff</p>
+            </Card>
+          ) : (
+            <Card className="glass-panel border-pink-500/20">
+              <CardHeader><CardTitle className="text-white flex items-center gap-2"><Brain className="w-5 h-5 text-pink-400" />AI Facility Managers</CardTitle></CardHeader>
+              <div className="p-4">
+                <AIFacilityManager currentBase={bases[0]} baseFacilities={baseFacilities} playerData={playerData} />
+              </div>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="security">
+          {bases.length === 0 ? (
+            <Card className="glass-panel border-red-500/20 p-6 text-center">
+              <p className="text-gray-400">Establish a base first to install security</p>
+            </Card>
+          ) : (
+            <Card className="glass-panel border-red-500/20">
+              <CardHeader><CardTitle className="text-white flex items-center gap-2"><Lock className="w-5 h-5 text-red-400" />Base Security Systems</CardTitle></CardHeader>
+              <div className="p-4">
+                <BaseSecuritySystem currentBase={bases[0]} playerData={playerData} />
+              </div>
+            </Card>
           )}
         </TabsContent>
 
