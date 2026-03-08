@@ -111,8 +111,8 @@ Provide strategic HR recommendations to optimize productivity while managing cos
     }
   });
 
-  const unionRisk = aiManager?.unionization_risk || 0;
-  const hasUnionDemands = aiManager?.union_demands?.length > 0;
+  const unionRisk = satisfaction?.turnover_risk || 0;
+  const hasUnionDemands = false;
 
   return (
     <Card className="glass-panel border-blue-500/30">
