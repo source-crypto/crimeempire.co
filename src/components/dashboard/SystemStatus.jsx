@@ -34,6 +34,13 @@ export default function SystemStatus({ playerData, crew, enterprises }) {
       icon: Activity,
       color: crew ? 'text-orange-400' : 'text-gray-400',
       description: crew ? `${crew.member_count} members` : 'No crew joined'
+    },
+    {
+      name: 'AI Generator',
+      status: 'limited',
+      icon: AlertTriangle,
+      color: 'text-yellow-400',
+      description: 'Monthly AI credits exhausted — fallback mode active'
     }
   ];
 
