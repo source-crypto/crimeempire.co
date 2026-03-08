@@ -9,6 +9,14 @@ import {
   Target, Clock, Award, Users, CheckCircle, Loader2, Sparkles
 } from 'lucide-react';
 import { toast } from 'sonner';
+import AILimitBanner, { isAILimitError } from '../shared/AILimitBanner';
+
+const FALLBACK_MISSIONS = [
+  { title: 'Street Level Collection', description: 'Collect protection payments across three blocks.', narrative: 'The neighborhood owes, and you are here to collect.', mission_type: 'side_quest', difficulty: 'easy', objectives: [{ description: 'Visit Block A', completed: false, progress: 0 }, { description: 'Visit Block B', completed: false, progress: 0 }, { description: 'Return funds', completed: false, progress: 0 }], rewards: { crypto: 3000, experience: 150, reputation: 5 }, requirements: { min_level: 1, crew_required: false } },
+  { title: 'Warehouse Takeover', description: 'Seize a rival gang's storage facility.', narrative: 'Intel confirms the warehouse is lightly guarded at midnight.', mission_type: 'crew_mission', difficulty: 'medium', objectives: [{ description: 'Neutralize perimeter guards', completed: false, progress: 0 }, { description: 'Breach the loading dock', completed: false, progress: 0 }, { description: 'Secure all inventory', completed: false, progress: 0 }, { description: 'Hold position for 10 minutes', completed: false, progress: 0 }], rewards: { crypto: 8000, experience: 400, reputation: 20 }, requirements: { min_level: 3, crew_required: true } },
+  { title: 'Black Market Drop', description: 'Deliver a package to an anonymous buyer.', narrative: 'No questions asked. No names exchanged. Just the goods.', mission_type: 'side_quest', difficulty: 'easy', objectives: [{ description: 'Pick up the package', completed: false, progress: 0 }, { description: 'Avoid surveillance cameras', completed: false, progress: 0 }, { description: 'Complete the handoff', completed: false, progress: 0 }], rewards: { crypto: 4500, experience: 200, reputation: 8 }, requirements: { min_level: 1, crew_required: false } },
+  { title: 'Corporate Espionage', description: 'Steal financial records from a rival corporation.', narrative: 'Someone powerful wants the data. They are paying very well.', mission_type: 'faction_conflict', difficulty: 'hard', objectives: [{ description: 'Infiltrate the server room', completed: false, progress: 0 }, { description: 'Extract encrypted files', completed: false, progress: 0 }, { description: 'Destroy evidence', completed: false, progress: 0 }, { description: 'Exfiltrate safely', completed: false, progress: 0 }], rewards: { crypto: 15000, experience: 700, reputation: 35 }, requirements: { min_level: 5, crew_required: false } },
+];
 
 const missionTypeColors = {
   story: 'from-purple-600 to-pink-600',
