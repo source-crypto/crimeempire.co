@@ -213,20 +213,13 @@ Provide strategic HR recommendations to optimize productivity while managing cos
           </div>
         </div>
 
-        {aiManager?.ai_enabled && aiManager?.ai_recommendations && (
+        {enterprise?.is_active && (
           <div className="p-3 rounded-lg bg-purple-900/20 border border-purple-500/30">
             <h4 className="text-white font-semibold mb-2 flex items-center gap-2">
               <Zap className="w-4 h-4 text-purple-400" />
-              AI Recommendations
+              AI Autopilot Active
             </h4>
-            <div className="space-y-2 text-sm">
-              {aiManager.ai_recommendations.morale_actions?.map((action, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-gray-300">
-                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400"></div>
-                  {action}
-                </div>
-              ))}
-            </div>
+            <p className="text-xs text-gray-300">AI is managing workforce, wages, and training automatically. Click Generate Recommendations for detailed analysis.</p>
           </div>
         )}
 
