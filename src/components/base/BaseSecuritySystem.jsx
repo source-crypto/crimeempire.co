@@ -8,7 +8,7 @@ import { base44 } from '@/api/base44Client';
 import { 
   Shield, AlertTriangle, Eye, Lock, Radio, Zap, 
   Bell, CheckCircle, XCircle, Crosshair, Activity,
-  ChevronDown, ChevronUp, Siren
+  ChevronDown, ChevronUp
 } from 'lucide-react';
 import { toast } from 'sonner';
 
