@@ -70,7 +70,7 @@ export default function BaseDefenseSystem({ playerData, selectedBase }) {
 
   const triggerRaidMutation = useMutation({
     mutationFn: async () => {
-      const raidDifficulty = selectedBase.vulnerability_rating;
+      const raidDifficulty = selectedBase.vulnerability_rating || 50;
       const defenseRating = baseDefense?.defense_rating || 0;
       const successChance = Math.max(20, Math.min(95, raidDifficulty - defenseRating));
 
