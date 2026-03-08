@@ -185,6 +185,7 @@ export default function MissionBoard({ playerData }) {
 
   return (
     <div className="space-y-4">
+      {aiLimitHit && <AILimitBanner />}
       <Card className="glass-panel border-purple-500/20">
         <CardHeader className="border-b border-purple-500/20">
           <div className="flex items-center justify-between">
