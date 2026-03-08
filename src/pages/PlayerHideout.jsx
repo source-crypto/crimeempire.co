@@ -9,7 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { 
   Home, Shield, Package, Wrench, DollarSign, 
   MapPin, Lock, Zap, Loader2, Settings, Palette,
-  Plus, ArrowUpCircle, Target, Brain, Siren, Users
+  Plus, ArrowUpCircle, Target, Brain, AlertTriangle, Users
 } from 'lucide-react';
 import { toast } from 'sonner';
 import BaseMissionCenter from '../components/base/BaseMissionCenter';
