@@ -178,6 +178,28 @@ Create immersive, choice-driven narrative that remembers player's journey.`;
           }
         }
       });
+      } catch (err) {
+        if (isAILimitError(err)) {
+          setAiLimitHit(true);
+          const diffLabel = adjustedDifficulty < 30 ? 'easy' : adjustedDifficulty < 55 ? 'medium' : adjustedDifficulty < 75 ? 'hard' : 'extreme';
+          mission = {
+            title: `Chain Op: ${['Warehouse Strike', 'Night Run', 'Clean Sweep', 'Dark Horizon', 'Iron Curtain'][Math.floor(Math.random() * 5)]}`,
+            narrative: `A mission chain targeting ${['rival territory', 'federal assets', 'corrupt officials', 'black market networks'][Math.floor(Math.random() * 4)]}. Your ${playerData.playstyle} approach will determine the outcome.`,
+            mission_type: ['story', 'crew_mission', 'faction_conflict'][Math.floor(Math.random() * 3)],
+            difficulty: diffLabel,
+            objectives: [
+              { description: 'Gather initial intelligence', completed: false, progress: 0, is_choice_point: false },
+              { description: 'Neutralize primary obstacle', completed: false, progress: 0, is_choice_point: true, choices: [{ option: 'Aggressive approach', consequence: 'Higher heat, faster completion' }, { option: 'Stealth approach', consequence: 'Lower heat, slower completion' }] },
+              { description: 'Execute the operation', completed: false, progress: 0, is_choice_point: false },
+              { description: 'Secure extraction', completed: false, progress: 0, is_choice_point: false }
+            ],
+            rewards: { crypto: Math.floor(5000 * (1 + adjustedDifficulty / 50)), experience: Math.floor(300 * (1 + adjustedDifficulty / 100)), reputation: Math.floor(15 * (1 + adjustedDifficulty / 100)) },
+            requirements: { min_level: Math.max(1, playerLevel - 2), crew_required: adjustedDifficulty > 60 }
+          };
+        } else {
+          throw err;
+        }
+      }
 
       const expiresAt = new Date();
       expiresAt.setHours(expiresAt.getHours() + 48);
@@ -200,9 +222,7 @@ Create immersive, choice-driven narrative that remembers player's journey.`;
           faction_activities: factionActivities.length,
           escalation_phase: currentPhase,
           player_level: playerLevel,
-          difficulty_scale: adjustedDifficulty,
-          chain_info: mission.chain_info,
-          personalization: mission.personalization
+          difficulty_scale: adjustedDifficulty
         },
         expires_at: expiresAt.toISOString()
       });
@@ -211,8 +231,9 @@ Create immersive, choice-driven narrative that remembers player's journey.`;
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['missions']);
-      toast.success('New mission generated!');
-    }
+      toast.success('New mission added!');
+    },
+    onError: (err) => toast.error(err.message || 'Mission generation failed')
   });
 
   if (!playerData) return null;
