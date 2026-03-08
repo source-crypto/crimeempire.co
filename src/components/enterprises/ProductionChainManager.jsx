@@ -115,11 +115,24 @@ export default function ProductionChainManager({ enterprise, playerData }) {
             <div className="space-y-3">
               <div>
                 <label className="text-sm text-gray-400">Chain Template</label>
-                <p className="text-white font-semibold">{predefinedChains[enterprise.type].chain_name}</p>
+                <p className="text-white font-semibold">
+                  {predefinedChains[enterprise.type]?.chain_name || `${enterprise.type.replace(/_/g, ' ')} Chain`}
+                </p>
               </div>
               <div className="flex gap-2">
                 <Button
-                  onClick={() => createChainMutation.mutate(predefinedChains[enterprise.type])}
+                  onClick={() => {
+                    const template = predefinedChains[enterprise.type] || {
+                      chain_name: `${enterprise.name} Production`,
+                      chain_type: 'standard',
+                      input_resources: [],
+                      output_products: [],
+                      production_stages: [
+                        { stage_number: 1, stage_name: 'Processing', duration_hours: 4, automation_level: 60 }
+                      ]
+                    };
+                    createChainMutation.mutate(template);
+                  }}
                   className="flex-1 bg-cyan-600 hover:bg-cyan-700"
                   disabled={createChainMutation.isPending}
                 >
