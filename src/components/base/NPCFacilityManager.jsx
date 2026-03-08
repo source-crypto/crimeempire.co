@@ -28,13 +28,16 @@ export default function NPCFacilityManager({ selectedBase, playerData }) {
     enabled: !!selectedBase?.id
   });
 
+  const facilityIds = facilities.map(f => f.id);
+
   const { data: managers = [] } = useQuery({
-    queryKey: ['npcManagers', selectedBase?.id],
+    queryKey: ['npcManagers', selectedBase?.id, facilityIds.join(',')],
     queryFn: async () => {
+      if (facilityIds.length === 0) return [];
       const allManagers = await base44.entities.NPCFacilityManager.list();
-      return allManagers.filter(m => facilities.some(f => f.id === m.facility_id));
+      return allManagers.filter(m => facilityIds.includes(m.facility_id));
     },
-    enabled: !!selectedBase?.id
+    enabled: !!selectedBase?.id && facilities.length > 0
   });
 
   const assignNPCMutation = useMutation({
