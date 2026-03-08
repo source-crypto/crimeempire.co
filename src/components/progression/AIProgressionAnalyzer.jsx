@@ -84,7 +84,7 @@ Player: ${playerData.username}, Level ${playerData.level}, ${playerData.playstyl
     onError: (err) => toast.error(err.message || 'Analysis failed')
   });
 
-  const recommendations = playerData.ai_recommendations;
+  const recommendations = analyzeProgressionMutation.data || playerData.ai_recommendations;
 
   return (
     <Card className="glass-panel border-purple-500/20">
