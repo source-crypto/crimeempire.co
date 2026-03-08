@@ -96,7 +96,7 @@ export default function ProductionChainManager({ enterprise, playerData }) {
             <Package className="w-5 h-5 text-cyan-400" />
             Production Chains
           </span>
-          {!newChain && predefinedChains[enterprise.type] && (
+          {!newChain && (
             <Button
               size="sm"
               onClick={() => setNewChain(true)}
