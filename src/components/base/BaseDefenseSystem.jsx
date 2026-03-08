@@ -39,16 +39,23 @@ export default function BaseDefenseSystem({ playerData, selectedBase }) {
         throw new Error('Insufficient funds');
       }
 
-      let newDefense = {...baseDefense};
       const key = upgrade.name.toLowerCase().replace(/\s+/g, '_');
-      
-      newDefense = {
-        ...newDefense,
+      const newDefenseData = {
         [key]: Math.min(100, (baseDefense[key] || 0) + upgrade.effectiveness),
         defense_rating: Math.min(100, (baseDefense.defense_rating || 0) + (upgrade.effectiveness * 0.8))
       };
 
-      await base44.entities.BaseDefense.update(baseDefense.id, newDefense);
+      if (baseDefense?.id) {
+        await base44.entities.BaseDefense.update(baseDefense.id, newDefenseData);
+      } else {
+        await base44.entities.BaseDefense.create({
+          base_id: selectedBase.id,
+          player_id: playerData.id,
+          ...newDefenseData,
+          guard_count: 2
+        });
+      }
+
       await base44.entities.Player.update(playerData.id, {
         crypto_balance: playerData.crypto_balance - upgrade.cost
       });
