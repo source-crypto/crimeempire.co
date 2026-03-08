@@ -75,89 +75,58 @@ export default function MissionBoard({ playerData }) {
     enabled: !!playerData
   });
 
+  const [aiLimitHit, setAiLimitHit] = useState(false);
+
   const generateMissionMutation = useMutation({
     mutationFn: async () => {
-      const prompt = `Generate a unique mission for a crime game player:
-
-Player Context:
-- Level: ${playerData.level}
-- Crew: ${playerData.crew_id ? 'Yes' : 'No'}
-- Territories: ${playerData.territory_count}
-- Playstyle: ${playerData.playstyle}
-- Total Earnings: $${playerData.total_earnings}
-
-Generate a procedural mission with:
-1. Title (short, engaging)
-2. Description (narrative hook)
-3. Narrative (story context, 2-3 sentences)
-4. Mission type (story/side_quest/crew_mission/faction_conflict)
-5. Difficulty (easy/medium/hard/extreme)
-6. Objectives array (3-5 objectives with descriptions)
-7. Rewards (crypto, experience, reputation)
-8. Requirements (min_level, crew_required)
-
-Make it unique and adapted to player's progress. Return JSON.`;
-
-      const aiMission = await base44.integrations.Core.InvokeLLM({
-        prompt,
-        response_json_schema: {
-          type: 'object',
-          properties: {
-            title: { type: 'string' },
-            description: { type: 'string' },
-            narrative: { type: 'string' },
-            mission_type: { type: 'string' },
-            difficulty: { type: 'string' },
-            objectives: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  description: { type: 'string' },
-                  completed: { type: 'boolean' },
-                  progress: { type: 'number' }
-                }
-              }
-            },
-            rewards: {
-              type: 'object',
-              properties: {
-                crypto: { type: 'number' },
-                experience: { type: 'number' },
-                reputation: { type: 'number' }
-              }
-            },
-            requirements: {
-              type: 'object',
-              properties: {
-                min_level: { type: 'number' },
-                crew_required: { type: 'boolean' }
-              }
-            }
-          }
-        }
-      });
-
       const expiresAt = new Date();
       expiresAt.setHours(expiresAt.getHours() + 48);
 
+      let missionData;
+      try {
+        const prompt = `Generate a unique mission for a crime game player at level ${playerData.level}, playstyle: ${playerData.playstyle}. Return JSON with: title, description, narrative, mission_type (story/side_quest/crew_mission/faction_conflict), difficulty (easy/medium/hard/extreme), objectives array, rewards object (crypto, experience, reputation), requirements object (min_level, crew_required).`;
+        missionData = await base44.integrations.Core.InvokeLLM({
+          prompt,
+          response_json_schema: {
+            type: 'object',
+            properties: {
+              title: { type: 'string' }, description: { type: 'string' }, narrative: { type: 'string' },
+              mission_type: { type: 'string' }, difficulty: { type: 'string' },
+              objectives: { type: 'array', items: { type: 'object', properties: { description: { type: 'string' }, completed: { type: 'boolean' }, progress: { type: 'number' } } } },
+              rewards: { type: 'object', properties: { crypto: { type: 'number' }, experience: { type: 'number' }, reputation: { type: 'number' } } },
+              requirements: { type: 'object', properties: { min_level: { type: 'number' }, crew_required: { type: 'boolean' } } }
+            }
+          }
+        });
+      } catch (err) {
+        if (isAILimitError(err)) {
+          setAiLimitHit(true);
+          // Use a random fallback mission scaled to player level
+          const pool = FALLBACK_MISSIONS.filter(m => (m.requirements.min_level || 1) <= (playerData.level || 1));
+          missionData = pool[Math.floor(Math.random() * pool.length)] || FALLBACK_MISSIONS[0];
+          // Scale rewards with player level
+          const scale = 1 + (playerData.level - 1) * 0.15;
+          missionData = { ...missionData, rewards: { ...missionData.rewards, crypto: Math.floor(missionData.rewards.crypto * scale), experience: Math.floor(missionData.rewards.experience * scale) } };
+        } else {
+          throw err;
+        }
+      }
+
       const mission = await base44.entities.Mission.create({
-        ...aiMission,
+        ...missionData,
         status: 'available',
         expires_at: expiresAt.toISOString(),
         generated_by_ai: true,
-        context_data: {
-          player_level: playerData.level,
-          playstyle: playerData.playstyle
-        }
+        context_data: { player_level: playerData.level, playstyle: playerData.playstyle }
       });
 
       return mission;
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['missions']);
-      toast.success('New mission generated!');
-    }
+      toast.success('New mission added!');
+    },
+    onError: (err) => toast.error(err.message || 'Failed to generate mission')
   });
 
   const acceptMissionMutation = useMutation({
