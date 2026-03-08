@@ -29,13 +29,12 @@ export default function EnterprisePvPSystem({ playerData, enterprise }) {
 
   const { data: rivalries = [] } = useQuery({
     queryKey: ['rivalries', playerData?.id],
-    queryFn: async () => {
-      const asP1 = await base44.entities.EnterpriseRivalry.filter({ player_1_id: playerData.id });
-      const asP2 = await base44.entities.EnterpriseRivalry.filter({ player_2_id: playerData.id });
-      const combined = [...asP1, ...asP2];
-      // Deduplicate
-      return combined.filter((v, i, a) => a.findIndex(t => t.id === v.id) === i);
-    },
+    queryFn: () => base44.entities.EnterpriseRivalry.filter({
+      $or: [
+        { player_1_id: playerData.id },
+        { player_2_id: playerData.id }
+      ]
+    }),
     enabled: !!playerData?.id
   });
 

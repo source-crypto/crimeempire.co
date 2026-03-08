@@ -14,10 +14,9 @@ export default function AIEmployeeManagement({ enterprise, playerData }) {
   const [aiConfig, setAiConfig] = useState(null);
 
   const { data: aiManager } = useQuery({
-    queryKey: ['enterpriseAIManager', enterprise.id],
+    queryKey: ['aiEmployeeManager', enterprise.id],
     queryFn: async () => {
-      // Use enterprise's own NPC manager, not the base AIEmployeeManager entity
-      const managers = await base44.entities.EnterpriseNPC.filter({ enterprise_id: enterprise.id });
+      const managers = await base44.entities.AIEmployeeManager.filter({ enterprise_id: enterprise.id });
       return managers[0];
     },
     enabled: !!enterprise?.id
@@ -70,20 +69,47 @@ Provide strategic HR recommendations to optimize productivity while managing cos
       return response;
     },
     onSuccess: async (recommendations) => {
-      queryClient.invalidateQueries(['enterpriseAIManager']);
+      if (aiManager) {
+        await base44.entities.AIEmployeeManager.update(aiManager.id, {
+          ai_recommendations: {
+            ...recommendations,
+            last_updated: new Date().toISOString()
+          }
+        });
+      } else {
+        await base44.entities.AIEmployeeManager.create({
+          enterprise_id: enterprise.id,
+          ai_recommendations: {
+            ...recommendations,
+            last_updated: new Date().toISOString()
+          }
+        });
+      }
+      queryClient.invalidateQueries(['aiEmployeeManager']);
       toast.success('AI recommendations updated');
     }
   });
 
   const toggleAIMutation = useMutation({
     mutationFn: async (enabled) => {
-      // Store AI toggle state on the enterprise itself
-      await base44.entities.CriminalEnterprise.update(enterprise.id, {
-        is_active: enabled
-      });
+      if (aiManager) {
+        return base44.entities.AIEmployeeManager.update(aiManager.id, {
+          ai_enabled: enabled,
+          auto_wage_adjustment: enabled,
+          auto_training: enabled
+        });
+      } else {
+        return base44.entities.AIEmployeeManager.create({
+          enterprise_id: enterprise.id,
+          ai_enabled: enabled,
+          auto_wage_adjustment: enabled,
+          auto_training: enabled,
+          management_strategy: 'balanced'
+        });
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['enterprises']);
+      queryClient.invalidateQueries(['aiEmployeeManager']);
       toast.success('AI management settings updated');
     }
   });
@@ -94,9 +120,21 @@ Provide strategic HR recommendations to optimize productivity while managing cos
       if (playerData.crypto_balance < cost) {
         throw new Error('Insufficient funds');
       }
+
+      const updates = {
+        unionization_risk: action === 'accept' ? 0 : Math.max(0, (aiManager.unionization_risk || 0) - 20),
+        union_demands: []
+      };
+
+      if (action === 'accept') {
+        updates.avg_wage_per_employee = (aiManager.avg_wage_per_employee || 500) * 1.2;
+      }
+
+      await base44.entities.AIEmployeeManager.update(aiManager.id, updates);
       await base44.entities.Player.update(playerData.id, {
         crypto_balance: playerData.crypto_balance - cost
       });
+
       if (satisfaction) {
         await base44.entities.EmployeeSatisfaction.update(satisfaction.id, {
           overall_morale: Math.min(100, (satisfaction.overall_morale || 75) + 15),
@@ -105,14 +143,15 @@ Provide strategic HR recommendations to optimize productivity while managing cos
       }
     },
     onSuccess: () => {
+      queryClient.invalidateQueries(['aiEmployeeManager']);
       queryClient.invalidateQueries(['employeeSatisfaction']);
       queryClient.invalidateQueries(['player']);
       toast.success('Union demand handled');
     }
   });
 
-  const unionRisk = satisfaction?.turnover_risk || 0;
-  const hasUnionDemands = false;
+  const unionRisk = aiManager?.unionization_risk || 0;
+  const hasUnionDemands = aiManager?.union_demands?.length > 0;
 
   return (
     <Card className="glass-panel border-blue-500/30">
@@ -125,7 +164,7 @@ Provide strategic HR recommendations to optimize productivity while managing cos
           <div className="flex items-center gap-3">
             <span className="text-sm text-gray-400">AI Autopilot</span>
             <Switch
-              checked={enterprise?.is_active || false}
+              checked={aiManager?.ai_enabled || false}
               onCheckedChange={(checked) => toggleAIMutation.mutate(checked)}
             />
           </div>
@@ -166,16 +205,24 @@ Provide strategic HR recommendations to optimize productivity while managing cos
           <div className="p-3 rounded-lg bg-blue-900/20 border border-blue-500/30">
             <p className="text-xs text-gray-400">Workforce Size</p>
             <p className="text-xl font-bold text-blue-400">
-              {enterprise?.production_rate ? Math.floor(enterprise.production_rate / 10) : 10}
+              {aiManager?.current_workforce_size || 10}
             </p>
-            <p className="text-xs text-gray-400 mt-1">Based on production rate</p>
+            {aiManager?.ai_recommendations?.suggested_workforce && (
+              <p className="text-xs text-gray-400 mt-1">
+                AI suggests: {aiManager.ai_recommendations.suggested_workforce}
+              </p>
+            )}
           </div>
           <div className="p-3 rounded-lg bg-green-900/20 border border-green-500/30">
             <p className="text-xs text-gray-400">Avg Wage</p>
             <p className="text-xl font-bold text-green-400">
-              ${enterprise?.level ? enterprise.level * 500 : 500}
+              ${aiManager?.avg_wage_per_employee || 500}
             </p>
-            <p className="text-xs text-gray-400 mt-1">Per employee/week</p>
+            {aiManager?.ai_recommendations?.suggested_wage && (
+              <p className="text-xs text-gray-400 mt-1">
+                AI suggests: ${aiManager.ai_recommendations.suggested_wage}
+              </p>
+            )}
           </div>
         </div>
 
@@ -213,13 +260,20 @@ Provide strategic HR recommendations to optimize productivity while managing cos
           </div>
         </div>
 
-        {enterprise?.is_active && (
+        {aiManager?.ai_enabled && aiManager?.ai_recommendations && (
           <div className="p-3 rounded-lg bg-purple-900/20 border border-purple-500/30">
             <h4 className="text-white font-semibold mb-2 flex items-center gap-2">
               <Zap className="w-4 h-4 text-purple-400" />
-              AI Autopilot Active
+              AI Recommendations
             </h4>
-            <p className="text-xs text-gray-300">AI is managing workforce, wages, and training automatically. Click Generate Recommendations for detailed analysis.</p>
+            <div className="space-y-2 text-sm">
+              {aiManager.ai_recommendations.morale_actions?.map((action, idx) => (
+                <div key={idx} className="flex items-center gap-2 text-gray-300">
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-400"></div>
+                  {action}
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
@@ -234,9 +288,9 @@ Provide strategic HR recommendations to optimize productivity while managing cos
 
         <div className="pt-3 border-t border-blue-500/20">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-400">Est. Labor Cost</span>
+            <span className="text-gray-400">Total Labor Cost</span>
             <span className="text-red-400 font-semibold">
-              ${(enterprise?.level ? enterprise.level * 500 * Math.floor(enterprise.production_rate / 10) : 0).toLocaleString()}/week
+              ${(aiManager?.total_labor_cost_hourly || 0).toLocaleString()}/hr
             </span>
           </div>
         </div>

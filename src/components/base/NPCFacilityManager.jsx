@@ -28,16 +28,13 @@ export default function NPCFacilityManager({ selectedBase, playerData }) {
     enabled: !!selectedBase?.id
   });
 
-  const facilityIds = facilities.map(f => f.id);
-
   const { data: managers = [] } = useQuery({
-    queryKey: ['npcManagers', selectedBase?.id, facilityIds.join(',')],
+    queryKey: ['npcManagers', selectedBase?.id],
     queryFn: async () => {
-      if (facilityIds.length === 0) return [];
       const allManagers = await base44.entities.NPCFacilityManager.list();
-      return allManagers.filter(m => facilityIds.includes(m.facility_id));
+      return allManagers.filter(m => facilities.some(f => f.id === m.facility_id));
     },
-    enabled: !!selectedBase?.id && facilities.length > 0
+    enabled: !!selectedBase?.id
   });
 
   const assignNPCMutation = useMutation({
@@ -75,20 +72,15 @@ export default function NPCFacilityManager({ selectedBase, playerData }) {
 
   const updateMoraleMutation = useMutation({
     mutationFn: async (manager) => {
-      const cost = 2000;
-      if (playerData?.crypto_balance < cost) throw new Error('Insufficient funds ($2k needed)');
-      const newMorale = Math.min(100, (manager.morale || 50) + 10);
-      await base44.entities.NPCFacilityManager.update(manager.id, { morale: newMorale });
-      await base44.entities.Player.update(playerData.id, {
-        crypto_balance: playerData.crypto_balance - cost
+      const newMorale = Math.min(100, manager.morale + 10);
+      await base44.entities.NPCFacilityManager.update(manager.id, {
+        morale: newMorale
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['npcManagers']);
-      queryClient.invalidateQueries(['player', playerData?.id]);
-      toast.success('Morale boosted! -$2,000');
-    },
-    onError: (err) => toast.error(err.message)
+      toast.success('Morale boosted!');
+    }
   });
 
   const totalWages = managers.reduce((sum, m) => sum + (m.wage || 0), 0);

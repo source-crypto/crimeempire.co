@@ -39,23 +39,16 @@ export default function BaseDefenseSystem({ playerData, selectedBase }) {
         throw new Error('Insufficient funds');
       }
 
+      let newDefense = {...baseDefense};
       const key = upgrade.name.toLowerCase().replace(/\s+/g, '_');
-      const newDefenseData = {
+      
+      newDefense = {
+        ...newDefense,
         [key]: Math.min(100, (baseDefense[key] || 0) + upgrade.effectiveness),
         defense_rating: Math.min(100, (baseDefense.defense_rating || 0) + (upgrade.effectiveness * 0.8))
       };
 
-      if (baseDefense?.id) {
-        await base44.entities.BaseDefense.update(baseDefense.id, newDefenseData);
-      } else {
-        await base44.entities.BaseDefense.create({
-          base_id: selectedBase.id,
-          player_id: playerData.id,
-          ...newDefenseData,
-          guard_count: 2
-        });
-      }
-
+      await base44.entities.BaseDefense.update(baseDefense.id, newDefense);
       await base44.entities.Player.update(playerData.id, {
         crypto_balance: playerData.crypto_balance - upgrade.cost
       });
@@ -70,7 +63,7 @@ export default function BaseDefenseSystem({ playerData, selectedBase }) {
 
   const triggerRaidMutation = useMutation({
     mutationFn: async () => {
-      const raidDifficulty = selectedBase.vulnerability_rating || 50;
+      const raidDifficulty = selectedBase.vulnerability_rating;
       const defenseRating = baseDefense?.defense_rating || 0;
       const successChance = Math.max(20, Math.min(95, raidDifficulty - defenseRating));
 
@@ -86,8 +79,8 @@ export default function BaseDefenseSystem({ playerData, selectedBase }) {
 
       if (!success) {
         await base44.entities.PlayerBase.update(selectedBase.id, {
-          last_le_raid: new Date().toISOString(),
-          vulnerability_rating: Math.max(0, (selectedBase.vulnerability_rating || 50) - 20)
+          last_ле_raid: new Date().toISOString(),
+          vulnerability_rating: Math.max(0, selectedBase.vulnerability_rating - 20)
         });
         toast.success('Base defended against raid!');
       } else {
@@ -100,7 +93,7 @@ export default function BaseDefenseSystem({ playerData, selectedBase }) {
     }
   });
 
-  if (!selectedBase) return null;
+  if (!baseDefense) return <div className="text-white">Loading defenses...</div>;
 
   return (
     <div className="space-y-3">
