@@ -95,7 +95,9 @@ Generate:
 
 Create immersive, choice-driven narrative that remembers player's journey.`;
 
-      const mission = await base44.integrations.Core.InvokeLLM({
+      let mission;
+      try {
+       mission = await base44.integrations.Core.InvokeLLM({
         prompt,
         response_json_schema: {
           type: "object",
