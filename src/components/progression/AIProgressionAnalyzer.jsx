@@ -115,6 +115,7 @@ Player: ${playerData.username}, Level ${playerData.level}, ${playerData.playstyl
         </div>
       </CardHeader>
       <CardContent className="p-4 space-y-4">
+        {aiLimitHit && <AILimitBanner />}
         {!recommendations ? (
           <div className="text-center py-8">
             <Target className="w-12 h-12 mx-auto mb-3 text-gray-400" />
