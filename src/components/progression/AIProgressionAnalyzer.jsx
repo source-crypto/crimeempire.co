@@ -7,6 +7,35 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Sparkles, TrendingUp, Target, Lightbulb, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import AILimitBanner, { isAILimitError } from '../shared/AILimitBanner';
+
+function buildFallbackAnalysis(playerData) {
+  const skills = playerData.skills || {};
+  const maxSkill = Object.entries(skills).sort((a, b) => b[1] - a[1])[0];
+  const minSkill = Object.entries(skills).sort((a, b) => a[1] - b[1])[0];
+  const playstyle = playerData.playstyle || 'balanced';
+  return {
+    playstyle_analysis: `${playerData.username} operates as a ${playstyle} criminal, leveraging ${maxSkill ? maxSkill[0] : 'stealth'} as a primary strength. Continued diversification will improve success rates across all mission types.`,
+    skill_allocation: {
+      recommended_skills: [
+        { skill_name: minSkill ? minSkill[0] : 'leadership', points_to_add: 2, reasoning: 'This is your weakest skill — investment here creates the most balanced growth.' },
+        { skill_name: 'negotiation', points_to_add: 1, reasoning: 'Higher negotiation unlocks better trade margins and mission rewards.' }
+      ]
+    },
+    investment_advice: [
+      { type: 'Criminal Enterprise', amount: Math.floor((playerData.crypto_balance || 10000) * 0.3), reasoning: 'Passive income from enterprises compounds over time and reduces heat exposure.', priority: 'high' },
+      { type: 'Crew Expansion', amount: Math.floor((playerData.crypto_balance || 10000) * 0.2), reasoning: 'Larger crews unlock harder missions with better rewards.', priority: 'medium' },
+      { type: 'Territory Defense', amount: Math.floor((playerData.crypto_balance || 10000) * 0.1), reasoning: 'Protect existing territory income before expanding.', priority: 'low' }
+    ],
+    next_objectives: [
+      { objective: 'Complete 3 missions this week to build XP momentum', priority: 'high', estimated_reward: 12000 },
+      { objective: 'Join or create a crew to unlock crew missions', priority: 'high', estimated_reward: 20000 },
+      { objective: 'Capture one territory to begin passive income', priority: 'medium', estimated_reward: 8000 }
+    ],
+    strengths: ['Active gameplay patterns', `${maxSkill ? maxSkill[0] : 'Combat'} skill development`],
+    weaknesses: [`${minSkill ? minSkill[0] : 'Negotiation'} needs investment`, 'Limited territory control']
+  };
+}
 
 export default function AIProgressionAnalyzer({ playerData }) {
   const queryClient = useQueryClient();
