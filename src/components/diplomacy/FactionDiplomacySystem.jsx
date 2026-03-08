@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Users, Eye, Bomb, Handshake, FileText, Loader2, Crown } from 'lucide-react';
 import { toast } from 'sonner';
+import AILimitBanner, { isAILimitError } from '../shared/AILimitBanner';
 
 const actionTypes = {
   negotiate_peace: { icon: Handshake, label: 'Negotiate Peace', cost: 30000, role: 'president' },
@@ -19,10 +20,34 @@ const actionTypes = {
   declare_war: { icon: Bomb, label: 'Declare War', cost: 100000, role: 'president' }
 };
 
+function buildFallbackDiplomacy(action, faction, playerLevel) {
+  const succChance = Math.max(20, Math.min(85, 50 + (playerLevel * 2) - ((faction.aggression || 50) / 2)));
+  return {
+    success_probability: Math.round(succChance),
+    relationship_change: action === 'declare_war' ? -30 : action === 'form_alliance' ? 25 : 10,
+    negotiation_log: [
+      { round: 1, player_offer: 'Standard diplomatic contact established.', faction_response: `${faction.name} acknowledges your approach with measured interest.`, mood: 'neutral' },
+      { round: 2, player_offer: 'Terms presented for consideration.', faction_response: succChance > 60 ? 'We see merit in this arrangement.' : 'Our leadership requires further deliberation.', mood: succChance > 60 ? 'positive' : 'cautious' }
+    ],
+    intel_gathered: {
+      territory_plans: [`${faction.name} is focused on eastern expansion`, 'Supply disruptions have weakened their northern flank'],
+      military_strength: faction.power_level || 100,
+      weaknesses: ['Overextended supply lines', 'Internal leadership disputes'],
+      secret_operations: ['Covert money laundering through shell corporations']
+    },
+    outcomes: {
+      immediate_effect: `Initial contact with ${faction.name} complete.`,
+      long_term_impact: 'Relationship dynamics are shifting based on your approach.',
+      rewards: {}
+    }
+  };
+}
+
 export default function FactionDiplomacySystem({ playerData, crewData }) {
   const [selectedAction, setSelectedAction] = useState('negotiate_peace');
   const [selectedFaction, setSelectedFaction] = useState('');
   const [playerMessage, setPlayerMessage] = useState('');
+  const [aiLimitHit, setAiLimitHit] = useState(false);
   const queryClient = useQueryClient();
 
   const { data: factions = [] } = useQuery({
@@ -32,82 +57,45 @@ export default function FactionDiplomacySystem({ playerData, crewData }) {
 
   const { data: diplomacyActions = [] } = useQuery({
     queryKey: ['diplomacy', playerData?.id],
-    queryFn: () => base44.entities.FactionDiplomacy.filter({ 
-      player_id: playerData.id 
-    }, '-created_date', 10),
+    queryFn: () => base44.entities.FactionDiplomacy.filter({ player_id: playerData.id }, '-created_date', 10),
     enabled: !!playerData
   });
 
   const initiateDiplomacyMutation = useMutation({
     mutationFn: async () => {
-      if (!selectedFaction) throw new Error('Select a faction');
-      
+      if (!selectedFaction) throw new Error('Select a faction first');
       const actionConfig = actionTypes[selectedAction];
       const faction = factions.find(f => f.id === selectedFaction);
+      if (!faction) throw new Error('Faction not found');
+      if ((playerData.crypto_balance || 0) < actionConfig.cost) throw new Error(`Need $${actionConfig.cost.toLocaleString()} — insufficient funds`);
 
-      if (playerData.crypto_balance < actionConfig.cost) {
-        throw new Error('Insufficient funds');
-      }
-
-      const prompt = `Simulate AI-driven ${selectedAction.replace('_', ' ')} between player and ${faction.name} faction.
-
-Faction Type: ${faction.faction_type}
-Faction Power: ${faction.power_level}
-Faction Aggression: ${faction.aggression}
-Player Message: "${playerMessage || 'Standard diplomatic approach'}"
-Player Level: ${playerData.level}
-Crew Reputation: ${crewData?.reputation || 0}
-
-Generate:
-1. For negotiations: 3-5 rounds of back-and-forth dialogue with mood indicators
-2. For intelligence: Detailed intel on territories, plans, weaknesses, secret operations
-3. For sabotage/covert ops: Mission details, success probability, and potential outcomes
-4. Success probability and relationship impact
-5. Potential benefits or risks
-
-Create immersive NPC responses and realistic outcomes.`;
-
-      const diplomacyData = await base44.integrations.Core.InvokeLLM({
-        prompt,
-        add_context_from_internet: false,
-        response_json_schema: {
-          type: "object",
-          properties: {
-            success_probability: { type: "number" },
-            relationship_change: { type: "number" },
-            negotiation_log: {
-              type: "array",
-              items: {
-                type: "object",
-                properties: {
-                  round: { type: "number" },
-                  player_offer: { type: "string" },
-                  faction_response: { type: "string" },
-                  mood: { type: "string" }
-                }
-              }
-            },
-            intel_gathered: {
-              type: "object",
-              properties: {
-                territory_plans: { type: "array", items: { type: "string" } },
-                military_strength: { type: "number" },
-                weaknesses: { type: "array", items: { type: "string" } },
-                secret_operations: { type: "array", items: { type: "string" } }
-              }
-            },
-            outcomes: {
-              type: "object",
-              properties: {
-                immediate_effect: { type: "string" },
-                long_term_impact: { type: "string" },
-                rewards: { type: "object" }
-              }
+      let diplomacyData;
+      try {
+        const prompt = `Simulate a ${selectedAction.replace(/_/g, ' ')} between a player (level ${playerData.level}, crew rep ${crewData?.reputation || 0}) and faction "${faction.name}" (type: ${faction.faction_type}, power: ${faction.power_level}, aggression: ${faction.aggression}). Player message: "${playerMessage || 'Standard approach'}". Return JSON with: success_probability (number 0-100), relationship_change (number), negotiation_log (array of {round, player_offer, faction_response, mood}), intel_gathered ({territory_plans, military_strength, weaknesses, secret_operations}), outcomes ({immediate_effect, long_term_impact}).`;
+        diplomacyData = await base44.integrations.Core.InvokeLLM({
+          prompt,
+          add_context_from_internet: false,
+          response_json_schema: {
+            type: "object",
+            properties: {
+              success_probability: { type: "number" },
+              relationship_change: { type: "number" },
+              negotiation_log: { type: "array", items: { type: "object", properties: { round: { type: "number" }, player_offer: { type: "string" }, faction_response: { type: "string" }, mood: { type: "string" } } } },
+              intel_gathered: { type: "object", properties: { territory_plans: { type: "array", items: { type: "string" } }, military_strength: { type: "number" }, weaknesses: { type: "array", items: { type: "string" } }, secret_operations: { type: "array", items: { type: "string" } } } },
+              outcomes: { type: "object", properties: { immediate_effect: { type: "string" }, long_term_impact: { type: "string" }, rewards: { type: "object" } } }
             }
           }
+        });
+      } catch (err) {
+        if (isAILimitError(err)) {
+          setAiLimitHit(true);
+          diplomacyData = buildFallbackDiplomacy(selectedAction, faction, playerData.level || 1);
+        } else {
+          throw err;
         }
-      });
+      }
 
+      // Deduct cost
       await base44.entities.Player.update(playerData.id, {
         crypto_balance: playerData.crypto_balance - actionConfig.cost
       });
@@ -152,15 +140,14 @@ Create immersive NPC responses and realistic outcomes.`;
       setPlayerMessage('');
       setSelectedFaction('');
     },
-    onError: (error) => {
-      toast.error(error.message);
-    }
+    onError: (error) => toast.error(error.message)
   });
 
   if (!playerData) return null;
 
   return (
     <div className="space-y-4">
+      {aiLimitHit && <AILimitBanner />}
       <Card className="glass-panel border-blue-500/20">
         <CardHeader className="border-b border-blue-500/20">
           <CardTitle className="text-white flex items-center gap-2">
@@ -178,7 +165,7 @@ Create immersive NPC responses and realistic outcomes.`;
               <SelectContent>
                 {Object.entries(actionTypes).map(([key, config]) => (
                   <SelectItem key={key} value={key}>
-                    {config.label} - ${config.cost.toLocaleString()} ({config.role})
+                    {config.label} — ${config.cost.toLocaleString()} ({config.role})
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -189,14 +176,18 @@ Create immersive NPC responses and realistic outcomes.`;
             <label className="text-sm text-gray-400 mb-2 block">Target Faction</label>
             <Select value={selectedFaction} onValueChange={setSelectedFaction}>
               <SelectTrigger className="bg-slate-900/50 border-blue-500/20 text-white">
-                <SelectValue placeholder="Select faction" />
+                <SelectValue placeholder="Select faction..." />
               </SelectTrigger>
               <SelectContent>
-                {factions.map((faction) => (
-                  <SelectItem key={faction.id} value={faction.id}>
-                    {faction.name} ({faction.faction_type}) - Power: {faction.power_level}
-                  </SelectItem>
-                ))}
+                {factions.length === 0 ? (
+                  <SelectItem value="_none" disabled>No factions available</SelectItem>
+                ) : (
+                  factions.map((faction) => (
+                    <SelectItem key={faction.id} value={faction.id}>
+                      {faction.name} ({faction.faction_type}) — Power: {faction.power_level}
+                    </SelectItem>
+                  ))
+                )}
               </SelectContent>
             </Select>
           </div>
@@ -220,26 +211,30 @@ Create immersive NPC responses and realistic outcomes.`;
               </div>
               <div>
                 <span className="text-gray-400">Role:</span>
-                <span className="text-cyan-400 ml-2 capitalize">{actionTypes[selectedAction].role.replace('_', ' ')}</span>
+                <span className="text-cyan-400 ml-2 capitalize">{actionTypes[selectedAction].role.replace(/_/g, ' ')}</span>
+              </div>
+              <div>
+                <span className="text-gray-400">Your Balance:</span>
+                <span className={`ml-2 ${(playerData.crypto_balance || 0) >= actionTypes[selectedAction].cost ? 'text-green-400' : 'text-red-400'}`}>
+                  ${(playerData.crypto_balance || 0).toLocaleString()}
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-400">Factions:</span>
+                <span className="text-white ml-2">{factions.length} available</span>
               </div>
             </div>
           </div>
 
           <Button
-            className="w-full bg-gradient-to-r from-blue-600 to-cyan-600"
+            className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500"
             onClick={() => initiateDiplomacyMutation.mutate()}
-            disabled={initiateDiplomacyMutation.isPending || !selectedFaction}
+            disabled={initiateDiplomacyMutation.isPending || !selectedFaction || (playerData.crypto_balance || 0) < actionTypes[selectedAction].cost}
           >
             {initiateDiplomacyMutation.isPending ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Processing...
-              </>
+              <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</>
             ) : (
-              <>
-                <Crown className="w-4 h-4 mr-2" />
-                Initiate {actionTypes[selectedAction].label}
-              </>
+              <><Crown className="w-4 h-4 mr-2" />Initiate {actionTypes[selectedAction].label}</>
             )}
           </Button>
         </CardContent>
@@ -258,7 +253,7 @@ Create immersive NPC responses and realistic outcomes.`;
                 <div key={action.id} className="p-3 rounded-lg bg-slate-900/30 border border-blue-500/10">
                   <div className="flex items-start justify-between mb-2">
                     <div>
-                      <h4 className="text-white font-semibold text-sm capitalize">{action.action_type.replace('_', ' ')}</h4>
+                      <h4 className="text-white font-semibold text-sm capitalize">{action.action_type.replace(/_/g, ' ')}</h4>
                       <p className="text-xs text-gray-400">{action.target_faction_name}</p>
                     </div>
                     <Badge className={
@@ -269,12 +264,12 @@ Create immersive NPC responses and realistic outcomes.`;
                       {action.status}
                     </Badge>
                   </div>
-                  
+
                   {action.success_probability && (
                     <p className="text-xs text-cyan-400 mb-2">Success Rate: {action.success_probability}%</p>
                   )}
 
-                  {action.intel_gathered && action.intel_gathered.territory_plans?.length > 0 && (
+                  {action.intel_gathered?.territory_plans?.length > 0 && (
                     <div className="mt-2 p-2 rounded bg-blue-900/20 border border-blue-500/20">
                       <p className="text-xs text-blue-400 font-semibold mb-1">Intel Gathered:</p>
                       {action.intel_gathered.territory_plans.slice(0, 2).map((intel, idx) => (
@@ -283,7 +278,7 @@ Create immersive NPC responses and realistic outcomes.`;
                     </div>
                   )}
 
-                  {action.ai_negotiation_log && action.ai_negotiation_log.length > 0 && (
+                  {action.ai_negotiation_log?.length > 0 && (
                     <div className="mt-2 p-2 rounded bg-slate-900/50 border border-blue-500/10 max-h-32 overflow-y-auto">
                       <p className="text-xs text-blue-400 font-semibold mb-1">Negotiations:</p>
                       {action.ai_negotiation_log.slice(0, 2).map((log, idx) => (
