@@ -166,24 +166,16 @@ Provide strategic HR recommendations to optimize productivity while managing cos
           <div className="p-3 rounded-lg bg-blue-900/20 border border-blue-500/30">
             <p className="text-xs text-gray-400">Workforce Size</p>
             <p className="text-xl font-bold text-blue-400">
-              {aiManager?.current_workforce_size || 10}
+              {enterprise?.production_rate ? Math.floor(enterprise.production_rate / 10) : 10}
             </p>
-            {aiManager?.ai_recommendations?.suggested_workforce && (
-              <p className="text-xs text-gray-400 mt-1">
-                AI suggests: {aiManager.ai_recommendations.suggested_workforce}
-              </p>
-            )}
+            <p className="text-xs text-gray-400 mt-1">Based on production rate</p>
           </div>
           <div className="p-3 rounded-lg bg-green-900/20 border border-green-500/30">
             <p className="text-xs text-gray-400">Avg Wage</p>
             <p className="text-xl font-bold text-green-400">
-              ${aiManager?.avg_wage_per_employee || 500}
+              ${enterprise?.level ? enterprise.level * 500 : 500}
             </p>
-            {aiManager?.ai_recommendations?.suggested_wage && (
-              <p className="text-xs text-gray-400 mt-1">
-                AI suggests: ${aiManager.ai_recommendations.suggested_wage}
-              </p>
-            )}
+            <p className="text-xs text-gray-400 mt-1">Per employee/week</p>
           </div>
         </div>
 
