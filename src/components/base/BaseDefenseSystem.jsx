@@ -100,7 +100,7 @@ export default function BaseDefenseSystem({ playerData, selectedBase }) {
     }
   });
 
-  if (!baseDefense) return <div className="text-white">Loading defenses...</div>;
+  if (!selectedBase) return null;
 
   return (
     <div className="space-y-3">
