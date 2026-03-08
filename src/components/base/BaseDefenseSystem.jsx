@@ -86,8 +86,8 @@ export default function BaseDefenseSystem({ playerData, selectedBase }) {
 
       if (!success) {
         await base44.entities.PlayerBase.update(selectedBase.id, {
-          last_ле_raid: new Date().toISOString(),
-          vulnerability_rating: Math.max(0, selectedBase.vulnerability_rating - 20)
+          last_le_raid: new Date().toISOString(),
+          vulnerability_rating: Math.max(0, (selectedBase.vulnerability_rating || 50) - 20)
         });
         toast.success('Base defended against raid!');
       } else {
