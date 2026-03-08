@@ -234,9 +234,9 @@ Provide strategic HR recommendations to optimize productivity while managing cos
 
         <div className="pt-3 border-t border-blue-500/20">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-400">Total Labor Cost</span>
+            <span className="text-gray-400">Est. Labor Cost</span>
             <span className="text-red-400 font-semibold">
-              ${(aiManager?.total_labor_cost_hourly || 0).toLocaleString()}/hr
+              ${(enterprise?.level ? enterprise.level * 500 * Math.floor(enterprise.production_rate / 10) : 0).toLocaleString()}/week
             </span>
           </div>
         </div>
