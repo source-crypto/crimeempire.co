@@ -77,24 +77,13 @@ Provide strategic HR recommendations to optimize productivity while managing cos
 
   const toggleAIMutation = useMutation({
     mutationFn: async (enabled) => {
-      if (aiManager) {
-        return base44.entities.AIEmployeeManager.update(aiManager.id, {
-          ai_enabled: enabled,
-          auto_wage_adjustment: enabled,
-          auto_training: enabled
-        });
-      } else {
-        return base44.entities.AIEmployeeManager.create({
-          enterprise_id: enterprise.id,
-          ai_enabled: enabled,
-          auto_wage_adjustment: enabled,
-          auto_training: enabled,
-          management_strategy: 'balanced'
-        });
-      }
+      // Store AI toggle state on the enterprise itself
+      await base44.entities.CriminalEnterprise.update(enterprise.id, {
+        is_active: enabled
+      });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['aiEmployeeManager']);
+      queryClient.invalidateQueries(['enterprises']);
       toast.success('AI management settings updated');
     }
   });
