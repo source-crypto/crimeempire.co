@@ -9,7 +9,10 @@ import Base3DCrimeMap from '../components/base/Base3DCrimeMap';
 import BaseLayoutDesigner from '../components/base/BaseLayoutDesigner';
 import NPCFacilityManager from '../components/base/NPCFacilityManager';
 import LEIntelligenceSystem from '../components/ai/LEIntelligenceSystem';
-import { Building2, Shield, Map, Palette, Users, Eye } from 'lucide-react';
+import BaseMissionCenter from '../components/base/BaseMissionCenter';
+import AIFacilityManager from '../components/base/AIFacilityManager';
+import BaseSecuritySystem from '../components/base/BaseSecuritySystem';
+import { Building2, Shield, Map, Palette, Users, Eye, Target, Brain, Lock } from 'lucide-react';
 
 export default function BaseManagement() {
   const [currentUser, setCurrentUser] = useState(null);
