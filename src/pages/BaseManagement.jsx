@@ -37,6 +37,12 @@ export default function BaseManagement() {
     enabled: !!playerData?.id
   });
 
+  const { data: baseFacilities = [] } = useQuery({
+    queryKey: ['baseFacilities', bases[0]?.id],
+    queryFn: () => base44.entities.BaseFacility.filter({ base_id: bases[0].id }),
+    enabled: !!bases[0]?.id
+  });
+
   if (!playerData) {
     return (
       <div className="flex items-center justify-center h-screen">
