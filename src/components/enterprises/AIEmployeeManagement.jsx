@@ -70,23 +70,7 @@ Provide strategic HR recommendations to optimize productivity while managing cos
       return response;
     },
     onSuccess: async (recommendations) => {
-      if (aiManager) {
-        await base44.entities.AIEmployeeManager.update(aiManager.id, {
-          ai_recommendations: {
-            ...recommendations,
-            last_updated: new Date().toISOString()
-          }
-        });
-      } else {
-        await base44.entities.AIEmployeeManager.create({
-          enterprise_id: enterprise.id,
-          ai_recommendations: {
-            ...recommendations,
-            last_updated: new Date().toISOString()
-          }
-        });
-      }
-      queryClient.invalidateQueries(['aiEmployeeManager']);
+      queryClient.invalidateQueries(['enterpriseAIManager']);
       toast.success('AI recommendations updated');
     }
   });
