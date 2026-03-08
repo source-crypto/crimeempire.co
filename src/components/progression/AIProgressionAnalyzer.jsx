@@ -40,104 +40,48 @@ function buildFallbackAnalysis(playerData) {
 export default function AIProgressionAnalyzer({ playerData }) {
   const queryClient = useQueryClient();
 
+  const [aiLimitHit, setAiLimitHit] = useState(false);
+
   const analyzeProgressionMutation = useMutation({
     mutationFn: async () => {
-      const prompt = `Analyze this player's performance and provide personalized recommendations:
-
-**Player Profile:**
-- Username: ${playerData.username}
-- Level: ${playerData.level}
-- Playstyle: ${playerData.playstyle}
-- Total Earnings: $${playerData.total_earnings}
-
-**Skills:**
-${Object.entries(playerData.skills || {}).map(([skill, points]) => `- ${skill}: ${points}`).join('\n')}
-
-**Statistics:**
-- Heists: ${playerData.stats?.heists_completed || 0} completed, ${playerData.stats?.heists_failed || 0} failed
-- Battles: ${playerData.stats?.battles_won || 0} won, ${playerData.stats?.battles_lost || 0} lost
-- Territories: ${playerData.territory_count}
-- Contracts: ${playerData.stats?.contracts_completed || 0}
-- Trades: ${playerData.stats?.items_traded || 0}
-
-**Available Resources:**
-- Crypto: $${playerData.crypto_balance}
-- Buy Power: $${playerData.buy_power}
-- Skill Points: ${playerData.skill_points}
-
-Provide analysis with:
-1. Playstyle analysis (2-3 sentences about their play patterns)
-2. Skill allocation recommendations (which skills to upgrade and why)
-3. Investment advice (3 specific recommendations with reasoning)
-4. Next objectives (3 clear action items to progress)
-5. Strengths and weaknesses
-
-Return detailed JSON.`;
-
-      const analysis = await base44.integrations.Core.InvokeLLM({
-        prompt,
-        response_json_schema: {
-          type: 'object',
-          properties: {
-            playstyle_analysis: { type: 'string' },
-            skill_allocation: {
-              type: 'object',
-              properties: {
-                recommended_skills: {
-                  type: 'array',
-                  items: {
-                    type: 'object',
-                    properties: {
-                      skill_name: { type: 'string' },
-                      points_to_add: { type: 'number' },
-                      reasoning: { type: 'string' }
-                    }
-                  }
-                }
-              }
-            },
-            investment_advice: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  type: { type: 'string' },
-                  amount: { type: 'number' },
-                  reasoning: { type: 'string' },
-                  priority: { type: 'string' }
-                }
-              }
-            },
-            next_objectives: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  objective: { type: 'string' },
-                  priority: { type: 'string' },
-                  estimated_reward: { type: 'number' }
-                }
-              }
-            },
-            strengths: { type: 'array', items: { type: 'string' } },
-            weaknesses: { type: 'array', items: { type: 'string' } }
+      let analysis;
+      try {
+        const prompt = `Analyze this crime game player and return JSON with: playstyle_analysis (string), skill_allocation.recommended_skills (array of {skill_name, points_to_add, reasoning}), investment_advice (array of {type, amount, reasoning, priority}), next_objectives (array of {objective, priority, estimated_reward}), strengths (array), weaknesses (array).
+Player: ${playerData.username}, Level ${playerData.level}, ${playerData.playstyle} playstyle, $${playerData.crypto_balance} balance, ${playerData.stats?.heists_completed || 0} heists, ${playerData.territory_count} territories, skills: ${JSON.stringify(playerData.skills || {})}.`;
+        analysis = await base44.integrations.Core.InvokeLLM({
+          prompt,
+          response_json_schema: {
+            type: 'object',
+            properties: {
+              playstyle_analysis: { type: 'string' },
+              skill_allocation: { type: 'object', properties: { recommended_skills: { type: 'array', items: { type: 'object', properties: { skill_name: { type: 'string' }, points_to_add: { type: 'number' }, reasoning: { type: 'string' } } } } } },
+              investment_advice: { type: 'array', items: { type: 'object', properties: { type: { type: 'string' }, amount: { type: 'number' }, reasoning: { type: 'string' }, priority: { type: 'string' } } } },
+              next_objectives: { type: 'array', items: { type: 'object', properties: { objective: { type: 'string' }, priority: { type: 'string' }, estimated_reward: { type: 'number' } } } },
+              strengths: { type: 'array', items: { type: 'string' } },
+              weaknesses: { type: 'array', items: { type: 'string' } }
+            }
           }
+        });
+      } catch (err) {
+        if (isAILimitError(err)) {
+          setAiLimitHit(true);
+          analysis = buildFallbackAnalysis(playerData);
+        } else {
+          throw err;
         }
-      });
+      }
 
       await base44.entities.Player.update(playerData.id, {
-        ai_recommendations: {
-          ...analysis,
-          last_updated: new Date().toISOString()
-        }
+        ai_recommendations: { ...analysis, last_updated: new Date().toISOString() }
       });
 
       return analysis;
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['player']);
-      toast.success('AI analysis complete!');
-    }
+      toast.success('Analysis complete!');
+    },
+    onError: (err) => toast.error(err.message || 'Analysis failed')
   });
 
   const recommendations = playerData.ai_recommendations;
