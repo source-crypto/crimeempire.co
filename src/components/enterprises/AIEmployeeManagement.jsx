@@ -125,7 +125,7 @@ Provide strategic HR recommendations to optimize productivity while managing cos
           <div className="flex items-center gap-3">
             <span className="text-sm text-gray-400">AI Autopilot</span>
             <Switch
-              checked={aiManager?.ai_enabled || false}
+              checked={enterprise?.is_active || false}
               onCheckedChange={(checked) => toggleAIMutation.mutate(checked)}
             />
           </div>
