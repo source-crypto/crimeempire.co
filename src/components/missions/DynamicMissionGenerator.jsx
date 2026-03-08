@@ -49,6 +49,8 @@ export default function DynamicMissionGenerator({ playerData }) {
     enabled: !!playerData?.id
   });
 
+  const [aiLimitHit, setAiLimitHit] = useState(false);
+
   const generateMissionMutation = useMutation({
     mutationFn: async () => {
       const currentPhase = governance[0]?.escalation_phase || 'normal';
