@@ -414,7 +414,7 @@ export default function PlayerHideout() {
                   <p className="text-xs text-gray-400">AI Employees</p>
                 </div>
                 <div className="p-3 rounded-xl border border-red-500/20 bg-red-900/10 text-center">
-                  <Siren className="w-5 h-5 text-red-400 mx-auto mb-1" />
+                  <AlertTriangle className="w-5 h-5 text-red-400 mx-auto mb-1" />
                   <p className="text-white font-bold">{currentBase.security_level || 0}%</p>
                   <p className="text-xs text-gray-400">Defense Rating</p>
                 </div>
