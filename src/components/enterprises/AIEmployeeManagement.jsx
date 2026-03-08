@@ -14,9 +14,10 @@ export default function AIEmployeeManagement({ enterprise, playerData }) {
   const [aiConfig, setAiConfig] = useState(null);
 
   const { data: aiManager } = useQuery({
-    queryKey: ['aiEmployeeManager', enterprise.id],
+    queryKey: ['enterpriseAIManager', enterprise.id],
     queryFn: async () => {
-      const managers = await base44.entities.AIEmployeeManager.filter({ enterprise_id: enterprise.id });
+      // Use enterprise's own NPC manager, not the base AIEmployeeManager entity
+      const managers = await base44.entities.EnterpriseNPC.filter({ enterprise_id: enterprise.id });
       return managers[0];
     },
     enabled: !!enterprise?.id
