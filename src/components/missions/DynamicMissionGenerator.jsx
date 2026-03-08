@@ -248,6 +248,7 @@ Create immersive, choice-driven narrative that remembers player's journey.`;
       </CardHeader>
       <CardContent className="p-4">
         <div className="space-y-3">
+          {aiLimitHit && <AILimitBanner />}
           <div className="p-3 rounded-lg bg-blue-900/20 border border-blue-500/30">
             <p className="text-sm text-gray-300 mb-2">
               <strong>Mission Chains:</strong> Interconnected objectives with branching paths
