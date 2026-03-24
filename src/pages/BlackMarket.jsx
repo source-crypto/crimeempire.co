@@ -7,7 +7,8 @@ import BlackMarketUI from '../components/blackmarket/BlackMarketUI';
 import ContrabandSmugglingManager from '../components/blackmarket/ContrabandSmugglingManager';
 import MarketTrendAnalyzer from '../components/blackmarket/MarketTrendAnalyzer';
 import AIDynamicPricing from '../components/blackmarket/AIDynamicPricing';
-import { ShoppingCart, Truck, TrendingUp } from 'lucide-react';
+import MarketCategories from '../components/blackmarket/MarketCategories';
+import { ShoppingCart, Truck, TrendingUp, Package } from 'lucide-react';
 
 export default function BlackMarket() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -70,6 +71,11 @@ export default function BlackMarket() {
             <span className="hidden sm:inline">Smuggling Routes</span>
             <span className="sm:hidden">Smuggling</span>
           </TabsTrigger>
+          <TabsTrigger value="categories" className="flex items-center gap-2 text-xs md:text-sm">
+            <Package className="w-4 h-4" />
+            <span className="hidden sm:inline">Product Categories</span>
+            <span className="sm:hidden">Shop</span>
+          </TabsTrigger>
           <TabsTrigger value="trends" className="flex items-center gap-2 text-xs md:text-sm">
             <TrendingUp className="w-4 h-4" />
             <span className="hidden sm:inline">Market Intelligence</span>
@@ -82,6 +88,10 @@ export default function BlackMarket() {
             <AIDynamicPricing playerData={playerData} />
             <BlackMarketUI playerData={playerData} />
           </div>
+        </TabsContent>
+
+        <TabsContent value="categories">
+          <MarketCategories playerData={playerData} />
         </TabsContent>
 
         <TabsContent value="smuggling">

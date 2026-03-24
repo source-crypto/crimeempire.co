@@ -2,7 +2,8 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Brain, Gift, TrendingUp } from 'lucide-react';
+import { Brain, Gift, TrendingUp, Dumbbell } from 'lucide-react';
+import SkillTrainingFacility from '../components/progression/SkillTrainingFacility';
 import SkillTreeDisplay from '../components/progression/SkillTreeDisplay.jsx';
 import PerkSystem from '../components/progression/PerkSystem.jsx';
 import ExperienceTracker from '../components/progression/ExperienceTracker.jsx';
@@ -45,6 +46,10 @@ export default function Skills() {
             <Gift className="w-4 h-4" />
             Perks
           </TabsTrigger>
+          <TabsTrigger value="training" className="flex items-center gap-2">
+            <Dumbbell className="w-4 h-4" />
+            Training Facility
+          </TabsTrigger>
           <TabsTrigger value="experience" className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
             Experience
@@ -57,6 +62,10 @@ export default function Skills() {
 
         <TabsContent value="perks">
           <PerkSystem playerData={playerData} />
+        </TabsContent>
+
+        <TabsContent value="training">
+          <SkillTrainingFacility playerData={playerData} />
         </TabsContent>
 
         <TabsContent value="experience">

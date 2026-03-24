@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { MapPin, TrendingUp, Link as LinkIcon, Swords, Loader2, Zap } from 'lucide-react';
 import LazyLoadWrapper from '../components/performance/LazyLoadWrapper';
 import TerritoryCreator from '../components/territory/TerritoryCreator';
+import TerritoryMapView from '../components/territory/TerritoryMapView';
 import TerritoryAnalytics from '../components/territory/TerritoryAnalytics';
 
 // Lazy load heavy territory components
@@ -207,11 +208,16 @@ export default function Territories() {
 
       <Tabs defaultValue="manage" className="space-y-4">
         <TabsList className="glass-panel border border-purple-500/20">
+          <TabsTrigger value="map">🗺️ City Map</TabsTrigger>
           <TabsTrigger value="manage">Manage</TabsTrigger>
           <TabsTrigger value="owned">Your Territories</TabsTrigger>
           <TabsTrigger value="warroom">War Room</TabsTrigger>
           <TabsTrigger value="all">All Territories</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="map">
+          <TerritoryMapView playerData={playerData} crewData={crewData} />
+        </TabsContent>
 
         <TabsContent value="manage">
           <LazyLoadWrapper fallbackText="Loading Territory Manager...">

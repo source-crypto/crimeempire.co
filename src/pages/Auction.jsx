@@ -5,7 +5,9 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Gavel, Loader2, TrendingUp, Plus } from 'lucide-react';
+import { Gavel, Loader2, TrendingUp, Plus, Eye } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AuctionWatchlist from '../components/auction/AuctionWatchlist';
 import { toast } from 'sonner';
 import CreateAuctionDialog from '../components/auction/CreateAuctionDialog';
 
@@ -88,6 +90,17 @@ export default function Auction() {
         playerData={playerData}
       />
 
+      <Tabs defaultValue="listings" className="space-y-4">
+        <TabsList className="glass-panel border border-purple-500/20">
+          <TabsTrigger value="listings">All Auctions ({auctions.length})</TabsTrigger>
+          <TabsTrigger value="watchlist" className="flex items-center gap-1"><Eye className="w-3.5 h-3.5" />Watchlist</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="watchlist">
+          <AuctionWatchlist playerData={playerData} auctions={auctions} />
+        </TabsContent>
+
+        <TabsContent value="listings">
       {auctions.length === 0 ? (
         <Card className="glass-panel border-purple-500/20">
           <CardContent className="p-12 text-center">
@@ -164,6 +177,8 @@ export default function Auction() {
           })}
         </div>
       )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
