@@ -22,6 +22,9 @@ const LiveMarketTracker = lazy(() => import('../components/marketplace/LiveMarke
 const TransparentInvestmentSystem = lazy(() => import('../components/economy/TransparentInvestmentSystem'));
 const EconomyDashboard = lazy(() => import('../components/economy/EconomyDashboard'));
 const PlayerActionEventSystem = lazy(() => import('../components/economy/PlayerActionEventSystem'));
+import RewardsHistory from '../components/missions/RewardsHistory';
+import CrewMissionAssignment from '../components/missions/CrewMissionAssignment';
+import MissionObjectivesDashboard from '../components/missions/MissionObjectivesDashboard';
 import { 
   Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle, Building2, Target, Zap, ShoppingCart
 } from 'lucide-react';
@@ -310,6 +313,7 @@ export default function Dashboard() {
           <TabsTrigger value="contracts" className="text-xs md:text-sm">Contracts</TabsTrigger>
           <TabsTrigger value="broadcasts" className="text-xs md:text-sm">Events</TabsTrigger>
           <TabsTrigger value="economy" className="text-xs md:text-sm">Economy</TabsTrigger>
+          <TabsTrigger value="missions" className="text-xs md:text-sm">Missions</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4 md:space-y-6">
@@ -418,6 +422,13 @@ export default function Dashboard() {
             </div>
           </LazyLoadWrapper>
         </TabsContent>
+
+        <TabsContent value="missions" className="space-y-6">
+          <MissionObjectivesDashboard playerData={playerData} />
+          <CrewMissionAssignment playerData={playerData} />
+          <RewardsHistory playerData={playerData} />
+        </TabsContent>
+
       </Tabs>
     </div>
   );
