@@ -25,6 +25,8 @@ const PlayerActionEventSystem = lazy(() => import('../components/economy/PlayerA
 import RewardsHistory from '../components/missions/RewardsHistory';
 import CrewMissionAssignment from '../components/missions/CrewMissionAssignment';
 import MissionObjectivesDashboard from '../components/missions/MissionObjectivesDashboard';
+import WantedSystem from '../components/wanted/WantedSystem';
+import WantedHUD from '../components/wanted/WantedHUD';
 import { 
   Wallet, TrendingUp, MapPin, Users, Star, AlertTriangle, Building2, Target, Zap, ShoppingCart
 } from 'lucide-react';
@@ -314,6 +316,7 @@ export default function Dashboard() {
           <TabsTrigger value="broadcasts" className="text-xs md:text-sm">Events</TabsTrigger>
           <TabsTrigger value="economy" className="text-xs md:text-sm">Economy</TabsTrigger>
           <TabsTrigger value="missions" className="text-xs md:text-sm">Missions</TabsTrigger>
+          <TabsTrigger value="wanted" className="text-xs md:text-sm flex items-center gap-1">🌟 Wanted</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4 md:space-y-6">
@@ -427,6 +430,10 @@ export default function Dashboard() {
           <MissionObjectivesDashboard playerData={playerData} />
           <CrewMissionAssignment playerData={playerData} />
           <RewardsHistory playerData={playerData} />
+        </TabsContent>
+
+        <TabsContent value="wanted">
+          <WantedSystem playerData={playerData} />
         </TabsContent>
 
       </Tabs>

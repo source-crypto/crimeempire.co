@@ -2,8 +2,9 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useQuery } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Brain, Gift, TrendingUp, Dumbbell } from 'lucide-react';
+import { Brain, Gift, TrendingUp, Dumbbell, Star } from 'lucide-react';
 import SkillTrainingFacility from '../components/progression/SkillTrainingFacility';
+import WantedHUD from '../components/wanted/WantedHUD';
 import SkillTreeDisplay from '../components/progression/SkillTreeDisplay.jsx';
 import PerkSystem from '../components/progression/PerkSystem.jsx';
 import ExperienceTracker from '../components/progression/ExperienceTracker.jsx';
@@ -29,11 +30,14 @@ export default function Skills() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-          Character Progression
-        </h1>
-        <p className="text-gray-400 mt-1">Master skills, unlock perks, and specialize your playstyle</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+            Character Progression
+          </h1>
+          <p className="text-gray-400 mt-1">Master skills, unlock perks, and specialize your playstyle</p>
+        </div>
+        <WantedHUD compact />
       </div>
 
       <Tabs defaultValue="skills" className="space-y-4">

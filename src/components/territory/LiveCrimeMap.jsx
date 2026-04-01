@@ -10,6 +10,7 @@ import {
   MapPin, Swords, DollarSign, Flame, Shield, AlertTriangle,
   TrendingUp, Zap, Eye, Radio
 } from 'lucide-react';
+import { useWantedLevel, BLOCKED_DISTRICTS_AT } from '../wanted/WantedSystem';
 import { toast } from 'sonner';
 import 'leaflet/dist/leaflet.css';
 
@@ -120,6 +121,8 @@ function PolicePatrols({ blocks, heatData }) {
 export default function LiveCrimeMap({ playerData, crewData }) {
   const queryClient = useQueryClient();
   const [heatData, setHeatData] = useState(getHeatData);
+  const { level: wantedLevel, triggerAction: triggerWanted } = useWantedLevel();
+  const blockedDistricts = BLOCKED_DISTRICTS_AT[wantedLevel] || [];
   const [cooldowns, setCooldowns] = useState(getCooldowns);
   const [selectedBlock, setSelectedBlock] = useState(null);
   const [attackLog, setAttackLog] = useState([]);
@@ -190,6 +193,7 @@ export default function LiveCrimeMap({ playerData, crewData }) {
       if (!playerData?.crew_id) throw new Error('Join a crew first');
       const cd = getCooldowns();
       if (cd[block.id] && Date.now() < cd[block.id]) throw new Error(`Cooldown: ${Math.ceil((cd[block.id] - Date.now()) / 60000)}m`);
+      if (blockedDistricts.includes(block.name)) throw new Error(`${block.name} is blockaded by law enforcement!`);
       await base44.entities.Territory.create({
         name: block.name,
         controlling_crew_id: playerData.crew_id,
@@ -201,6 +205,7 @@ export default function LiveCrimeMap({ playerData, crewData }) {
       await base44.entities.Player.update(playerData.id, {
         territory_count: (playerData.territory_count || 0) + 1
       });
+      triggerWanted('territory_capture');
       raiseHeat(block.id, 15);
     },
     onSuccess: (_, block) => {
@@ -219,13 +224,16 @@ export default function LiveCrimeMap({ playerData, crewData }) {
       if (cd[block.id] && Date.now() < cd[block.id]) throw new Error(`Cooldown active`);
       if (isPoliceBlocked(block.id)) throw new Error('Police lockdown! Try later.');
 
+      if (blockedDistricts.includes(block.name)) throw new Error(`${block.name} is blockaded — cannot attack during police lockdown!`);
       const heatPenalty = block.heat * 0.3;
+      const wantedPenalty = wantedLevel * 5; // high wanted = more police interfere
       const attackPower = (playerData.strength_score || 10) + ((playerData.skills?.combat || 0) * 5);
       const defPower = 40 + Math.random() * 30;
-      const successChance = Math.max(5, Math.min(90, 50 + attackPower - defPower - heatPenalty));
+      const successChance = Math.max(5, Math.min(90, 50 + attackPower - defPower - heatPenalty - wantedPenalty));
       const success = Math.random() * 100 < successChance;
 
-      // Always raise heat on attack
+      // Always raise heat on attack + raise wanted level
+      triggerWanted('territory_attack');
       raiseHeat(block.id, success ? 25 : 15);
 
       // Set cooldown

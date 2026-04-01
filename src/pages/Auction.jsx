@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Gavel, Loader2, TrendingUp, Plus, Eye } from 'lucide-react';
+import WantedHUD from '../components/wanted/WantedHUD';
+import { useWantedLevel } from '../components/wanted/WantedSystem';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AuctionWatchlist from '../components/auction/AuctionWatchlist';
 import { toast } from 'sonner';
@@ -16,6 +18,7 @@ export default function Auction() {
   const [bidAmounts, setBidAmounts] = useState({});
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const queryClient = useQueryClient();
+  const { triggerAction: triggerWanted } = useWantedLevel();
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
@@ -53,7 +56,7 @@ export default function Auction() {
         highest_bidder_id: playerData.id,
         bid_count: (auction.bid_count || 0) + 1
       });
-
+      if (bidAmount > 50000) triggerWanted('auction_high_bid');
       return bidAmount;
     },
     onSuccess: (amount) => {
@@ -72,6 +75,7 @@ export default function Auction() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">Auction House</h1>
+            <WantedHUD compact />
             <p className="text-gray-400">Buy and sell valuable items</p>
           </div>
           <Button

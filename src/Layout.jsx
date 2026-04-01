@@ -6,6 +6,7 @@ import {
         Settings, Menu, X, Zap, Shield, Bell, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown
       } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import WantedHUD from './components/wanted/WantedHUD';
 import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children, currentPageName }) {
@@ -148,6 +149,7 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Right Actions */}
             <div className="flex items-center gap-3">
+              <WantedHUD compact />
               <Button
                 variant="ghost"
                 size="icon"

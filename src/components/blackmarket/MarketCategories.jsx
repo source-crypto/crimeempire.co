@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useWantedLevel } from '../wanted/WantedSystem';
 import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -75,6 +76,7 @@ const rarityColors = {
 export default function MarketCategories({ playerData }) {
   const [activeCategory, setActiveCategory] = useState('weapons');
   const queryClient = useQueryClient();
+  const { triggerAction: triggerWanted } = useWantedLevel();
 
   const buyMutation = useMutation({
     mutationFn: async (item) => {
@@ -94,6 +96,9 @@ export default function MarketCategories({ playerData }) {
         is_equipped: false,
         quantity: 1
       });
+      // High-value or weapon purchases raise wanted level
+      if (activeCategory === 'weapons') triggerWanted('weapons_purchase');
+      else if (activeCategory === 'contraband') triggerWanted('contraband_purchase');
     },
     onSuccess: (_, item) => {
       queryClient.invalidateQueries(['player']);
