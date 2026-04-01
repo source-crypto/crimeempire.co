@@ -19,6 +19,7 @@ const BusinessManagementUI = lazy(() => import('../components/enterprise/Busines
 const AdvancedNPCManagement = lazy(() => import('../components/enterprise/AdvancedNPCManagement'));
 const SupplyChainOptimization = lazy(() => import('../components/territory/SupplyChainOptimization'));
 const EnterprisePvPSystem = lazy(() => import('../components/enterprises/EnterprisePvPSystem'));
+const EnterpriseChainDashboard = lazy(() => import('../components/enterprises/EnterpriseChainDashboard'));
 
 export default function Enterprises() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -165,6 +166,10 @@ export default function Enterprises() {
         onOpenChange={setCreateDialogOpen}
         playerData={playerData}
       />
+
+      <LazyLoadWrapper fallbackText="Loading Chain Dashboard...">
+        <EnterpriseChainDashboard enterprises={enterprises} playerData={playerData} />
+      </LazyLoadWrapper>
 
       <EnterpriseLeaderboard playerData={playerData} />
 

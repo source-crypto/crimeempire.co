@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { MapPin, TrendingUp, Link as LinkIcon, Swords, Loader2, Zap } from 'lucide-react';
 import LazyLoadWrapper from '../components/performance/LazyLoadWrapper';
 import TerritoryCreator from '../components/territory/TerritoryCreator';
-import TerritoryMapView from '../components/territory/TerritoryMapView';
+const LiveCrimeMap = lazy(() => import('../components/territory/LiveCrimeMap'));
 import TerritoryAnalytics from '../components/territory/TerritoryAnalytics';
 
 // Lazy load heavy territory components
@@ -216,7 +216,9 @@ export default function Territories() {
         </TabsList>
 
         <TabsContent value="map">
-          <TerritoryMapView playerData={playerData} crewData={crewData} />
+          <LazyLoadWrapper fallbackText="Loading Live Crime Map...">
+            <LiveCrimeMap playerData={playerData} crewData={crewData} />
+          </LazyLoadWrapper>
         </TabsContent>
 
         <TabsContent value="manage">
