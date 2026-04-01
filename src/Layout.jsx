@@ -43,6 +43,8 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Reputation', page: 'Reputation', icon: Crown },
     { name: 'Syndicates', page: 'Syndicates', icon: Users },
     { name: 'Governance', page: 'Governance', icon: Crown },
+    { name: 'Embassy', page: 'Embassy', icon: Users },
+    { name: 'Fleet Management', page: 'FleetManagement', icon: Building2 },
   ];
 
   const allNavigation = [...mainNavigation, ...moreNavigation];

@@ -1,0 +1,62 @@
+{
+  "name": "AllianceBank",
+  "type": "object",
+  "properties": {
+    "treaty_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "crew_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Crew IDs with access"
+    },
+    "balance": {
+      "type": "number",
+      "default": 0
+    },
+    "transactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "crew_id": {
+            "type": "string"
+          },
+          "crew_name": {
+            "type": "string"
+          },
+          "player_name": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "type": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "withdrawal_limit": {
+      "type": "number",
+      "default": 50000,
+      "description": "Max single withdrawal"
+    }
+  },
+  "required": [
+    "treaty_id",
+    "name"
+  ]
+}

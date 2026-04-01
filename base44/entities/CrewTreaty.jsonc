@@ -1,0 +1,70 @@
+{
+  "name": "CrewTreaty",
+  "type": "object",
+  "properties": {
+    "treaty_type": {
+      "type": "string",
+      "enum": [
+        "non_aggression",
+        "shared_defense",
+        "trade_agreement",
+        "full_alliance"
+      ],
+      "description": "Type of diplomatic treaty"
+    },
+    "initiating_crew_id": {
+      "type": "string"
+    },
+    "initiating_crew_name": {
+      "type": "string"
+    },
+    "target_crew_id": {
+      "type": "string"
+    },
+    "target_crew_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "rejected",
+        "expired",
+        "broken"
+      ],
+      "default": "pending"
+    },
+    "terms": {
+      "type": "string",
+      "description": "Custom treaty terms text"
+    },
+    "duration_days": {
+      "type": "number",
+      "default": 30
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "alliance_bank_id": {
+      "type": "string",
+      "description": "Shared bank for full alliances"
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "broken_by_crew_id": {
+      "type": "string"
+    },
+    "break_reason": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "treaty_type",
+    "initiating_crew_id",
+    "target_crew_id"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "name": "FleetSupplyRoute",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string"
+    },
+    "crew_id": {
+      "type": "string"
+    },
+    "route_name": {
+      "type": "string"
+    },
+    "from_enterprise_id": {
+      "type": "string"
+    },
+    "from_enterprise_name": {
+      "type": "string"
+    },
+    "to_enterprise_id": {
+      "type": "string"
+    },
+    "to_enterprise_name": {
+      "type": "string"
+    },
+    "assigned_vehicle_id": {
+      "type": "string"
+    },
+    "assigned_vehicle_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "disrupted",
+        "no_vehicle"
+      ],
+      "default": "no_vehicle"
+    },
+    "revenue_per_trip": {
+      "type": "number",
+      "default": 5000
+    },
+    "trip_duration_hours": {
+      "type": "number",
+      "default": 2
+    },
+    "hijack_risk": {
+      "type": "number",
+      "default": 15,
+      "description": "% chance of hijack per trip"
+    },
+    "total_trips": {
+      "type": "number",
+      "default": 0
+    },
+    "total_revenue": {
+      "type": "number",
+      "default": 0
+    },
+    "total_hijacks": {
+      "type": "number",
+      "default": 0
+    },
+    "last_trip_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "next_trip_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "events_log": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "owner_id",
+    "route_name",
+    "from_enterprise_id",
+    "to_enterprise_id"
+  ]
+}

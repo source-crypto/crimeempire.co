@@ -48,6 +48,8 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AIEmployees from './pages/AIEmployees';
+import Embassy from './pages/Embassy';
+import FleetManagement from './pages/FleetManagement';
 import AIManagement from './pages/AIManagement';
 import Auction from './pages/Auction';
 import BaseManagement from './pages/BaseManagement';
@@ -95,6 +97,8 @@ import __Layout from './Layout.jsx';
 
 export const PAGES = {
     "AIEmployees": AIEmployees,
+    "Embassy": Embassy,
+    "FleetManagement": FleetManagement,
     "AIManagement": AIManagement,
     "Auction": Auction,
     "BaseManagement": BaseManagement,
