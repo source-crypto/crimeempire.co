@@ -1,0 +1,91 @@
+{
+  "name": "HitContract",
+  "type": "object",
+  "properties": {
+    "target_player_id": {
+      "type": "string"
+    },
+    "target_username": {
+      "type": "string"
+    },
+    "placer_player_id": {
+      "type": "string"
+    },
+    "placer_username": {
+      "type": "string"
+    },
+    "hit_type": {
+      "type": "string",
+      "enum": [
+        "tag",
+        "eliminate",
+        "track"
+      ],
+      "default": "tag"
+    },
+    "bounty_pool": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "assigned",
+        "completed",
+        "expired",
+        "cancelled"
+      ],
+      "default": "open"
+    },
+    "is_silent": {
+      "type": "boolean",
+      "default": false
+    },
+    "priority_boost": {
+      "type": "boolean",
+      "default": false
+    },
+    "assigned_hunter_id": {
+      "type": "string"
+    },
+    "assigned_hunter_username": {
+      "type": "string"
+    },
+    "contributors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reward_distributed": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "target_player_id",
+    "placer_player_id",
+    "hit_type"
+  ]
+}

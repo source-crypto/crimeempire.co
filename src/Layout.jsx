@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { 
         Home, Map, Users, Building2, Car, Gavel, 
-        Settings, Menu, X, Zap, Shield, Bell, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown
+        Settings, Menu, X, Zap, Shield, Bell, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown, Target
       } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WantedHUD from './components/wanted/WantedHUD';
@@ -45,6 +45,8 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Governance', page: 'Governance', icon: Crown },
     { name: 'Embassy', page: 'Embassy', icon: Users },
     { name: 'Fleet Management', page: 'FleetManagement', icon: Building2 },
+    { name: 'Currency Exchange', page: 'CurrencyExchange', icon: DollarSign },
+    { name: 'Contract Hits', page: 'ContractHits', icon: Shield },
   ];
 
   const allNavigation = [...mainNavigation, ...moreNavigation];
