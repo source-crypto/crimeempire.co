@@ -290,7 +290,7 @@ export default function InteractiveCrimeMap({
         ))}
 
         {/* Contraband Caches */}
-        {activeLayers.contraband && contrabandCaches.map((cache) => (
+        {activeLayers.contraband && contrabandCaches.filter(cache => cache.coordinates?.lat != null).map((cache) => (
           <Marker
             key={cache.id}
             position={[cache.coordinates.lat, cache.coordinates.lng]}
@@ -330,7 +330,7 @@ export default function InteractiveCrimeMap({
         ))}
 
         {/* Material Deposits */}
-        {activeLayers.materials && materialDeposits.map((deposit) => (
+        {activeLayers.materials && materialDeposits.filter(deposit => deposit.coordinates?.lat != null).map((deposit) => (
           <Marker
             key={deposit.id}
             position={[deposit.coordinates.lat, deposit.coordinates.lng]}
