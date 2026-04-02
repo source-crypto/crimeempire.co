@@ -1,0 +1,72 @@
+{
+  "name": "CommodityPrice",
+  "type": "object",
+  "properties": {
+    "commodity": {
+      "type": "string",
+      "enum": [
+        "drugs",
+        "weapons",
+        "vehicles",
+        "electronics",
+        "raw_materials",
+        "contraband",
+        "weapons_cache"
+      ]
+    },
+    "current_price": {
+      "type": "number"
+    },
+    "base_price": {
+      "type": "number"
+    },
+    "demand_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "supply_volume": {
+      "type": "number",
+      "default": 100
+    },
+    "price_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "number"
+          },
+          "ts": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "trend": {
+      "type": "string",
+      "enum": [
+        "rising",
+        "falling",
+        "stable",
+        "volatile"
+      ],
+      "default": "stable"
+    },
+    "pct_change": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "commodity",
+    "current_price",
+    "base_price"
+  ]
+}

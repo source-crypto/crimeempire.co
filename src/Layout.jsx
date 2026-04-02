@@ -47,6 +47,9 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Fleet Management', page: 'FleetManagement', icon: Building2 },
     { name: 'Currency Exchange', page: 'CurrencyExchange', icon: DollarSign },
     { name: 'Contract Hits', page: 'ContractHits', icon: Shield },
+    { name: 'Enforcement Center', page: 'EnforcementCenter', icon: Shield },
+    { name: 'Commodity Market', page: 'CommodityMarket', icon: TrendingUp },
+    { name: 'Territory Control', page: 'TerritoryControl', icon: Map },
   ];
 
   const allNavigation = [...mainNavigation, ...moreNavigation];

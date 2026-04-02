@@ -1,0 +1,63 @@
+{
+  "name": "RaidHistory",
+  "type": "object",
+  "properties": {
+    "target_player_id": {
+      "type": "string"
+    },
+    "target_username": {
+      "type": "string"
+    },
+    "raider_player_id": {
+      "type": "string"
+    },
+    "raid_type": {
+      "type": "string",
+      "enum": [
+        "quick_strike",
+        "tactical",
+        "full_operation"
+      ],
+      "default": "tactical"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "active",
+        "success",
+        "failed"
+      ],
+      "default": "planning"
+    },
+    "assets_seized": {
+      "type": "number",
+      "default": 0
+    },
+    "target_enterprise_id": {
+      "type": "string"
+    },
+    "target_enterprise_name": {
+      "type": "string"
+    },
+    "defense_rating": {
+      "type": "number",
+      "default": 0
+    },
+    "police_force": {
+      "type": "number",
+      "default": 0
+    },
+    "outcome_notes": {
+      "type": "string"
+    },
+    "executed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "target_player_id",
+    "raid_type"
+  ]
+}
