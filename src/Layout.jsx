@@ -64,7 +64,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Macro Economics', page: 'MacroEconomics', icon: TrendingUp },
     { name: 'Performance', page: 'Performance', icon: Activity },
     { name: 'Metaverse', page: 'Metaverse', icon: Zap },
-    { name: 'Earnings', page: 'Earnings', icon: Bell },
+    { name: 'Earnings', page: 'Earnings', icon: DollarSign },
     { name: 'Reputation', page: 'Reputation', icon: Crown },
     { name: 'Syndicates', page: 'Syndicates', icon: Users },
     { name: 'Governance', page: 'Governance', icon: Crown },
