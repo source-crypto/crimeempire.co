@@ -1,0 +1,31 @@
+{
+  "name": "DailyStreak",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "current_streak": {
+      "type": "number",
+      "default": 0
+    },
+    "longest_streak": {
+      "type": "number",
+      "default": 0
+    },
+    "last_claimed_date": {
+      "type": "string"
+    },
+    "total_claims": {
+      "type": "number",
+      "default": 0
+    },
+    "claimed_today": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "player_id"
+  ]
+}

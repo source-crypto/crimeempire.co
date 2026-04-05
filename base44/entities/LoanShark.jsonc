@@ -1,0 +1,48 @@
+{
+  "name": "LoanShark",
+  "type": "object",
+  "properties": {
+    "borrower_id": {
+      "type": "string"
+    },
+    "borrower_username": {
+      "type": "string"
+    },
+    "principal": {
+      "type": "number"
+    },
+    "interest_rate": {
+      "type": "number",
+      "default": 0.25
+    },
+    "amount_owed": {
+      "type": "number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paid",
+        "defaulted"
+      ],
+      "default": "active"
+    },
+    "due_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "paid_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "defaulted_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "borrower_id",
+    "principal",
+    "amount_owed"
+  ]
+}

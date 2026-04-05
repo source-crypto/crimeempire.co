@@ -1,17 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { 
         Home, Map, Users, Building2, Car, Gavel, 
-        Settings, Menu, X, Zap, Shield, Bell, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown, Target
+        Settings, Menu, X, Zap, Shield, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown, Target
       } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WantedHUD from './components/wanted/WantedHUD';
+import NotificationBell from './components/notifications/NotificationBell';
+import OnboardingFlow from './components/onboarding/OnboardingFlow';
+import DailyStreakReward from './components/dailyreward/DailyStreakReward';
 import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showStreak, setShowStreak] = useState(false);
+  const [playerForUI, setPlayerForUI] = useState(null);
+
+  React.useEffect(() => {
+    const init = async () => {
+      try {
+        const user = await base44.auth.me();
+        const players = await base44.entities.Player.filter({ created_by: user.email });
+        const p = players[0];
+        if (p) {
+          setPlayerForUI(p);
+          const today = new Date().toDateString();
+          const onboardingDone = localStorage.getItem('onboarding_done');
+          const streakChecked = sessionStorage.getItem('streak_checked_' + today);
+          if (!onboardingDone && !p.username) setShowOnboarding(true);
+          if (!streakChecked) { sessionStorage.setItem('streak_checked_' + today, '1'); setShowStreak(true); }
+        }
+      } catch (e) { /* not logged in */ }
+    };
+    init();
+  }, []);
 
   const mainNavigation = [
     { name: 'Dashboard', page: 'Dashboard', icon: Home },
@@ -50,6 +75,9 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Enforcement Center', page: 'EnforcementCenter', icon: Shield },
     { name: 'Commodity Market', page: 'CommodityMarket', icon: TrendingUp },
     { name: 'Territory Control', page: 'TerritoryControl', icon: Map },
+    { name: 'World Events', page: 'WorldEvents', icon: Zap },
+    { name: 'Street Combat', page: 'DirectCombat', icon: Shield },
+    { name: 'Leaderboard', page: 'SeasonalLeaderboard', icon: Crown },
   ];
 
   const allNavigation = [...mainNavigation, ...moreNavigation];
@@ -157,13 +185,7 @@ export default function Layout({ children, currentPageName }) {
             {/* Right Actions */}
             <div className="flex items-center gap-3">
               <WantedHUD compact />
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-gray-400 hover:text-purple-300"
-              >
-                <Bell className="w-5 h-5" />
-              </Button>
+              <NotificationBell />
               <Button
                 variant="ghost"
                 size="icon"
@@ -211,6 +233,9 @@ export default function Layout({ children, currentPageName }) {
           </div>
         )}
       </nav>
+
+      {showOnboarding && <OnboardingFlow onClose={() => { setShowOnboarding(false); localStorage.setItem('onboarding_done', '1'); }} />}
+      {showStreak && playerForUI && <DailyStreakReward playerData={playerForUI} onClose={() => setShowStreak(false)} />}
 
       {/* Page Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

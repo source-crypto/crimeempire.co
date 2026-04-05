@@ -1,0 +1,71 @@
+{
+  "name": "SeasonalLeaderboard",
+  "type": "object",
+  "properties": {
+    "season_number": {
+      "type": "number"
+    },
+    "season_name": {
+      "type": "string"
+    },
+    "start_date": {
+      "type": "string"
+    },
+    "end_date": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "top_players": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number"
+          },
+          "rank": {
+            "type": "number"
+          },
+          "title_earned": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "top_crews": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "crew_id": {
+            "type": "string"
+          },
+          "crew_name": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number"
+          },
+          "rank": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "season_number",
+    "season_name"
+  ]
+}

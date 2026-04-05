@@ -48,6 +48,9 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import AIEmployees from './pages/AIEmployees';
+import WorldEvents from './pages/WorldEvents';
+import DirectCombat from './pages/DirectCombat';
+import SeasonalLeaderboard from './pages/SeasonalLeaderboard';
 import EnforcementCenter from './pages/EnforcementCenter';
 import CommodityMarket from './pages/CommodityMarket';
 import TerritoryControl from './pages/TerritoryControl';
@@ -102,6 +105,9 @@ import __Layout from './Layout.jsx';
 
 export const PAGES = {
     "AIEmployees": AIEmployees,
+    "WorldEvents": WorldEvents,
+    "DirectCombat": DirectCombat,
+    "SeasonalLeaderboard": SeasonalLeaderboard,
     "EnforcementCenter": EnforcementCenter,
     "CommodityMarket": CommodityMarket,
     "TerritoryControl": TerritoryControl,

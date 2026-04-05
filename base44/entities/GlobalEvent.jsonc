@@ -1,0 +1,53 @@
+{
+  "name": "GlobalEvent",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "police_crackdown",
+        "market_crash",
+        "market_surge",
+        "gang_war",
+        "supply_shortage",
+        "opportunity"
+      ],
+      "default": "market_surge"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "effect_type": {
+      "type": "string"
+    },
+    "effect_value": {
+      "type": "number",
+      "default": 0
+    },
+    "duration_hours": {
+      "type": "number",
+      "default": 2
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "affected_commodity": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "title",
+    "event_type"
+  ]
+}

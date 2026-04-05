@@ -1,0 +1,48 @@
+{
+  "name": "Achievement",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "achievement_key": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "xp_reward": {
+      "type": "number",
+      "default": 100
+    },
+    "cash_reward": {
+      "type": "number",
+      "default": 0
+    },
+    "rarity": {
+      "type": "string",
+      "enum": [
+        "common",
+        "rare",
+        "epic",
+        "legendary"
+      ],
+      "default": "common"
+    },
+    "unlocked_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "player_id",
+    "achievement_key",
+    "title"
+  ]
+}
