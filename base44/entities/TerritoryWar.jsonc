@@ -1,0 +1,118 @@
+{
+  "name": "TerritoryWar",
+  "type": "object",
+  "properties": {
+    "territory_id": {
+      "type": "string"
+    },
+    "territory_name": {
+      "type": "string"
+    },
+    "attacker_crew_id": {
+      "type": "string"
+    },
+    "attacker_crew_name": {
+      "type": "string"
+    },
+    "defender_crew_id": {
+      "type": "string"
+    },
+    "defender_crew_name": {
+      "type": "string"
+    },
+    "war_score_attacker": {
+      "type": "number",
+      "default": 0
+    },
+    "war_score_defender": {
+      "type": "number",
+      "default": 0
+    },
+    "attacker_influence_pct": {
+      "type": "number",
+      "default": 0
+    },
+    "defender_influence_pct": {
+      "type": "number",
+      "default": 100
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "ended",
+        "lockdown"
+      ],
+      "default": "active"
+    },
+    "winner_crew_id": {
+      "type": "string"
+    },
+    "winner_crew_name": {
+      "type": "string"
+    },
+    "ticks_elapsed": {
+      "type": "number",
+      "default": 0
+    },
+    "max_ticks": {
+      "type": "number",
+      "default": 6,
+      "description": "6 ticks = 1 hour war"
+    },
+    "attacker_top_contributor_id": {
+      "type": "string"
+    },
+    "defender_top_contributor_id": {
+      "type": "string"
+    },
+    "economic_damage": {
+      "type": "number",
+      "default": 0
+    },
+    "heat_generated": {
+      "type": "number",
+      "default": 0
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ended_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "action_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "player_name": {
+            "type": "string"
+          },
+          "crew_id": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "score": {
+            "type": "number"
+          },
+          "ts": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "territory_id",
+    "attacker_crew_id",
+    "defender_crew_id"
+  ]
+}

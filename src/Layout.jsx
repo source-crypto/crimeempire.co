@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { 
         Home, Map, Users, Building2, Car, Gavel, 
-        Settings, Menu, X, Zap, Shield, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown, Target
+        Settings, Menu, X, Zap, Shield, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown, Target, Swords
       } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WantedHUD from './components/wanted/WantedHUD';
@@ -78,6 +78,8 @@ export default function Layout({ children, currentPageName }) {
     { name: 'World Events', page: 'WorldEvents', icon: Zap },
     { name: 'Street Combat', page: 'DirectCombat', icon: Shield },
     { name: 'Leaderboard', page: 'SeasonalLeaderboard', icon: Crown },
+    { name: 'Gang War', page: 'GangWar', icon: Swords },
+    { name: 'World Tick Engine', page: 'WorldTickDashboard', icon: Activity },
   ];
 
   const allNavigation = [...mainNavigation, ...moreNavigation];

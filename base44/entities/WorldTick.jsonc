@@ -1,0 +1,94 @@
+{
+  "name": "WorldTick",
+  "type": "object",
+  "properties": {
+    "tick_number": {
+      "type": "number",
+      "description": "Sequential tick counter"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "running",
+        "completed",
+        "failed"
+      ],
+      "default": "running"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration_ms": {
+      "type": "number",
+      "default": 0
+    },
+    "enterprises_processed": {
+      "type": "number",
+      "default": 0
+    },
+    "players_processed": {
+      "type": "number",
+      "default": 0
+    },
+    "territories_processed": {
+      "type": "number",
+      "default": 0
+    },
+    "wars_processed": {
+      "type": "number",
+      "default": 0
+    },
+    "market_items_updated": {
+      "type": "number",
+      "default": 0
+    },
+    "total_income_distributed": {
+      "type": "number",
+      "default": 0
+    },
+    "total_production_generated": {
+      "type": "number",
+      "default": 0
+    },
+    "events_triggered": {
+      "type": "number",
+      "default": 0
+    },
+    "error_log": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "phase_timings": {
+      "type": "object",
+      "properties": {
+        "enterprise_ms": {
+          "type": "number"
+        },
+        "heat_decay_ms": {
+          "type": "number"
+        },
+        "market_ms": {
+          "type": "number"
+        },
+        "territory_ms": {
+          "type": "number"
+        },
+        "gang_wars_ms": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "required": [
+    "tick_number",
+    "status"
+  ]
+}

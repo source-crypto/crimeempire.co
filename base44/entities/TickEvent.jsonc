@@ -1,0 +1,56 @@
+{
+  "name": "TickEvent",
+  "type": "object",
+  "properties": {
+    "tick_id": {
+      "type": "string"
+    },
+    "tick_number": {
+      "type": "number"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "enterprise_production",
+        "heat_decay",
+        "market_update",
+        "territory_income",
+        "gang_war_update",
+        "gang_war_ended",
+        "gang_war_started",
+        "global_event_triggered",
+        "raid_triggered",
+        "error"
+      ]
+    },
+    "entity_id": {
+      "type": "string",
+      "description": "ID of affected entity"
+    },
+    "entity_name": {
+      "type": "string"
+    },
+    "player_id": {
+      "type": "string"
+    },
+    "before_value": {
+      "type": "number"
+    },
+    "after_value": {
+      "type": "number"
+    },
+    "delta": {
+      "type": "number"
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "phase": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "tick_id",
+    "event_type"
+  ]
+}
