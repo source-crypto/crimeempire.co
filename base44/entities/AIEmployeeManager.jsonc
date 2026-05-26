@@ -1,0 +1,98 @@
+{
+  "name": "AIEmployeeManager",
+  "type": "object",
+  "properties": {
+    "base_id": {
+      "type": "string",
+      "description": "Player base this AI employee works in"
+    },
+    "facility_id": {
+      "type": "string",
+      "description": "Specific facility being managed"
+    },
+    "facility_type": {
+      "type": "string",
+      "description": "Type of facility (storage, workshop, etc.)"
+    },
+    "ai_name": {
+      "type": "string",
+      "description": "AI employee name/designation"
+    },
+    "skill": {
+      "type": "string",
+      "description": "AI specialization skill"
+    },
+    "skill_level": {
+      "type": "number",
+      "default": 1,
+      "description": "AI skill level 1-10"
+    },
+    "passive_income_rate": {
+      "type": "number",
+      "default": 500,
+      "description": "Income generated per hour"
+    },
+    "resource_bonus": {
+      "type": "string",
+      "description": "Description of resource bonuses provided"
+    },
+    "efficiency": {
+      "type": "number",
+      "default": 100,
+      "description": "Operational efficiency 0-100"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "idle",
+        "offline",
+        "upgrading"
+      ],
+      "default": "active"
+    },
+    "system_instructions": {
+      "type": "string",
+      "description": "Custom instructions for this AI employee's behavior"
+    },
+    "schedule_type": {
+      "type": "string",
+      "enum": [
+        "interval",
+        "cron"
+      ],
+      "default": "interval",
+      "description": "How this employee's tasks are scheduled"
+    },
+    "schedule_interval_mins": {
+      "type": "number",
+      "default": 60,
+      "description": "Task interval in minutes (when schedule_type=interval)"
+    },
+    "schedule_cron": {
+      "type": "string",
+      "default": "0 * * * *",
+      "description": "Cron expression for scheduling (when schedule_type=cron)"
+    },
+    "last_collection": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time income was collected"
+    },
+    "accumulated_income": {
+      "type": "number",
+      "default": 0,
+      "description": "Income pending collection"
+    },
+    "total_earned": {
+      "type": "number",
+      "default": 0,
+      "description": "Lifetime earnings generated"
+    }
+  },
+  "required": [
+    "base_id",
+    "facility_id",
+    "ai_name"
+  ]
+}

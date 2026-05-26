@@ -53,15 +53,13 @@ export default function EnterpriseResearchTree({ enterprise, playerData }) {
   const [selectedResearch, setSelectedResearch] = useState(null);
   const queryClient = useQueryClient();
 
-  if (!enterprise || !playerData) {
-    return null;
-  }
-
   const { data: research = [] } = useQuery({
     queryKey: ['enterpriseResearch', enterprise.id],
     queryFn: () => base44.entities.EnterpriseResearch.filter({ enterprise_id: enterprise.id }),
     refetchInterval: 30000
   });
+
+  if (!enterprise || !playerData) return null;
 
   const initializeResearchMutation = useMutation({
     mutationFn: async () => {

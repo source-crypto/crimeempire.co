@@ -38,11 +38,7 @@ export default function ResearchTreeSystem({ enterprise, playerData }) {
   const [selectedResearch, setSelectedResearch] = useState(null);
   const queryClient = useQueryClient();
 
-  if (!enterprise || !playerData) {
-    return null;
-  }
-
-  const availableResearch = researchTrees[enterprise.type] || [];
+  const availableResearch = researchTrees[enterprise?.type] || [];
 
   const { data: completedResearch = [], isLoading } = useQuery({
     queryKey: ['enterpriseResearch', enterprise.id],
@@ -62,6 +58,8 @@ export default function ResearchTreeSystem({ enterprise, playerData }) {
       return research[0] || null;
     }
   });
+
+  if (!enterprise || !playerData) return null;
 
   const getAISuggestionMutation = useMutation({
     mutationFn: async () => {

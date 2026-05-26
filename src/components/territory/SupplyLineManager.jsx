@@ -19,17 +19,6 @@ export default function SupplyLineManager({ crewId, canManage }) {
   const [toTerritory, setToTerritory] = useState('');
   const queryClient = useQueryClient();
 
-  if (!crewId) {
-    return (
-      <Card className="glass-panel border-purple-500/20">
-        <CardContent className="p-8 text-center text-gray-400">
-          <LinkIcon className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p>Join a crew to manage supply lines</p>
-        </CardContent>
-      </Card>
-    );
-  }
-
   const { data: territories = [] } = useQuery({
     queryKey: ['crewTerritories', crewId],
     queryFn: () => base44.entities.Territory.filter({ controlling_crew_id: crewId }),
@@ -41,6 +30,15 @@ export default function SupplyLineManager({ crewId, canManage }) {
     queryFn: () => base44.entities.SupplyLine.filter({ crew_id: crewId }),
     enabled: !!crewId
   });
+
+  if (!crewId) return (
+    <Card className="glass-panel border-purple-500/20">
+      <CardContent className="p-8 text-center text-gray-400">
+        <LinkIcon className="w-12 h-12 mx-auto mb-3 opacity-30" />
+        <p>Join a crew to manage supply lines</p>
+      </CardContent>
+    </Card>
+  );
 
   const createSupplyLineMutation = useMutation({
     mutationFn: async () => {

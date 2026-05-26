@@ -12,10 +12,6 @@ export default function SmartRouteOptimizer({ crewId, playerData }) {
   const [routeSuggestions, setRouteSuggestions] = useState(null);
   const queryClient = useQueryClient();
 
-  if (!crewId || !playerData) {
-    return null;
-  }
-
   const { data: territories = [] } = useQuery({
     queryKey: ['crewTerritories', crewId],
     queryFn: () => base44.entities.Territory.filter({ controlling_crew_id: crewId })
@@ -46,6 +42,8 @@ export default function SmartRouteOptimizer({ crewId, playerData }) {
     queryKey: ['supplyRoutes', crewId],
     queryFn: () => base44.entities.SupplyRoute.filter({ crew_id: crewId })
   });
+
+  if (!crewId || !playerData) return null;
 
   const analyzeRoutesMutation = useMutation({
     mutationFn: async () => {

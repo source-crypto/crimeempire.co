@@ -20,20 +20,22 @@ export default function NPCInteractionSystem({ territoryId, playerData }) {
   const [generating, setGenerating] = useState(false);
   const queryClient = useQueryClient();
 
-  if (!territoryId || !playerData) return null;
-
   const { data: territory } = useQuery({
     queryKey: ['territory', territoryId],
     queryFn: async () => {
       const territories = await base44.entities.Territory.filter({ id: territoryId });
       return territories[0];
-    }
+    },
+    enabled: !!territoryId && !!playerData
   });
 
   const { data: npcs = [] } = useQuery({
     queryKey: ['npcs', territoryId],
-    queryFn: () => base44.entities.NPCContact.filter({ territory_id: territoryId })
+    queryFn: () => base44.entities.NPCContact.filter({ territory_id: territoryId }),
+    enabled: !!territoryId && !!playerData
   });
+
+  if (!territoryId || !playerData) return null;
 
   const generateNPCMutation = useMutation({
     mutationFn: async () => {

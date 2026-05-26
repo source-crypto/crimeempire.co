@@ -29,15 +29,13 @@ const memberTypeColors = {
 export default function CrewRecruitmentSystem({ crewId, playerData }) {
   const queryClient = useQueryClient();
 
-  if (!crewId || !playerData) {
-    return null;
-  }
-
   const { data: crewMembers = [] } = useQuery({
     queryKey: ['crewMembers', crewId],
     queryFn: () => base44.entities.CrewMember.filter({ crew_id: crewId }),
     enabled: !!crewId
   });
+
+  if (!crewId || !playerData) return null;
 
   const generateRecruitMutation = useMutation({
     mutationFn: async () => {

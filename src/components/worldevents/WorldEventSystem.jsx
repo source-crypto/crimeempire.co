@@ -28,15 +28,13 @@ const severityColors = {
 export default function WorldEventSystem({ playerData }) {
   const queryClient = useQueryClient();
 
-  if (!playerData) {
-    return null;
-  }
-
   const { data: activeEvents = [] } = useQuery({
     queryKey: ['worldEvents', 'active'],
     queryFn: () => base44.entities.WorldEvent.filter({ status: 'active' }),
     refetchInterval: 30000
   });
+
+  if (!playerData) return null;
 
   const generateEventMutation = useMutation({
     mutationFn: async () => {

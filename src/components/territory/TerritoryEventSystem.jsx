@@ -29,14 +29,11 @@ export default function TerritoryEventSystem({ territoryId, playerData }) {
   const [generatingEvent, setGeneratingEvent] = useState(false);
   const queryClient = useQueryClient();
 
-  if (!territoryId || !playerData) {
-    return null;
-  }
-
   const { data: events = [], isLoading } = useQuery({
     queryKey: ['territoryEvents', territoryId],
     queryFn: () => base44.entities.TerritoryEvent.filter({ territory_id: territoryId, status: 'active' }),
-    refetchInterval: 30000
+    refetchInterval: 30000,
+    enabled: !!territoryId && !!playerData
   });
 
   const { data: territory } = useQuery({
@@ -44,15 +41,19 @@ export default function TerritoryEventSystem({ territoryId, playerData }) {
     queryFn: async () => {
       const territories = await base44.entities.Territory.filter({ id: territoryId });
       return territories[0];
-    }
+    },
+    enabled: !!territoryId && !!playerData
   });
 
   const { data: enterprises = [] } = useQuery({
     queryKey: ['territoryEnterprises', territoryId],
     queryFn: async () => {
       return await base44.entities.CriminalEnterprise.list();
-    }
+    },
+    enabled: !!territoryId && !!playerData
   });
+
+  if (!territoryId || !playerData) return null;
 
   const generateEventMutation = useMutation({
     mutationFn: async () => {

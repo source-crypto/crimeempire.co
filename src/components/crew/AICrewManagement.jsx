@@ -16,21 +16,22 @@ export default function AICrewManagement({ crewId, playerData }) {
   const [selectedTarget, setSelectedTarget] = useState('');
   const queryClient = useQueryClient();
 
-  if (!crewId || !playerData) return null;
-
   const { data: crewMembers = [] } = useQuery({
     queryKey: ['crewMembers', crewId],
-    queryFn: () => base44.entities.CrewMember.filter({ crew_id: crewId })
+    queryFn: () => base44.entities.CrewMember.filter({ crew_id: crewId }),
+    enabled: !!crewId && !!playerData
   });
 
   const { data: assignments = [] } = useQuery({
     queryKey: ['crewAssignments', crewId],
-    queryFn: () => base44.entities.CrewAssignment.filter({ crew_id: crewId, status: 'active' })
+    queryFn: () => base44.entities.CrewAssignment.filter({ crew_id: crewId, status: 'active' }),
+    enabled: !!crewId && !!playerData
   });
 
   const { data: territories = [] } = useQuery({
     queryKey: ['territories', crewId],
-    queryFn: () => base44.entities.Territory.filter({ controlling_crew_id: crewId })
+    queryFn: () => base44.entities.Territory.filter({ controlling_crew_id: crewId }),
+    enabled: !!crewId && !!playerData
   });
 
   const { data: enterprises = [] } = useQuery({
@@ -38,8 +39,11 @@ export default function AICrewManagement({ crewId, playerData }) {
     queryFn: async () => {
       const allEnterprises = await base44.entities.CriminalEnterprise.list();
       return allEnterprises.filter(e => e.crew_id === crewId);
-    }
+    },
+    enabled: !!crewId && !!playerData
   });
+
+  if (!crewId || !playerData) return null;
 
   const optimizeAssignmentsMutation = useMutation({
     mutationFn: async () => {

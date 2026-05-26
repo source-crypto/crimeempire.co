@@ -269,7 +269,7 @@ export default function TerritoryResourceManager({ territory, playerData }) {
       </Card>
 
       {/* Revenue Trend Chart */}
-      {revenueHistory.length > 0 && (
+      {false && (
         <Card className="glass-panel border-purple-500/20">
           <CardHeader className="border-b border-purple-500/20">
             <CardTitle className="text-white flex items-center gap-2">

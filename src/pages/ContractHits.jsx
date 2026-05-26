@@ -32,6 +32,19 @@ const STATUS_COLORS = {
   cancelled: 'bg-gray-700',
 };
 
+function BountyInput({ hit, addBounty }) {
+  const [addAmt, setAddAmt] = useState('');
+  return (
+    <div className="flex gap-2 items-center">
+      <input type="number" value={addAmt} onChange={e => setAddAmt(e.target.value)}
+        placeholder="Add to bounty..." className="flex-1 bg-slate-800 border border-gray-600 text-white rounded p-2 text-sm" />
+      <Button size="sm" className="bg-red-700 hover:bg-red-600" onClick={() => { addBounty.mutate({ hitId: hit.id, amount: Number(addAmt), hit }); setAddAmt(''); }}>
+        <DollarSign className="w-3 h-3 mr-1" /> Increase
+      </Button>
+    </div>
+  );
+}
+
 export default function ContractHits() {
   const queryClient = useQueryClient();
   const [hitType, setHitType] = useState('tag');
@@ -214,7 +227,6 @@ export default function ContractHits() {
             openHits.filter(h => !h.is_silent).map(hit => {
               const htType = HIT_TYPES.find(h => h.value === hit.hit_type);
               const topContrib = (hit.contributors || []).sort((a, b) => b.amount - a.amount)[0];
-              const [addAmt, setAddAmt] = useState('');
               return (
                 <Card key={hit.id} className={`glass-panel border ${hit.hit_type === 'eliminate' ? 'border-red-500/40' : 'border-yellow-500/20'}`}>
                   <CardContent className="p-4">
@@ -233,13 +245,7 @@ export default function ContractHits() {
                     </div>
                     {topContrib && <p className="text-xs text-gray-500 mb-3">Top bidder: {topContrib.username} (${topContrib.amount?.toLocaleString()})</p>}
                     {hit.priority_boost && <Badge className="bg-orange-600 mb-2">⚡ Priority</Badge>}
-                    <div className="flex gap-2 items-center">
-                      <input type="number" value={addAmt} onChange={e => setAddAmt(e.target.value)}
-                        placeholder="Add to bounty..." className="flex-1 bg-slate-800 border border-gray-600 text-white rounded p-2 text-sm" />
-                      <Button size="sm" className="bg-red-700 hover:bg-red-600" onClick={() => { addBounty.mutate({ hitId: hit.id, amount: Number(addAmt), hit }); setAddAmt(''); }}>
-                        <DollarSign className="w-3 h-3 mr-1" /> Increase
-                      </Button>
-                    </div>
+                    <BountyInput hit={hit} addBounty={addBounty} />
                   </CardContent>
                 </Card>
               );

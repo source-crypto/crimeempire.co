@@ -21,10 +21,6 @@ export default function SmuggleRouteOptimizer({ crewId, playerData }) {
   const [selectedRoute, setSelectedRoute] = useState(null);
   const queryClient = useQueryClient();
 
-  if (!crewId || !playerData) {
-    return null;
-  }
-
   const { data: territories = [] } = useQuery({
     queryKey: ['crewTerritories', crewId],
     queryFn: () => base44.entities.Territory.filter({ controlling_crew_id: crewId })
@@ -34,6 +30,8 @@ export default function SmuggleRouteOptimizer({ crewId, playerData }) {
     queryKey: ['smuggleRoutes', crewId],
     queryFn: () => base44.entities.SmuggleRoute.filter({ crew_id: crewId }, '-created_date')
   });
+
+  if (!crewId || !playerData) return null;
 
   const generateRoutesMutation = useMutation({
     mutationFn: async ({ fromTerritoryId, toTerritoryId }) => {

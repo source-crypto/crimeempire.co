@@ -31,10 +31,6 @@ const eventColors = {
 export default function EnterpriseManagementSystem({ enterprise, playerData }) {
   const queryClient = useQueryClient();
 
-  if (!enterprise || !playerData) {
-    return null;
-  }
-
   const { data: enterpriseEvents = [] } = useQuery({
     queryKey: ['enterpriseEvents', enterprise?.id],
     queryFn: () => base44.entities.EnterpriseEvent.filter({ 
@@ -43,6 +39,8 @@ export default function EnterpriseManagementSystem({ enterprise, playerData }) {
     }),
     enabled: !!enterprise
   });
+
+  if (!enterprise || !playerData) return null;
 
   const generateEventMutation = useMutation({
     mutationFn: async () => {

@@ -22,15 +22,13 @@ export default function TerritoryDevelopmentSystem({ territory, playerData }) {
   const [selectedType, setSelectedType] = useState('black_market');
   const queryClient = useQueryClient();
 
-  if (!playerData || !territory) {
-    return null;
-  }
-
   const { data: developments = [] } = useQuery({
     queryKey: ['territoryDevelopments', territory?.id],
     queryFn: () => base44.entities.TerritoryDevelopment.filter({ territory_id: territory.id }),
     enabled: !!territory
   });
+
+  if (!playerData || !territory) return null;
 
   const buildDevelopmentMutation = useMutation({
     mutationFn: async (devType) => {
