@@ -59,8 +59,6 @@ export default function EnterpriseResearchTree({ enterprise, playerData }) {
     refetchInterval: 30000
   });
 
-  if (!enterprise || !playerData) return null;
-
   const initializeResearchMutation = useMutation({
     mutationFn: async () => {
       const templates = researchTemplates[enterprise.type] || [];
@@ -189,6 +187,8 @@ Provide 3 ranked recommendations with clear reasoning.`;
       toast.error(error.message);
     }
   });
+
+  if (!enterprise || !playerData) return null;
 
   const completeResearch = async (researchId, researchItem) => {
     await base44.entities.EnterpriseResearch.update(researchId, {

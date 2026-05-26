@@ -43,8 +43,6 @@ export default function SmartRouteOptimizer({ crewId, playerData }) {
     queryFn: () => base44.entities.SupplyRoute.filter({ crew_id: crewId })
   });
 
-  if (!crewId || !playerData) return null;
-
   const analyzeRoutesMutation = useMutation({
     mutationFn: async () => {
       setAnalyzing(true);
@@ -177,6 +175,8 @@ For each route:
       toast.error(error.message);
     }
   });
+
+  if (!crewId || !playerData) return null;
 
   const getRiskColor = (risk) => {
     if (risk < 30) return 'text-green-400';

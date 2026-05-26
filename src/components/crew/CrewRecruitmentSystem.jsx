@@ -35,8 +35,6 @@ export default function CrewRecruitmentSystem({ crewId, playerData }) {
     enabled: !!crewId
   });
 
-  if (!crewId || !playerData) return null;
-
   const generateRecruitMutation = useMutation({
     mutationFn: async () => {
       const prompt = `Generate an AI crew member for recruitment:
@@ -152,6 +150,8 @@ Make them interesting and valuable. Return JSON.`;
       toast.error(error.message);
     }
   });
+
+  if (!crewId || !playerData) return null;
 
   return (
     <div className="space-y-4">

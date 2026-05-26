@@ -40,8 +40,6 @@ export default function EnterpriseManagementSystem({ enterprise, playerData }) {
     enabled: !!enterprise
   });
 
-  if (!enterprise || !playerData) return null;
-
   const generateEventMutation = useMutation({
     mutationFn: async () => {
       const prompt = `Generate a random event for a ${enterprise.type} enterprise:
@@ -178,6 +176,8 @@ Make it relevant to the enterprise type. Return JSON.`;
       toast.error(error.message);
     }
   });
+
+  if (!enterprise || !playerData) return null;
 
   return (
     <div className="space-y-4">

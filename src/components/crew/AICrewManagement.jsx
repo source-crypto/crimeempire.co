@@ -43,8 +43,6 @@ export default function AICrewManagement({ crewId, playerData }) {
     enabled: !!crewId && !!playerData
   });
 
-  if (!crewId || !playerData) return null;
-
   const optimizeAssignmentsMutation = useMutation({
     mutationFn: async () => {
       setOptimizing(true);
@@ -246,6 +244,8 @@ Generate a personalized training curriculum with exercises, duration, and expect
       toast.error(error.message);
     }
   });
+
+  if (!crewId || !playerData) return null;
 
   return (
     <div className="space-y-4">

@@ -31,15 +31,6 @@ export default function SupplyLineManager({ crewId, canManage }) {
     enabled: !!crewId
   });
 
-  if (!crewId) return (
-    <Card className="glass-panel border-purple-500/20">
-      <CardContent className="p-8 text-center text-gray-400">
-        <LinkIcon className="w-12 h-12 mx-auto mb-3 opacity-30" />
-        <p>Join a crew to manage supply lines</p>
-      </CardContent>
-    </Card>
-  );
-
   const createSupplyLineMutation = useMutation({
     mutationFn: async () => {
       if (!fromTerritory || !toTerritory) {
@@ -106,6 +97,15 @@ export default function SupplyLineManager({ crewId, canManage }) {
       toast.success('Security upgraded');
     }
   });
+
+  if (!crewId) return (
+    <Card className="glass-panel border-purple-500/20">
+      <CardContent className="p-8 text-center text-gray-400">
+        <LinkIcon className="w-12 h-12 mx-auto mb-3 opacity-30" />
+        <p>Join a crew to manage supply lines</p>
+      </CardContent>
+    </Card>
+  );
 
   return (
     <div className="space-y-4">

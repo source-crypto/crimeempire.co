@@ -35,8 +35,6 @@ export default function NPCInteractionSystem({ territoryId, playerData }) {
     enabled: !!territoryId && !!playerData
   });
 
-  if (!territoryId || !playerData) return null;
-
   const generateNPCMutation = useMutation({
     mutationFn: async () => {
       setGenerating(true);
@@ -156,6 +154,8 @@ Make it immersive and fitting for the territory.`;
       toast.error(error.message);
     }
   });
+
+  if (!territoryId || !playerData) return null;
 
   return (
     <Card className="glass-panel border-purple-500/20">

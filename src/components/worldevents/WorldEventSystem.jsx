@@ -34,8 +34,6 @@ export default function WorldEventSystem({ playerData }) {
     refetchInterval: 30000
   });
 
-  if (!playerData) return null;
-
   const generateEventMutation = useMutation({
     mutationFn: async () => {
       const prompt = `Generate a major world event for a crime game:
@@ -137,6 +135,8 @@ Make it feel like a major event that affects the entire game world. Return JSON.
       toast.success('Event participation recorded!');
     }
   });
+
+  if (!playerData) return null;
 
   return (
     <Card className="glass-panel border-red-500/20">

@@ -31,8 +31,6 @@ export default function SmuggleRouteOptimizer({ crewId, playerData }) {
     queryFn: () => base44.entities.SmuggleRoute.filter({ crew_id: crewId }, '-created_date')
   });
 
-  if (!crewId || !playerData) return null;
-
   const generateRoutesMutation = useMutation({
     mutationFn: async ({ fromTerritoryId, toTerritoryId }) => {
       const fromTerritory = territories.find(t => t.id === fromTerritoryId);
@@ -220,6 +218,8 @@ Make routes strategically interesting and varied!`;
       }
     }
   });
+
+  if (!crewId || !playerData) return null;
 
   const getRiskLevel = (score) => {
     if (score < 30) return 'low';

@@ -59,8 +59,6 @@ export default function ResearchTreeSystem({ enterprise, playerData }) {
     }
   });
 
-  if (!enterprise || !playerData) return null;
-
   const getAISuggestionMutation = useMutation({
     mutationFn: async () => {
       const prompt = `Analyze research options for ${enterprise.name} (${enterprise.type}).
@@ -194,6 +192,8 @@ Recommend the TOP 3 research priorities based on ROI, synergies, and player prog
       toast.success('Research completed!');
     }
   });
+
+  if (!enterprise || !playerData) return null;
 
   const getResearchStatus = (research) => {
     if (activeResearch?.research_node === research.node) return 'active';

@@ -53,8 +53,6 @@ export default function TerritoryEventSystem({ territoryId, playerData }) {
     enabled: !!territoryId && !!playerData
   });
 
-  if (!territoryId || !playerData) return null;
-
   const generateEventMutation = useMutation({
     mutationFn: async () => {
       setGeneratingEvent(true);
@@ -181,6 +179,8 @@ Make it realistic and impactful.`;
       toast.error(error.message || 'Failed to resolve event');
     }
   });
+
+  if (!territoryId || !playerData) return null;
 
   return (
     <div className="space-y-4">

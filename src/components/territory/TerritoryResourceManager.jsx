@@ -8,7 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { 
-  Package, TrendingUp, Truck, Factory, Coins, 
+  Package, Truck, Factory, Coins, 
   ArrowRightLeft, Loader2, AlertCircle 
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -268,39 +268,7 @@ export default function TerritoryResourceManager({ territory, playerData }) {
         </CardContent>
       </Card>
 
-      {/* Revenue Trend Chart */}
-      {false && (
-        <Card className="glass-panel border-purple-500/20">
-          <CardHeader className="border-b border-purple-500/20">
-            <CardTitle className="text-white flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-purple-400" />
-              Territory Revenue Performance
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-4">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <div className="p-3 rounded-lg bg-slate-900/30 border border-purple-500/10">
-                <p className="text-xs text-gray-400 mb-1">Peak Daily Revenue</p>
-                <p className="text-xl font-bold text-green-400">
-                  ${Math.max(...revenueHistory.map(d => d.revenue)).toLocaleString()}
-                </p>
-              </div>
-              <div className="p-3 rounded-lg bg-slate-900/30 border border-purple-500/10">
-                <p className="text-xs text-gray-400 mb-1">Average Daily</p>
-                <p className="text-xl font-bold text-cyan-400">
-                  ${Math.floor(revenueHistory.reduce((sum, d) => sum + d.revenue, 0) / revenueHistory.length).toLocaleString()}
-                </p>
-              </div>
-              <div className="p-3 rounded-lg bg-slate-900/30 border border-purple-500/10">
-                <p className="text-xs text-gray-400 mb-1">7-Day Total</p>
-                <p className="text-xl font-bold text-purple-400">
-                  ${revenueHistory.reduce((sum, d) => sum + d.revenue, 0).toLocaleString()}
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+
     </div>
   );
 }

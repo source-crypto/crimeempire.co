@@ -28,8 +28,6 @@ export default function TerritoryDevelopmentSystem({ territory, playerData }) {
     enabled: !!territory
   });
 
-  if (!playerData || !territory) return null;
-
   const buildDevelopmentMutation = useMutation({
     mutationFn: async (devType) => {
       const type = developmentTypes[devType];
@@ -86,6 +84,8 @@ export default function TerritoryDevelopmentSystem({ territory, playerData }) {
       toast.success('Development completed!');
     }
   });
+
+  if (!playerData || !territory) return null;
 
   return (
     <Card className="glass-panel border-cyan-500/20">

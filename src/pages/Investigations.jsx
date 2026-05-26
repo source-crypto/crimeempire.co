@@ -492,7 +492,7 @@ export default function InvestigationsPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <h3 className="text-white font-semibold">{inv.case_title}</h3>
                     <Badge className={getPriorityColor(inv.priority)}>{inv.priority}</Badge>
-                    <Badge className="bg-purple-600">{inv.investigation_type.replace('_', ' ')}</Badge>
+                    <Badge className="bg-purple-600">{(inv.investigation_type || '').replace('_', ' ')}</Badge>
                   </div>
                   <div className="flex items-center gap-4 text-xs text-gray-400">
                     <span>Target: {inv.target_player_username}</span>
