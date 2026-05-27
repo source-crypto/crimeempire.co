@@ -47,6 +47,7 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import CrewTechTree from './pages/CrewTechTree';
 import AIEmployees from './pages/AIEmployees';
 import WorldEvents from './pages/WorldEvents';
 import DirectCombat from './pages/DirectCombat';
@@ -105,6 +106,7 @@ import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "CrewTechTree": CrewTechTree,
     "AIEmployees": AIEmployees,
     "WorldEvents": WorldEvents,
     "DirectCombat": DirectCombat,

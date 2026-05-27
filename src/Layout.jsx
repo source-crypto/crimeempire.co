@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { 
         Home, Map, Users, Building2, Car, Gavel, 
-        Settings, Menu, X, Zap, Shield, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown, Target
+        Settings, Menu, X, Zap, Shield, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown, Target, Cpu
       } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WantedHUD from './components/wanted/WantedHUD';
@@ -77,6 +77,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Territory Control', page: 'TerritoryControl', icon: Map },
     { name: 'World Events', page: 'WorldEvents', icon: Zap },
     { name: 'Street Combat', page: 'DirectCombat', icon: Shield },
+    { name: 'Crew Tech Tree', page: 'CrewTechTree', icon: Cpu },
     { name: 'Leaderboard', page: 'SeasonalLeaderboard', icon: Crown },
     { name: '⚙️ World Tick', page: 'WorldTickMonitor', icon: Activity },
   ];

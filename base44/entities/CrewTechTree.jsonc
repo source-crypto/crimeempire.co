@@ -1,0 +1,82 @@
+{
+  "name": "CrewTechTree",
+  "type": "object",
+  "properties": {
+    "crew_id": {
+      "type": "string"
+    },
+    "node_id": {
+      "type": "string",
+      "description": "Unique tech node identifier"
+    },
+    "node_name": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "infiltration",
+        "transport",
+        "legal",
+        "combat",
+        "intelligence",
+        "economy"
+      ]
+    },
+    "tier": {
+      "type": "number",
+      "default": 1
+    },
+    "level": {
+      "type": "number",
+      "default": 1
+    },
+    "max_level": {
+      "type": "number",
+      "default": 3
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "locked",
+        "available",
+        "researching",
+        "unlocked"
+      ],
+      "default": "locked"
+    },
+    "cost_per_level": {
+      "type": "number"
+    },
+    "total_invested": {
+      "type": "number",
+      "default": 0
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "bonuses": {
+      "type": "object"
+    },
+    "description": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "unlocked_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "crew_id",
+    "node_id",
+    "node_name",
+    "category"
+  ]
+}
