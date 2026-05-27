@@ -5,98 +5,53 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Progress } from '@/components/ui/progress';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import HeistSimulation from './HeistSimulation';
 import {
-  Users, Target, AlertTriangle, CheckCircle, Loader2, Sparkles
+  Users, Target, AlertTriangle, CheckCircle, Loader2,
+  ArrowLeft, Swords, Eye, Car, Brain, MessageSquare, Zap
 } from 'lucide-react';
 import { toast } from 'sonner';
+
+const SKILL_ICONS = {
+  combat: <Swords className="w-3 h-3" />,
+  stealth: <Eye className="w-3 h-3" />,
+  driving: <Car className="w-3 h-3" />,
+  hacking: <Zap className="w-3 h-3" />,
+  leadership: <Brain className="w-3 h-3" />,
+  negotiation: <MessageSquare className="w-3 h-3" />,
+};
+
+const SKILL_COLOR = {
+  combat: 'text-red-400',
+  stealth: 'text-purple-400',
+  driving: 'text-cyan-400',
+  hacking: 'text-yellow-400',
+  leadership: 'text-green-400',
+  negotiation: 'text-blue-400',
+};
 
 export default function HeistPlanner({ selectedTarget, playerData, crewId, onBack }) {
   const [selectedMembers, setSelectedMembers] = useState([playerData.id]);
   const [heistName, setHeistName] = useState(selectedTarget.target_name);
-  const [aiAnalysis, setAiAnalysis] = useState(null);
   const queryClient = useQueryClient();
 
-  const { data: crewMembers = [] } = useQuery({
-    queryKey: ['crewMembers', crewId],
+  const { data: crewMembers = [], isLoading } = useQuery({
+    queryKey: ['crewPlayers', crewId],
     queryFn: () => base44.entities.Player.filter({ crew_id: crewId }),
-    enabled: !!crewId
+    enabled: !!crewId,
   });
 
-  const getAIRecommendationsMutation = useMutation({
-    mutationFn: async () => {
-      const prompt = `
-You are an AI heist planner. Analyze this heist and provide recommendations:
-
-Heist Details:
-- Target: ${selectedTarget.target_name}
-- Type: ${selectedTarget.target_type}
-- Difficulty: ${selectedTarget.difficulty}
-- Estimated Payout: $${selectedTarget.estimated_payout}
-- Challenges: ${selectedTarget.challenges.join(', ')}
-
-Crew Members Available (${crewMembers.length}):
-${crewMembers.map(m => `- ${m.username}: Level ${m.level}, Strength ${m.strength_score}, Role: ${m.crew_role}`).join('\n')}
-
-Selected Members (${selectedMembers.length}):
-${crewMembers.filter(m => selectedMembers.includes(m.id)).map(m => `- ${m.username}: Level ${m.level}, Strength ${m.strength_score}`).join('\n')}
-
-Provide:
-1. Overall assessment of the crew composition
-2. Recommended roles for each selected member
-3. Suggestions for improving success chances
-4. Estimated success probability (0-100)
-5. Risk mitigation strategies
-6. Optimal loot distribution percentages
-
-Return JSON format.
-`;
-
-      const response = await base44.integrations.Core.InvokeLLM({
-        prompt,
-        response_json_schema: {
-          type: 'object',
-          properties: {
-            assessment: { type: 'string' },
-            recommended_roles: {
-              type: 'array',
-              items: {
-                type: 'object',
-                properties: {
-                  player_id: { type: 'string' },
-                  role: { type: 'string' },
-                  reasoning: { type: 'string' }
-                }
-              }
-            },
-            suggestions: { type: 'array', items: { type: 'string' } },
-            success_probability: { type: 'number' },
-            risk_strategies: { type: 'array', items: { type: 'string' } },
-            loot_distribution: {
-              type: 'object',
-              additionalProperties: { type: 'number' }
-            }
-          }
-        }
-      });
-
-      return response;
-    },
-    onSuccess: (data) => {
-      setAiAnalysis(data);
-      toast.success('AI analysis complete');
-    }
-  });
-
-  const startHeistMutation = useMutation({
-    mutationFn: async () => {
+  const confirmHeistMutation = useMutation({
+    mutationFn: async ({ simulation, equipment }) => {
       const participants = crewMembers
         .filter(m => selectedMembers.includes(m.id))
         .map(m => ({
           player_id: m.id,
           username: m.username,
-          role: aiAnalysis?.recommended_roles?.find(r => r.player_id === m.id)?.role || 'crew',
-          contribution_score: 0
+          role: simulation?.member_roles?.find(r => r.username === m.username)?.recommended_role || 'crew',
+          contribution_score: simulation?.member_roles?.find(r => r.username === m.username)?.effectiveness || 50,
         }));
 
       const heist = await base44.entities.Heist.create({
@@ -110,216 +65,206 @@ Return JSON format.
         status: 'planning',
         estimated_payout: selectedTarget.estimated_payout,
         risk_level: selectedTarget.risk_level,
-        success_probability: aiAnalysis?.success_probability || selectedTarget.success_probability,
+        success_probability: simulation?.success_probability || selectedTarget.success_probability,
         challenges: selectedTarget.challenges,
-        ai_analysis: aiAnalysis
+        ai_analysis: {
+          simulation,
+          equipment_used: equipment,
+          overall_assessment: simulation?.overall_assessment,
+        },
       });
 
       await base44.entities.CrewActivity.create({
         crew_id: crewId,
         activity_type: 'heist_completed',
-        title: 'Heist Planned',
-        description: `${heistName} - Planning phase initiated`,
+        title: '🎯 Heist Planned',
+        description: `${heistName} — ${simulation?.success_probability || 0}% success probability`,
         player_id: playerData.id,
-        player_username: playerData.username
+        player_username: playerData.username,
       });
 
       return heist;
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['heists']);
-      toast.success('Heist planning initiated!');
+      toast.success('Heist plan saved! Ready for execution.');
       onBack();
-    }
+    },
+    onError: (e) => toast.error(e.message),
   });
 
-  const toggleMember = (memberId) => {
-    if (memberId === playerData.id) return; // Can't deselect organizer
-    
+  const toggleMember = (id) => {
+    if (id === playerData.id) return;
     setSelectedMembers(prev =>
-      prev.includes(memberId)
-        ? prev.filter(id => id !== memberId)
-        : [...prev, memberId]
+      prev.includes(id) ? prev.filter(m => m !== id) : [...prev, id]
     );
   };
 
+  const getTopSkill = (member) => {
+    if (!member.skills) return null;
+    const entries = Object.entries(member.skills);
+    if (!entries.length) return null;
+    return entries.reduce((a, b) => a[1] > b[1] ? a : b);
+  };
+
+  const memberColor = (m) => selectedMembers.includes(m.id)
+    ? 'bg-purple-900/40 border-purple-500/60'
+    : 'bg-slate-900/30 border-gray-700/30 hover:border-purple-500/30';
+
   return (
     <div className="space-y-4">
-      <Card className="glass-panel border-purple-500/20">
-        <CardHeader className="border-b border-purple-500/20">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-white">Plan Heist</CardTitle>
-            <Button variant="outline" size="sm" onClick={onBack}>
-              Back
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="p-4 space-y-4">
-          {/* Heist Name */}
-          <div>
-            <label className="text-sm text-gray-400 mb-2 block">Heist Name</label>
-            <Input
-              value={heistName}
-              onChange={(e) => setHeistName(e.target.value)}
-              className="bg-slate-900/50 border-purple-500/20 text-white"
-            />
-          </div>
+      {/* Header */}
+      <div className="glass-panel border border-purple-500/20 p-4 rounded-xl flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+            <Target className="w-6 h-6 text-purple-400" />
+            Plan: {selectedTarget.target_name}
+          </h2>
+          <p className="text-gray-400 text-sm">{selectedTarget.description}</p>
+        </div>
+        <Button variant="outline" size="sm" onClick={onBack} className="border-purple-500/30">
+          <ArrowLeft className="w-4 h-4 mr-1" />Back
+        </Button>
+      </div>
 
-          {/* Target Summary */}
-          <div className="p-4 rounded-lg bg-slate-900/30 border border-purple-500/10">
-            <div className="flex items-center gap-2 mb-2">
-              <Target className="w-5 h-5 text-purple-400" />
-              <h4 className="font-semibold text-white">{selectedTarget.target_name}</h4>
-            </div>
-            <p className="text-sm text-gray-400 mb-2">{selectedTarget.description}</p>
-            <div className="flex gap-2 flex-wrap">
-              <Badge className="bg-green-900/30 text-green-400">
-                ${selectedTarget.estimated_payout.toLocaleString()}
-              </Badge>
-              <Badge className="bg-yellow-900/30 text-yellow-400">
-                {selectedTarget.success_probability}% success
-              </Badge>
-              <Badge className="bg-orange-900/30 text-orange-400">
-                {selectedTarget.risk_level}% risk
-              </Badge>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Target Info */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { label: 'Payout', value: `$${selectedTarget.estimated_payout?.toLocaleString()}`, color: 'text-green-400' },
+          { label: 'Success', value: `${selectedTarget.success_probability}%`, color: selectedTarget.success_probability > 60 ? 'text-green-400' : 'text-yellow-400' },
+          { label: 'Risk', value: `${selectedTarget.risk_level}%`, color: 'text-red-400' },
+          { label: 'Crew Needed', value: `${selectedTarget.required_crew_size}`, color: 'text-cyan-400' },
+        ].map(s => (
+          <Card key={s.label} className="glass-panel border-purple-500/20">
+            <CardContent className="p-3 text-center">
+              <p className={`text-xl font-bold ${s.color}`}>{s.value}</p>
+              <p className="text-xs text-gray-400">{s.label}</p>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
-      {/* Crew Selection */}
-      <Card className="glass-panel border-purple-500/20">
-        <CardHeader className="border-b border-purple-500/20">
-          <CardTitle className="flex items-center gap-2 text-white">
-            <Users className="w-5 h-5 text-purple-400" />
-            Select Crew Members
-            <Badge className="ml-auto bg-cyan-600">
-              {selectedMembers.length}/{selectedTarget.required_crew_size} required
+      <Tabs defaultValue="crew">
+        <TabsList className="glass-panel border border-purple-500/20">
+          <TabsTrigger value="crew">
+            👥 Crew Selection
+            <Badge className={`ml-2 text-xs ${selectedMembers.length >= selectedTarget.required_crew_size ? 'bg-green-700' : 'bg-red-700'}`}>
+              {selectedMembers.length}/{selectedTarget.required_crew_size}
             </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-4 space-y-2">
-          {crewMembers.map(member => {
-            const isSelected = selectedMembers.includes(member.id);
-            const isOrganizer = member.id === playerData.id;
+          </TabsTrigger>
+          <TabsTrigger value="simulate">⚡ Simulate & Equipment</TabsTrigger>
+        </TabsList>
 
-            return (
-              <div
-                key={member.id}
-                className={`p-3 rounded-lg border transition-all ${
-                  isSelected
-                    ? 'bg-purple-900/30 border-purple-500/50'
-                    : 'bg-slate-900/30 border-purple-500/10'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Checkbox
-                    checked={isSelected}
-                    onCheckedChange={() => toggleMember(member.id)}
-                    disabled={isOrganizer}
-                  />
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h5 className="font-semibold text-white">{member.username}</h5>
-                      {isOrganizer && <Badge className="bg-yellow-600">Organizer</Badge>}
-                    </div>
-                    <p className="text-sm text-gray-400">
-                      Level {member.level} • Strength {member.strength_score}
-                    </p>
-                  </div>
-                </div>
+        {/* CREW SELECTION TAB */}
+        <TabsContent value="crew" className="mt-4 space-y-4">
+          {/* Heist Name */}
+          <Card className="glass-panel border-purple-500/20">
+            <CardContent className="p-4">
+              <label className="text-sm text-gray-400 mb-2 block">Heist Name</label>
+              <Input
+                value={heistName}
+                onChange={(e) => setHeistName(e.target.value)}
+                className="bg-slate-900/50 border-purple-500/20 text-white"
+              />
+            </CardContent>
+          </Card>
+
+          {/* Challenges */}
+          <Card className="glass-panel border-red-500/20">
+            <CardContent className="p-4">
+              <h4 className="text-white font-semibold mb-2 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-red-400" />Target Challenges
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {selectedTarget.challenges?.map((c, i) => (
+                  <Badge key={i} variant="outline" className="text-red-300 border-red-500/30">{c}</Badge>
+                ))}
               </div>
-            );
-          })}
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
 
-      {/* AI Analysis */}
-      <Card className="glass-panel border-purple-500/20">
-        <CardHeader className="border-b border-purple-500/20">
-          <CardTitle className="flex items-center gap-2 text-white">
-            <Sparkles className="w-5 h-5 text-purple-400" />
-            AI Analysis
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-4">
-          {!aiAnalysis ? (
-            <div className="text-center py-8">
-              <Button
-                className="bg-gradient-to-r from-purple-600 to-cyan-600"
-                onClick={() => getAIRecommendationsMutation.mutate()}
-                disabled={getAIRecommendationsMutation.isPending || selectedMembers.length < selectedTarget.required_crew_size}
-              >
-                {getAIRecommendationsMutation.isPending ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Analyzing...
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    Get AI Recommendations
-                  </>
-                )}
-              </Button>
-              {selectedMembers.length < selectedTarget.required_crew_size && (
-                <p className="text-sm text-gray-400 mt-2">
-                  Select at least {selectedTarget.required_crew_size} members
-                </p>
+          {/* Crew Members */}
+          <Card className="glass-panel border-purple-500/20">
+            <CardHeader className="border-b border-purple-500/20">
+              <CardTitle className="text-white flex items-center gap-2">
+                <Users className="w-5 h-5 text-purple-400" />
+                Select Crew Members
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-4 space-y-2">
+              {isLoading ? (
+                <div className="text-center py-6"><Loader2 className="w-6 h-6 animate-spin text-purple-400 mx-auto" /></div>
+              ) : crewMembers.length === 0 ? (
+                <p className="text-gray-400 text-center py-6">No crew members found</p>
+              ) : (
+                crewMembers.map(member => {
+                  const selected = selectedMembers.includes(member.id);
+                  const isOrganizer = member.id === playerData.id;
+                  const topSkill = getTopSkill(member);
+                  return (
+                    <button
+                      key={member.id}
+                      onClick={() => toggleMember(member.id)}
+                      className={`w-full p-3 rounded-lg border text-left transition-all ${memberColor(member)}`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 ${selected ? 'bg-purple-600 border-purple-500' : 'border-gray-600'}`}>
+                          {selected && <CheckCircle className="w-3 h-3 text-white" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-white text-sm">{member.username}</span>
+                            {isOrganizer && <Badge className="bg-yellow-600 text-xs">You</Badge>}
+                          </div>
+                          <div className="flex items-center gap-3 mt-1">
+                            <span className="text-xs text-gray-400">Lv {member.level || 1}</span>
+                            <span className="text-xs text-gray-400">STR {member.strength_score || 10}</span>
+                            {member.crew_role && (
+                              <span className="text-xs text-gray-500 capitalize">{member.crew_role}</span>
+                            )}
+                          </div>
+                          {/* Skill bars */}
+                          {member.skills && (
+                            <div className="flex gap-2 mt-1 flex-wrap">
+                              {Object.entries(member.skills).slice(0, 4).map(([skill, val]) => (
+                                <span key={skill} className={`text-xs flex items-center gap-0.5 ${SKILL_COLOR[skill] || 'text-gray-400'}`}>
+                                  {SKILL_ICONS[skill]}{skill.slice(0,3)} {val}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          {topSkill && (
+                            <span className={`text-xs mt-0.5 inline-block ${SKILL_COLOR[topSkill[0]] || 'text-gray-400'}`}>
+                              ★ Best: {topSkill[0]} ({topSkill[1]})
+                            </span>
+                          )}
+                        </div>
+                        <div className="text-right">
+                          <div className="text-xs text-gray-400">Combat</div>
+                          <Progress value={member.strength_score || 10} className="h-1 w-16" />
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })
               )}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="p-4 rounded-lg bg-slate-900/30">
-                <h4 className="font-semibold text-white mb-2">Assessment</h4>
-                <p className="text-sm text-gray-300">{aiAnalysis.assessment}</p>
-              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-              <div className="p-4 rounded-lg bg-green-900/20 border border-green-500/30">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="w-5 h-5 text-green-400" />
-                  <h4 className="font-semibold text-white">Success Probability</h4>
-                </div>
-                <p className="text-3xl font-bold text-green-400">
-                  {aiAnalysis.success_probability}%
-                </p>
-              </div>
-
-              {aiAnalysis.suggestions && aiAnalysis.suggestions.length > 0 && (
-                <div>
-                  <h4 className="font-semibold text-white mb-2">Suggestions</h4>
-                  <ul className="space-y-1">
-                    {aiAnalysis.suggestions.map((suggestion, idx) => (
-                      <li key={idx} className="text-sm text-gray-300 flex items-start gap-2">
-                        <span className="text-purple-400">•</span>
-                        {suggestion}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              <Button
-                className="w-full bg-gradient-to-r from-green-600 to-emerald-600"
-                onClick={() => startHeistMutation.mutate()}
-                disabled={startHeistMutation.isPending}
-              >
-                {startHeistMutation.isPending ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Planning...
-                  </>
-                ) : (
-                  <>
-                    <Target className="w-4 h-4 mr-2" />
-                    Confirm Heist Plan
-                  </>
-                )}
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+        {/* SIMULATION TAB */}
+        <TabsContent value="simulate" className="mt-4">
+          <HeistSimulation
+            target={selectedTarget}
+            selectedMembers={selectedMembers}
+            crewMembers={crewMembers}
+            playerData={playerData}
+            onSimulationDone={(simulation, equipment) =>
+              confirmHeistMutation.mutate({ simulation, equipment })
+            }
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

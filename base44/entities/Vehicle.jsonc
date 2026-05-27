@@ -1,0 +1,113 @@
+{
+  "name": "Vehicle",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "courier_bike",
+        "cargo_van",
+        "muscle_car",
+        "armored_truck",
+        "speedboat",
+        "helicopter",
+        "sports",
+        "muscle",
+        "luxury",
+        "suv",
+        "motorcycle",
+        "truck"
+      ],
+      "default": "cargo_van"
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "crew_id": {
+      "type": "string"
+    },
+    "speed": {
+      "type": "number",
+      "default": 60,
+      "description": "Speed rating 0-100"
+    },
+    "cargo_capacity": {
+      "type": "number",
+      "default": 50,
+      "description": "Cargo capacity units"
+    },
+    "stealth": {
+      "type": "number",
+      "default": 50,
+      "description": "Stealth rating 0-100 (lower heat)"
+    },
+    "armor": {
+      "type": "number",
+      "default": 30,
+      "description": "Armor/durability 0-100"
+    },
+    "horsepower": {
+      "type": "number",
+      "default": 300
+    },
+    "top_speed": {
+      "type": "number",
+      "default": 150
+    },
+    "handling": {
+      "type": "number",
+      "default": 70
+    },
+    "durability": {
+      "type": "number",
+      "default": 100
+    },
+    "value": {
+      "type": "number",
+      "default": 50000
+    },
+    "base_price": {
+      "type": "number",
+      "default": 50000
+    },
+    "upgrade_level": {
+      "type": "number",
+      "default": 0
+    },
+    "assigned_route_id": {
+      "type": "string"
+    },
+    "assigned_route_name": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "idle",
+        "in_transit",
+        "maintenance"
+      ],
+      "default": "idle"
+    },
+    "is_stolen": {
+      "type": "boolean",
+      "default": false
+    },
+    "license_plate": {
+      "type": "string"
+    },
+    "image_url": {
+      "type": "string"
+    },
+    "auction_id": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "owner_id"
+  ]
+}
