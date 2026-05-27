@@ -4,10 +4,8 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { 
-  ArrowRightLeft, Flame, Building2, Waves, Globe, 
-  TrendingDown, AlertTriangle, CheckCircle, Clock, Wallet, DollarSign
+  ArrowRightLeft, Flame, AlertTriangle, CheckCircle, Clock, Wallet, DollarSign, History, TrendingUp
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -56,6 +54,7 @@ export default function CurrencyExchange() {
   const [activeTransaction, setActiveTransaction] = useState(null);
   const [stageIndex, setStageIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [txHistory, setTxHistory] = useState([]);
 
   const { data: user } = useQuery({ queryKey: ['user'], queryFn: () => base44.auth.me() });
 
@@ -97,12 +96,14 @@ export default function CurrencyExchange() {
 
   const finalizeTransaction = async (tx) => {
     const busted = Math.random() * 100 < tx.risk;
+    const timestamp = new Date().toLocaleTimeString();
     if (busted) {
       const confiscated = Math.floor(tx.cleanCash * 0.5);
       toast.error(`🚨 Law enforcement seized $${confiscated.toLocaleString()}! Heat increased.`);
       await base44.entities.Player.update(playerData.id, {
         wanted_level: Math.min(5, (playerData.wanted_level || 0) + 1),
       });
+      setTxHistory(h => [{ time: timestamp, method: tx.method, amount: tx.original, result: 'BUSTED', loss: confiscated }, ...h.slice(0, 9)]);
     } else {
       await base44.entities.Player.update(playerData.id, {
         buy_power: (playerData.buy_power || 0) + tx.cleanCash,
@@ -111,6 +112,7 @@ export default function CurrencyExchange() {
         total_earnings: (playerData.total_earnings || 0) + tx.cleanCash,
       });
       toast.success(`✅ $${tx.cleanCash.toLocaleString()} clean cash delivered!`);
+      setTxHistory(h => [{ time: timestamp, method: tx.method, amount: tx.original, cleaned: tx.cleanCash, fee: tx.fee, result: 'SUCCESS' }, ...h.slice(0, 9)]);
     }
     setActiveTransaction(null);
     setProgress(0);
@@ -174,7 +176,9 @@ export default function CurrencyExchange() {
             <div className="flex items-center gap-2">
               <p className={`text-2xl font-bold ${wantedColors[wantedLevel]}`}>{'★'.repeat(wantedLevel)}{'☆'.repeat(5 - wantedLevel)}</p>
             </div>
-            <Progress value={wantedLevel * 20} className="h-1.5 mt-2" />
+            <div className="h-1.5 mt-2 rounded-full bg-gray-700 overflow-hidden">
+              <div className="h-full bg-red-500 transition-all" style={{ width: `${wantedLevel * 20}%` }} />
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -253,7 +257,9 @@ export default function CurrencyExchange() {
                     <span>Laundering via {activeTransaction.method}</span>
                     <span>{Math.floor(progress)}%</span>
                   </div>
-                  <Progress value={progress} className="h-3" />
+                  <div className="h-3 rounded-full bg-gray-700 overflow-hidden">
+                    <div className="h-full bg-cyan-500 transition-all" style={{ width: `${progress}%` }} />
+                  </div>
                 </div>
 
                 <div className="space-y-3">
@@ -300,6 +306,30 @@ export default function CurrencyExchange() {
               <p>• Lower your heat level before large exchanges</p>
             </CardContent>
           </Card>
+
+          {/* Transaction History */}
+          {txHistory.length > 0 && (
+            <Card className="glass-panel border border-purple-500/20">
+              <CardHeader><CardTitle className="text-purple-400 text-sm flex items-center gap-2"><History className="w-4 h-4" />Transaction Log</CardTitle></CardHeader>
+              <CardContent className="space-y-2">
+                {txHistory.map((tx, i) => (
+                  <div key={i} className={`flex items-center justify-between p-2 rounded-lg text-xs border ${tx.result === 'SUCCESS' ? 'bg-green-900/10 border-green-500/20' : 'bg-red-900/10 border-red-500/20'}`}>
+                    <div>
+                      <span className={`font-semibold ${tx.result === 'SUCCESS' ? 'text-green-400' : 'text-red-400'}`}>{tx.result === 'SUCCESS' ? '✅' : '🚨'} {tx.result}</span>
+                      <span className="text-gray-400 ml-2">{tx.method}</span>
+                    </div>
+                    <div className="text-right">
+                      {tx.result === 'SUCCESS'
+                        ? <p className="text-green-400 font-semibold">+${tx.cleaned?.toLocaleString()} <span className="text-gray-500">(-${tx.fee?.toLocaleString()} fee)</span></p>
+                        : <p className="text-red-400 font-semibold">-${tx.loss?.toLocaleString()} seized</p>
+                      }
+                      <p className="text-gray-500">{tx.time}</p>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </div>

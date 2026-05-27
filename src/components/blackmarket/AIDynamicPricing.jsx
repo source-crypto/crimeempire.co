@@ -4,185 +4,206 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { TrendingUp, TrendingDown, Zap, RefreshCw, DollarSign } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { TrendingUp, TrendingDown, Zap, RefreshCw, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-export default function AIDynamicPricing({ playerData }) {
-  const [updating, setUpdating] = useState(false);
-  const queryClient = useQueryClient();
+const ITEM_TYPES = ['weapons', 'drugs', 'vehicles', 'contraband', 'intelligence', 'forgery'];
 
-  const { data: pricingModels = [] } = useQuery({
+const DEFAULT_MODELS = {
+  weapons:      { base_price: 2000, current_price: 2350, demand_score: 72, supply_score: 45, volatility: 18, ai_prediction: { next_price: 2600, trend: 'bullish', confidence: 80 } },
+  drugs:        { base_price: 500,  current_price: 680,  demand_score: 88, supply_score: 30, volatility: 30, ai_prediction: { next_price: 720,  trend: 'bullish', confidence: 85 } },
+  vehicles:     { base_price: 45000,current_price: 52000,demand_score: 55, supply_score: 60, volatility: 12, ai_prediction: { next_price: 49000,trend: 'bearish', confidence: 70 } },
+  contraband:   { base_price: 1500, current_price: 1800, demand_score: 65, supply_score: 50, volatility: 22, ai_prediction: { next_price: 1900, trend: 'bullish', confidence: 75 } },
+  intelligence: { base_price: 3000, current_price: 3200, demand_score: 90, supply_score: 20, volatility: 10, ai_prediction: { next_price: 3500, trend: 'bullish', confidence: 92 } },
+  forgery:      { base_price: 1000, current_price: 950,  demand_score: 48, supply_score: 75, volatility: 15, ai_prediction: { next_price: 880,  trend: 'bearish', confidence: 68 } },
+};
+
+export default function AIDynamicPricing({ playerData }) {
+  const queryClient = useQueryClient();
+  const [lastUpdated, setLastUpdated] = useState(null);
+
+  const { data: pricingModels = [], isLoading } = useQuery({
     queryKey: ['aiPricing'],
     queryFn: () => base44.entities.AIPricingModel.list('-updated_date', 20),
-    staleTime: 30000
+    staleTime: 30000,
   });
 
-  const { data: macroData = [] } = useQuery({
-    queryKey: ['macroData'],
-    queryFn: () => base44.entities.MacroEconomicData.list('-updated_date', 5),
-    staleTime: 60000
-  });
+  // Use DB models if available, otherwise defaults
+  const displayModels = pricingModels.length > 0
+    ? pricingModels
+    : ITEM_TYPES.map(type => ({ id: type, item_type: type, ...DEFAULT_MODELS[type] }));
 
-  const updatePricingMutation = useMutation({
+  const updateMutation = useMutation({
     mutationFn: async () => {
-      const items = ['weapons', 'drugs', 'vehicles', 'contraband', 'intelligence'];
-      
-      for (const itemType of items) {
-        const prompt = `
-Analyze current black market pricing for ${itemType} considering:
-- Current macro environment (interest rates, inflation)
-- Law enforcement activity
-- Market supply/demand dynamics
-- Seasonal factors
+      const prompt = `You are an underground black market economist. Analyze these 6 illegal commodities and give updated pricing data:
+- weapons (firearms, ammo, explosives)
+- drugs (narcotics, stimulants, pharmaceuticals)
+- vehicles (stolen cars, motorcycles, boats)
+- contraband (smuggled goods, stolen electronics, luxury items)
+- intelligence (hacked data, insider info, surveillance feeds)
+- forgery (fake IDs, counterfeit currency, documents)
 
-Provide dynamic pricing with demand/supply scores and volatility.
-        `;
+For each, consider: current law enforcement crackdowns, supply chain disruptions, gang warfare affecting supply, and seasonal demand shifts.
 
-        const analysis = await base44.integrations.Core.InvokeLLM({
-          prompt,
-          add_context_from_internet: true,
-          response_json_schema: {
-            type: "object",
-            properties: {
-              base_price: { type: "number" },
-              current_price: { type: "number" },
-              demand_score: { type: "number" },
-              supply_score: { type: "number" },
-              volatility: { type: "number" },
-              predicted_price: { type: "number" },
-              trend: { type: "string" }
+Return current pricing with demand/supply scores (0-100), volatility (0-50), and price predictions.`;
+
+      const analysis = await base44.integrations.Core.InvokeLLM({
+        prompt,
+        response_json_schema: {
+          type: 'object',
+          properties: {
+            markets: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  item_type: { type: 'string' },
+                  base_price: { type: 'number' },
+                  current_price: { type: 'number' },
+                  demand_score: { type: 'number' },
+                  supply_score: { type: 'number' },
+                  volatility: { type: 'number' },
+                  trend: { type: 'string' },
+                  next_price: { type: 'number' },
+                  confidence: { type: 'number' },
+                  market_note: { type: 'string' },
+                }
+              }
             }
           }
-        });
+        }
+      });
 
+      const markets = analysis.markets || [];
+      for (const m of markets) {
         await base44.entities.AIPricingModel.create({
-          item_type: itemType,
-          base_price: analysis.base_price,
-          current_price: analysis.current_price,
-          demand_score: analysis.demand_score,
-          supply_score: analysis.supply_score,
-          volatility: analysis.volatility,
-          macro_factors: {
-            interest_rate_impact: macroData[0]?.current_value || 0,
-            law_enforcement_heat: Math.random() * 50
-          },
+          item_type: m.item_type,
+          base_price: m.base_price,
+          current_price: m.current_price,
+          demand_score: m.demand_score,
+          supply_score: m.supply_score,
+          volatility: m.volatility,
+          macro_factors: { market_note: m.market_note },
           ai_prediction: {
-            next_price: analysis.predicted_price,
-            trend: analysis.trend,
-            confidence: 75 + Math.random() * 20
-          }
+            next_price: m.next_price,
+            trend: m.trend,
+            confidence: m.confidence,
+          },
         });
       }
-
-      return true;
+      return markets.length;
     },
-    onSuccess: () => {
+    onSuccess: (count) => {
       queryClient.invalidateQueries(['aiPricing']);
-      toast.success('AI pricing models updated');
-    }
+      setLastUpdated(new Date());
+      toast.success(`AI updated ${count} market models`);
+    },
+    onError: (e) => toast.error('Failed to update pricing: ' + e.message),
   });
 
-  const handleUpdate = () => {
-    setUpdating(true);
-    updatePricingMutation.mutate();
-    setTimeout(() => setUpdating(false), 3000);
-  };
-
   return (
-    <div className="space-y-4">
-      <Card className="glass-panel border-cyan-500/20">
-        <CardHeader className="border-b border-cyan-500/20">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-white text-sm flex items-center gap-2">
-              <Zap className="w-4 h-4 text-cyan-400" />
-              AI Dynamic Pricing Engine
-            </CardTitle>
-            <Button
-              onClick={handleUpdate}
-              disabled={updating}
-              size="sm"
-              className="bg-gradient-to-r from-cyan-600 to-blue-600"
-            >
-              <RefreshCw className={`w-4 h-4 mr-2 ${updating ? 'animate-spin' : ''}`} />
-              Update
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="p-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {pricingModels.map((model) => (
-              <Card key={model.id} className="bg-slate-900/50 border-cyan-500/10">
-                <CardContent className="p-4">
+    <Card className="glass-panel border-cyan-500/20">
+      <CardHeader className="border-b border-cyan-500/20">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-white text-sm flex items-center gap-2">
+            <Zap className="w-4 h-4 text-cyan-400" />
+            AI Dynamic Pricing Engine
+            {lastUpdated && (
+              <span className="text-xs text-gray-500 font-normal">
+                Updated {lastUpdated.toLocaleTimeString()}
+              </span>
+            )}
+          </CardTitle>
+          <Button
+            size="sm"
+            className="bg-gradient-to-r from-cyan-600 to-blue-600"
+            onClick={() => updateMutation.mutate()}
+            disabled={updateMutation.isPending}
+          >
+            {updateMutation.isPending
+              ? <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Analyzing...</>
+              : <><RefreshCw className="w-3 h-3 mr-1" />Update Prices</>
+            }
+          </Button>
+        </div>
+      </CardHeader>
+      <CardContent className="p-4">
+        {isLoading ? (
+          <div className="text-center py-6"><Loader2 className="w-6 h-6 animate-spin text-cyan-400 mx-auto" /></div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+            {displayModels.map((model) => {
+              const isBullish = model.ai_prediction?.trend === 'bullish';
+              const isBearish = model.ai_prediction?.trend === 'bearish';
+              const priceDiff = (model.ai_prediction?.next_price || 0) - (model.current_price || 0);
+              return (
+                <div key={model.id || model.item_type} className="p-4 rounded-lg bg-slate-900/60 border border-cyan-500/10">
                   <div className="flex items-center justify-between mb-3">
                     <h4 className="font-semibold text-white capitalize">{model.item_type}</h4>
-                    <Badge className={
-                      model.ai_prediction?.trend === 'bullish' ? 'bg-green-600' :
-                      model.ai_prediction?.trend === 'bearish' ? 'bg-red-600' :
-                      'bg-gray-600'
-                    }>
-                      {model.ai_prediction?.trend || 'neutral'}
+                    <Badge className={isBullish ? 'bg-green-700' : isBearish ? 'bg-red-700' : 'bg-gray-600'}>
+                      {isBullish ? '📈' : isBearish ? '📉' : '➡️'} {model.ai_prediction?.trend || 'stable'}
                     </Badge>
                   </div>
 
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-400">Current Price</span>
-                      <span className="text-lg font-bold text-cyan-400">
-                        ${model.current_price?.toFixed(0)}
-                      </span>
+                    <div className="flex justify-between">
+                      <span className="text-xs text-gray-400">Current Price</span>
+                      <span className="text-lg font-bold text-cyan-400">${model.current_price?.toLocaleString()}</span>
                     </div>
-
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-gray-500">Predicted</span>
+                    <div className="flex justify-between items-center text-xs">
+                      <span className="text-gray-500">AI Prediction</span>
                       <div className="flex items-center gap-1">
-                        {model.ai_prediction?.next_price > model.current_price ? (
-                          <TrendingUp className="w-3 h-3 text-green-400" />
-                        ) : (
-                          <TrendingDown className="w-3 h-3 text-red-400" />
-                        )}
-                        <span className="text-white">
-                          ${model.ai_prediction?.next_price?.toFixed(0)}
+                        {priceDiff >= 0
+                          ? <TrendingUp className="w-3 h-3 text-green-400" />
+                          : <TrendingDown className="w-3 h-3 text-red-400" />
+                        }
+                        <span className={priceDiff >= 0 ? 'text-green-400' : 'text-red-400'}>
+                          ${model.ai_prediction?.next_price?.toLocaleString()} ({priceDiff >= 0 ? '+' : ''}{priceDiff.toLocaleString()})
                         </span>
                       </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs">
-                        <span className="text-gray-400">Demand</span>
-                        <span className="text-white">{model.demand_score}%</span>
+                    {/* Demand bar */}
+                    <div>
+                      <div className="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>Demand</span><span>{model.demand_score}%</span>
                       </div>
-                      <Progress value={model.demand_score} className="h-1" />
+                      <div className="h-1.5 rounded-full bg-gray-700 overflow-hidden">
+                        <div className="h-full bg-green-500 transition-all" style={{ width: `${model.demand_score}%` }} />
+                      </div>
                     </div>
 
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-xs">
-                        <span className="text-gray-400">Supply</span>
-                        <span className="text-white">{model.supply_score}%</span>
+                    {/* Supply bar */}
+                    <div>
+                      <div className="flex justify-between text-xs text-gray-400 mb-1">
+                        <span>Supply</span><span>{model.supply_score}%</span>
                       </div>
-                      <Progress value={model.supply_score} className="h-1" />
+                      <div className="h-1.5 rounded-full bg-gray-700 overflow-hidden">
+                        <div className="h-full bg-blue-500 transition-all" style={{ width: `${model.supply_score}%` }} />
+                      </div>
                     </div>
 
-                    <div className="pt-2 border-t border-gray-700">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="text-gray-500">Volatility</span>
-                        <span className="text-yellow-400">{model.volatility}%</span>
-                      </div>
-                      <div className="flex items-center justify-between text-xs mt-1">
-                        <span className="text-gray-500">Confidence</span>
-                        <span className="text-green-400">
-                          {model.ai_prediction?.confidence?.toFixed(0)}%
-                        </span>
-                      </div>
+                    <div className="flex justify-between text-xs pt-1 border-t border-gray-700">
+                      <span className="text-gray-500">Volatility</span>
+                      <span className="text-yellow-400">{model.volatility}%</span>
                     </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-500">Confidence</span>
+                      <span className="text-green-400">{model.ai_prediction?.confidence?.toFixed(0)}%</span>
+                    </div>
+
+                    {model.macro_factors?.market_note && (
+                      <p className="text-xs text-gray-400 italic border-t border-gray-700 pt-1">
+                        💡 {model.macro_factors.market_note}
+                      </p>
+                    )}
                   </div>
-                </CardContent>
-              </Card>
-            ))}
+                </div>
+              );
+            })}
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }
