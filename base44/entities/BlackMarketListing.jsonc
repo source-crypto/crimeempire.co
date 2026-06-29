@@ -1,0 +1,75 @@
+{
+  "name": "BlackMarketListing",
+  "type": "object",
+  "properties": {
+    "seller_id": {
+      "type": "string",
+      "description": "Player or NPC seller ID"
+    },
+    "item_name": {
+      "type": "string",
+      "description": "Name of illegal good/service"
+    },
+    "item_type": {
+      "type": "string",
+      "enum": [
+        "drugs",
+        "weapons",
+        "stolen_goods",
+        "hacking_service",
+        "assassination",
+        "forgery",
+        "data_breach",
+        "contraband"
+      ],
+      "description": "Type of black market item"
+    },
+    "quantity": {
+      "type": "number",
+      "description": "Amount available"
+    },
+    "base_price": {
+      "type": "number",
+      "description": "Original price before market adjustments"
+    },
+    "current_price": {
+      "type": "number",
+      "description": "Current price adjusted by demand/supply"
+    },
+    "price_multiplier": {
+      "type": "number",
+      "default": 1,
+      "description": "Dynamic price adjustment factor"
+    },
+    "demand_level": {
+      "type": "number",
+      "default": 50,
+      "description": "Current market demand 0-100"
+    },
+    "quality": {
+      "type": "number",
+      "default": 70,
+      "description": "Item quality/purity 0-100"
+    },
+    "heat_level": {
+      "type": "number",
+      "default": 0,
+      "description": "Police attention on this item 0-100"
+    },
+    "listing_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "seller_id",
+    "item_name",
+    "item_type",
+    "quantity",
+    "base_price"
+  ]
+}

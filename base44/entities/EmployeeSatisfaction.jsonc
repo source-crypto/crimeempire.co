@@ -1,0 +1,66 @@
+{
+  "name": "EmployeeSatisfaction",
+  "type": "object",
+  "properties": {
+    "enterprise_id": {
+      "type": "string"
+    },
+    "overall_morale": {
+      "type": "number",
+      "default": 75,
+      "description": "Employee morale 0-100"
+    },
+    "wage_satisfaction": {
+      "type": "number",
+      "default": 70
+    },
+    "safety_rating": {
+      "type": "number",
+      "default": 80
+    },
+    "loyalty_score": {
+      "type": "number",
+      "default": 75
+    },
+    "productivity_modifier": {
+      "type": "number",
+      "default": 1,
+      "description": "Production multiplier based on morale"
+    },
+    "turnover_risk": {
+      "type": "number",
+      "default": 10,
+      "description": "Chance of employees leaving 0-100"
+    },
+    "strike_probability": {
+      "type": "number",
+      "default": 5,
+      "description": "Chance of labor strike 0-100"
+    },
+    "last_wage_increase": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "complaints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "issue": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "enterprise_id"
+  ]
+}

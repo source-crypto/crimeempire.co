@@ -1,0 +1,71 @@
+{
+  "name": "Investment",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "investment_type": {
+      "type": "string",
+      "enum": [
+        "crypto_staking",
+        "enterprise_shares",
+        "territory_bonds",
+        "market_speculation",
+        "crew_investment"
+      ],
+      "default": "crypto_staking"
+    },
+    "asset_name": {
+      "type": "string"
+    },
+    "amount_invested": {
+      "type": "number"
+    },
+    "current_value": {
+      "type": "number"
+    },
+    "roi_percentage": {
+      "type": "number",
+      "default": 0
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "extreme"
+      ],
+      "default": "medium"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "matured",
+        "liquidated",
+        "failed"
+      ],
+      "default": "active"
+    },
+    "maturity_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "daily_return": {
+      "type": "number",
+      "default": 0
+    },
+    "total_earned": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "player_id",
+    "investment_type",
+    "asset_name",
+    "amount_invested"
+  ]
+}

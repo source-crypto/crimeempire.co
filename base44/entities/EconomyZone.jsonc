@@ -1,0 +1,73 @@
+{
+  "name": "EconomyZone",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "zone_type": {
+      "type": "string",
+      "enum": [
+        "financial_district",
+        "industrial",
+        "residential",
+        "black_market",
+        "luxury"
+      ],
+      "default": "residential"
+    },
+    "coordinates": {
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        }
+      }
+    },
+    "economic_activity": {
+      "type": "number",
+      "default": 50,
+      "description": "Activity level 0-100"
+    },
+    "average_prices": {
+      "type": "object",
+      "properties": {
+        "weapons": {
+          "type": "number"
+        },
+        "vehicles": {
+          "type": "number"
+        },
+        "materials": {
+          "type": "number"
+        },
+        "contraband": {
+          "type": "number"
+        }
+      },
+      "default": {}
+    },
+    "controlling_syndicate_id": {
+      "type": "string"
+    },
+    "trade_volume": {
+      "type": "number",
+      "default": 0
+    },
+    "crime_rate": {
+      "type": "number",
+      "default": 50
+    },
+    "law_enforcement_presence": {
+      "type": "number",
+      "default": 50
+    }
+  },
+  "required": [
+    "name",
+    "zone_type"
+  ]
+}

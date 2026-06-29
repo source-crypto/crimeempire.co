@@ -1,0 +1,56 @@
+{
+  "name": "TerritoryBenefit",
+  "type": "object",
+  "properties": {
+    "territory_id": {
+      "type": "string"
+    },
+    "benefit_type": {
+      "type": "string",
+      "enum": [
+        "production_boost",
+        "wanted_reduction",
+        "recruitment_bonus",
+        "defense_bonus",
+        "income_multiplier",
+        "intel_network",
+        "safe_house"
+      ],
+      "default": "production_boost"
+    },
+    "benefit_name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "level": {
+      "type": "number",
+      "default": 1,
+      "description": "Upgrade level 1-5"
+    },
+    "multiplier": {
+      "type": "number",
+      "default": 1,
+      "description": "Benefit multiplier"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "upgrade_cost": {
+      "type": "number",
+      "description": "Cost to upgrade to next level"
+    },
+    "maintenance_cost": {
+      "type": "number",
+      "default": 0,
+      "description": "Daily maintenance"
+    }
+  },
+  "required": [
+    "territory_id",
+    "benefit_type",
+    "benefit_name"
+  ]
+}

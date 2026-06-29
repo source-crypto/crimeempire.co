@@ -1,0 +1,110 @@
+{
+  "name": "PlayerActionTrigger",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "player_username": {
+      "type": "string"
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "large_investment",
+        "supply_disruption",
+        "successful_sabotage",
+        "territory_takeover",
+        "market_manipulation",
+        "faction_betrayal"
+      ]
+    },
+    "action_magnitude": {
+      "type": "number",
+      "description": "0-100 impact scale"
+    },
+    "action_details": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number"
+        },
+        "target": {
+          "type": "string"
+        },
+        "affected_entities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "triggered_event_id": {
+      "type": "string"
+    },
+    "ai_impact_assessment": {
+      "type": "object",
+      "properties": {
+        "market_impact": {
+          "type": "number"
+        },
+        "faction_reactions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "faction_name": {
+                "type": "string"
+              },
+              "reaction_type": {
+                "type": "string"
+              },
+              "intensity": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "cascading_effects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "transparency_chain": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step": {
+            "type": "string"
+          },
+          "calculation": {
+            "type": "string"
+          },
+          "reasoning": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "evaluated",
+        "triggered",
+        "cascading",
+        "resolved"
+      ],
+      "default": "evaluated"
+    }
+  },
+  "required": [
+    "player_id",
+    "action_type",
+    "action_magnitude"
+  ]
+}

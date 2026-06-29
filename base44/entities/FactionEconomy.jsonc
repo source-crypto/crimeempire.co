@@ -1,0 +1,137 @@
+{
+  "name": "FactionEconomy",
+  "type": "object",
+  "properties": {
+    "faction_id": {
+      "type": "string"
+    },
+    "faction_name": {
+      "type": "string"
+    },
+    "economic_theme": {
+      "type": "string"
+    },
+    "primary_supply": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_type": {
+            "type": "string"
+          },
+          "volume": {
+            "type": "number"
+          },
+          "quality": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "primary_demand": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_type": {
+            "type": "string"
+          },
+          "demand_pressure": {
+            "type": "number"
+          },
+          "urgency": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "trade_routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "route_name": {
+            "type": "string"
+          },
+          "stability": {
+            "type": "number",
+            "default": 100
+          },
+          "risk_factor": {
+            "type": "number"
+          },
+          "controlled_by": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "economic_weaknesses": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ai_behavior_signature": {
+      "type": "object",
+      "properties": {
+        "aggression": {
+          "type": "number",
+          "default": 50
+        },
+        "manipulation_tendency": {
+          "type": "number"
+        },
+        "stability_priority": {
+          "type": "number"
+        },
+        "monopoly_desire": {
+          "type": "number"
+        }
+      }
+    },
+    "current_economic_metrics": {
+      "type": "object",
+      "properties": {
+        "supply_volume": {
+          "type": "number"
+        },
+        "demand_pressure": {
+          "type": "number"
+        },
+        "trade_route_stability": {
+          "type": "number"
+        },
+        "influence_weight": {
+          "type": "number"
+        }
+      }
+    },
+    "diplomacy_state": {
+      "type": "object",
+      "properties": {
+        "alliances": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "trade_pacts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "enemies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "faction_name"
+  ]
+}

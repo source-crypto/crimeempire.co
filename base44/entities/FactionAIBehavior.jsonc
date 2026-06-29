@@ -1,0 +1,107 @@
+{
+  "name": "FactionAIBehavior",
+  "type": "object",
+  "properties": {
+    "faction_id": {
+      "type": "string",
+      "description": "Faction this AI manages"
+    },
+    "decision_strategy": {
+      "type": "string",
+      "enum": [
+        "aggressive",
+        "defensive",
+        "diplomatic",
+        "opportunistic",
+        "isolationist"
+      ],
+      "default": "opportunistic"
+    },
+    "current_goals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "goal": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "number"
+          },
+          "progress": {
+            "type": "number"
+          },
+          "deadline": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Active faction goals"
+    },
+    "player_assessment": {
+      "type": "object",
+      "properties": {
+        "threat_level": {
+          "type": "number"
+        },
+        "opportunity_level": {
+          "type": "number"
+        },
+        "alliance_potential": {
+          "type": "number"
+        }
+      }
+    },
+    "recent_actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Recent faction activities"
+    },
+    "resource_allocation": {
+      "type": "object",
+      "properties": {
+        "military": {
+          "type": "number"
+        },
+        "economic": {
+          "type": "number"
+        },
+        "intelligence": {
+          "type": "number"
+        },
+        "diplomacy": {
+          "type": "number"
+        }
+      },
+      "description": "Resource spending distribution"
+    },
+    "reaction_speed": {
+      "type": "number",
+      "default": 50,
+      "description": "How quickly faction reacts 0-100"
+    },
+    "last_decision": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "faction_id"
+  ]
+}

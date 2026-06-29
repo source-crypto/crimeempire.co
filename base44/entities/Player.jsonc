@@ -1,0 +1,218 @@
+{
+  "name": "Player",
+  "type": "object",
+  "properties": {
+    "username": {
+      "type": "string",
+      "description": "Player's in-game name"
+    },
+    "crypto_balance": {
+      "type": "number",
+      "default": 10000,
+      "description": "Cryptocurrency balance"
+    },
+    "buy_power": {
+      "type": "number",
+      "default": 5000,
+      "description": "Buying power / cash"
+    },
+    "endgame_points": {
+      "type": "number",
+      "default": 0,
+      "description": "Endgame reputation points"
+    },
+    "strength_score": {
+      "type": "number",
+      "default": 10,
+      "description": "Combat strength"
+    },
+    "wanted_level": {
+      "type": "number",
+      "default": 0,
+      "description": "Law enforcement heat (0-5 stars)"
+    },
+    "level": {
+      "type": "number",
+      "default": 1,
+      "description": "Player level"
+    },
+    "experience": {
+      "type": "number",
+      "default": 0,
+      "description": "Total experience points"
+    },
+    "skill_points": {
+      "type": "number",
+      "default": 5,
+      "description": "Available skill points"
+    },
+    "skills": {
+      "type": "object",
+      "description": "Player skill allocations",
+      "properties": {
+        "combat": {
+          "type": "number"
+        },
+        "stealth": {
+          "type": "number"
+        },
+        "driving": {
+          "type": "number"
+        },
+        "hacking": {
+          "type": "number"
+        },
+        "leadership": {
+          "type": "number"
+        },
+        "negotiation": {
+          "type": "number"
+        }
+      }
+    },
+    "crew_id": {
+      "type": "string",
+      "description": "ID of the crew player belongs to"
+    },
+    "crew_role": {
+      "type": "string",
+      "enum": [
+        "boss",
+        "underboss",
+        "capo",
+        "soldier",
+        "associate"
+      ],
+      "default": "associate"
+    },
+    "territory_count": {
+      "type": "number",
+      "default": 0
+    },
+    "total_earnings": {
+      "type": "number",
+      "default": 0
+    },
+    "stats": {
+      "type": "object",
+      "description": "Player performance statistics",
+      "properties": {
+        "heists_completed": {
+          "type": "number"
+        },
+        "heists_failed": {
+          "type": "number"
+        },
+        "battles_won": {
+          "type": "number"
+        },
+        "battles_lost": {
+          "type": "number"
+        },
+        "territories_captured": {
+          "type": "number"
+        },
+        "total_loot": {
+          "type": "number"
+        },
+        "contracts_completed": {
+          "type": "number"
+        },
+        "items_traded": {
+          "type": "number"
+        },
+        "investments_made": {
+          "type": "number"
+        }
+      }
+    },
+    "playstyle": {
+      "type": "string",
+      "enum": [
+        "aggressive",
+        "strategic",
+        "stealthy",
+        "balanced"
+      ],
+      "default": "balanced",
+      "description": "AI-detected playstyle"
+    },
+    "ai_recommendations": {
+      "type": "object",
+      "description": "AI-generated player recommendations",
+      "properties": {
+        "skill_allocation": {
+          "type": "object"
+        },
+        "investment_advice": {
+          "type": "array"
+        },
+        "next_objectives": {
+          "type": "array"
+        },
+        "playstyle_analysis": {
+          "type": "string"
+        },
+        "last_updated": {
+          "type": "string"
+        }
+      }
+    },
+    "avatar_url": {
+      "type": "string"
+    },
+    "character_appearance": {
+      "type": "object",
+      "description": "Character visual customization",
+      "properties": {
+        "skin_tone": {
+          "type": "string"
+        },
+        "hair_style": {
+          "type": "string"
+        },
+        "outfit": {
+          "type": "string"
+        },
+        "accessory": {
+          "type": "string"
+        }
+      }
+    },
+    "background_story": {
+      "type": "string",
+      "description": "Character backstory"
+    },
+    "starting_bonus": {
+      "type": "string",
+      "description": "Selected starting bonus type"
+    },
+    "reputation_titles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Earned titles and achievements"
+    },
+    "personality_traits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Character personality traits"
+    }
+  },
+  "required": [
+    "username"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

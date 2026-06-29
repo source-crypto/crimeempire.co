@@ -1,0 +1,95 @@
+{
+  "name": "EnterpriseEvent",
+  "type": "object",
+  "properties": {
+    "enterprise_id": {
+      "type": "string"
+    },
+    "enterprise_name": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "raid",
+        "supplier_issue",
+        "breakthrough",
+        "worker_strike",
+        "equipment_failure",
+        "lucky_find",
+        "insider_theft"
+      ],
+      "default": "raid"
+    },
+    "description": {
+      "type": "string"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "minor",
+        "moderate",
+        "major"
+      ],
+      "default": "moderate"
+    },
+    "effects": {
+      "type": "object",
+      "properties": {
+        "production_modifier": {
+          "type": "number"
+        },
+        "security_impact": {
+          "type": "number"
+        },
+        "heat_change": {
+          "type": "number"
+        },
+        "stock_loss": {
+          "type": "number"
+        },
+        "revenue_impact": {
+          "type": "number"
+        }
+      }
+    },
+    "resolution_options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "number"
+          },
+          "outcome": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "resolved",
+        "ignored"
+      ],
+      "default": "active"
+    },
+    "resolved_action": {
+      "type": "string"
+    },
+    "ai_generated": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "enterprise_id",
+    "event_type",
+    "description"
+  ]
+}

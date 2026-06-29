@@ -1,0 +1,74 @@
+{
+  "name": "PlayerExperience",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player ID"
+    },
+    "total_experience": {
+      "type": "number",
+      "default": 0,
+      "description": "Total lifetime experience"
+    },
+    "current_level": {
+      "type": "number",
+      "default": 1,
+      "description": "Current player level"
+    },
+    "experience_to_next_level": {
+      "type": "number",
+      "default": 1000,
+      "description": "Experience needed for next level"
+    },
+    "current_level_experience": {
+      "type": "number",
+      "default": 0,
+      "description": "Experience in current level"
+    },
+    "experience_sources": {
+      "type": "object",
+      "description": "Experience gained from different activities",
+      "properties": {
+        "missions_completed": {
+          "type": "number"
+        },
+        "battles_won": {
+          "type": "number"
+        },
+        "heists_completed": {
+          "type": "number"
+        },
+        "territories_captured": {
+          "type": "number"
+        },
+        "contracts_completed": {
+          "type": "number"
+        },
+        "trading_volume": {
+          "type": "number"
+        },
+        "skill_usage": {
+          "type": "number"
+        }
+      }
+    },
+    "level_up_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "number"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "player_id"
+  ]
+}

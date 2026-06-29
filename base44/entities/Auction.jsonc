@@ -1,0 +1,55 @@
+{
+  "name": "Auction",
+  "type": "object",
+  "properties": {
+    "item_id": {
+      "type": "string"
+    },
+    "item_type": {
+      "type": "string",
+      "enum": [
+        "vehicle",
+        "property",
+        "equipment"
+      ],
+      "default": "vehicle"
+    },
+    "item_name": {
+      "type": "string"
+    },
+    "item_image": {
+      "type": "string"
+    },
+    "seller_id": {
+      "type": "string"
+    },
+    "starting_bid": {
+      "type": "number"
+    },
+    "current_bid": {
+      "type": "number"
+    },
+    "highest_bidder_id": {
+      "type": "string"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "ends_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "bid_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "item_id",
+    "item_type",
+    "item_name",
+    "seller_id",
+    "starting_bid"
+  ]
+}

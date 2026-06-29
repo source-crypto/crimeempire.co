@@ -1,0 +1,82 @@
+{
+  "name": "CrewMessage",
+  "type": "object",
+  "properties": {
+    "crew_id": {
+      "type": "string"
+    },
+    "sender_id": {
+      "type": "string",
+      "description": "Player ID of sender"
+    },
+    "sender_username": {
+      "type": "string"
+    },
+    "sender_role": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "message_type": {
+      "type": "string",
+      "enum": [
+        "text",
+        "system",
+        "alert",
+        "achievement"
+      ],
+      "default": "text"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional data for special messages"
+    }
+  },
+  "required": [
+    "crew_id",
+    "sender_id",
+    "message"
+  ],
+  "rls": {
+    "read": {
+      "crew_id": "{{user.data.crew_id}}"
+    },
+    "update": {
+      "$or": [
+        {
+          "sender_id": "{{user.data.player_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "sender_id": "{{user.data.player_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "write": {
+      "$or": [
+        {
+          "sender_id": "{{user.data.player_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

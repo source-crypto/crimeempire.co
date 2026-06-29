@@ -1,0 +1,107 @@
+{
+  "name": "TerritoryEvent",
+  "type": "object",
+  "properties": {
+    "territory_id": {
+      "type": "string"
+    },
+    "territory_name": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "internal_gang_war",
+        "turf_clash",
+        "law_enforcement_raid",
+        "black_market_deal",
+        "protection_racket",
+        "rival_sabotage",
+        "local_uprising"
+      ],
+      "default": "turf_clash"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "minor",
+        "moderate",
+        "major",
+        "critical"
+      ],
+      "default": "moderate"
+    },
+    "effects": {
+      "type": "object",
+      "properties": {
+        "revenue_modifier": {
+          "type": "number"
+        },
+        "control_loss": {
+          "type": "number"
+        },
+        "heat_increase": {
+          "type": "number"
+        },
+        "opportunity_value": {
+          "type": "number"
+        }
+      }
+    },
+    "resolution_options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "number"
+          },
+          "requirements": {
+            "type": "object"
+          },
+          "outcome_description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "resolved",
+        "expired"
+      ],
+      "default": "active"
+    },
+    "resolved_action": {
+      "type": "string"
+    },
+    "outcome": {
+      "type": "object"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ai_generated": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "territory_id",
+    "event_type",
+    "title",
+    "description"
+  ]
+}

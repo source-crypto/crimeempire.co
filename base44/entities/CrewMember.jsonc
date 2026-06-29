@@ -1,0 +1,107 @@
+{
+  "name": "CrewMember",
+  "type": "object",
+  "properties": {
+    "crew_id": {
+      "type": "string"
+    },
+    "member_name": {
+      "type": "string"
+    },
+    "member_type": {
+      "type": "string",
+      "enum": [
+        "enforcer",
+        "hacker",
+        "driver",
+        "strategist",
+        "smuggler",
+        "negotiator"
+      ],
+      "default": "enforcer"
+    },
+    "level": {
+      "type": "number",
+      "default": 1
+    },
+    "experience": {
+      "type": "number",
+      "default": 0
+    },
+    "skills": {
+      "type": "object",
+      "properties": {
+        "combat": {
+          "type": "number"
+        },
+        "stealth": {
+          "type": "number"
+        },
+        "driving": {
+          "type": "number"
+        },
+        "hacking": {
+          "type": "number"
+        },
+        "negotiation": {
+          "type": "number"
+        }
+      }
+    },
+    "specialization": {
+      "type": "string",
+      "description": "Primary skill focus"
+    },
+    "morale": {
+      "type": "number",
+      "default": 75,
+      "description": "0-100 morale level"
+    },
+    "loyalty": {
+      "type": "number",
+      "default": 50,
+      "description": "0-100 loyalty to crew"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "on_mission",
+        "injured",
+        "training",
+        "resting"
+      ],
+      "default": "available"
+    },
+    "current_assignment": {
+      "type": "string"
+    },
+    "salary": {
+      "type": "number",
+      "default": 500
+    },
+    "recruited_by": {
+      "type": "string"
+    },
+    "recruitment_cost": {
+      "type": "number",
+      "default": 5000
+    },
+    "traits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Special abilities or characteristics"
+    },
+    "ai_generated": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "crew_id",
+    "member_name",
+    "member_type"
+  ]
+}

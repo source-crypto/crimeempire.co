@@ -1,0 +1,105 @@
+{
+  "name": "PlayerBase",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Owner of the base"
+    },
+    "base_name": {
+      "type": "string",
+      "description": "Custom base name"
+    },
+    "base_type": {
+      "type": "string",
+      "enum": [
+        "safehouse",
+        "enterprise_hq",
+        "hideout"
+      ],
+      "default": "hideout"
+    },
+    "location": {
+      "type": "object",
+      "properties": {
+        "territory_id": {
+          "type": "string"
+        },
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "z": {
+          "type": "number"
+        }
+      }
+    },
+    "level": {
+      "type": "number",
+      "default": 1,
+      "description": "Base upgrade level 1-10"
+    },
+    "security_level": {
+      "type": "number",
+      "default": 0,
+      "description": "Security rating 0-100"
+    },
+    "capacity": {
+      "type": "number",
+      "default": 1000,
+      "description": "Storage capacity"
+    },
+    "current_storage": {
+      "type": "number",
+      "default": 0
+    },
+    "maintenance_cost": {
+      "type": "number",
+      "default": 5000,
+      "description": "Weekly maintenance"
+    },
+    "last_maintenance": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "maintenance_health": {
+      "type": "number",
+      "default": 100,
+      "description": "Base condition 0-100"
+    },
+    "facilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "BaseFacility IDs"
+    },
+    "assigned_npcs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "NPCs managing base"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "last_\u043b\u0435_raid": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "vulnerability_rating": {
+      "type": "number",
+      "default": 50,
+      "description": "Risk of LE raid 0-100"
+    }
+  },
+  "required": [
+    "player_id",
+    "base_name",
+    "base_type"
+  ]
+}

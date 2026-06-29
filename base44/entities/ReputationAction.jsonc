@@ -1,0 +1,85 @@
+{
+  "name": "ReputationAction",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player taking action"
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "faction_quest",
+        "donation",
+        "sabotage",
+        "intel_sharing",
+        "undercover_op",
+        "scandal_creation"
+      ],
+      "description": "Type of action to modify reputation"
+    },
+    "target_group": {
+      "type": "string",
+      "enum": [
+        "faction",
+        "law_enforcement",
+        "underworld",
+        "corporate",
+        "hackers",
+        "street",
+        "government"
+      ],
+      "description": "Who the action targets"
+    },
+    "description": {
+      "type": "string",
+      "description": "Action details"
+    },
+    "cost": {
+      "type": "number",
+      "description": "Cost to perform action"
+    },
+    "reputation_change": {
+      "type": "number",
+      "description": "How much reputation changes"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard",
+        "extreme"
+      ],
+      "default": "medium"
+    },
+    "success_rate": {
+      "type": "number",
+      "default": 75,
+      "description": "Chance of success 0-100"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "in_progress",
+        "completed",
+        "failed"
+      ],
+      "default": "available"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "player_id",
+    "action_type",
+    "target_group"
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player receiving notification"
+    },
+    "notification_type": {
+      "type": "string",
+      "enum": [
+        "market_change",
+        "territory_attack",
+        "investment_update",
+        "crew_invitation",
+        "battle_result",
+        "heist_opportunity",
+        "enterprise_alert",
+        "message_received",
+        "resource_ready",
+        "auction_won"
+      ],
+      "description": "Type of notification"
+    },
+    "title": {
+      "type": "string",
+      "description": "Notification title"
+    },
+    "message": {
+      "type": "string",
+      "description": "Notification content"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false
+    },
+    "action_url": {
+      "type": "string",
+      "description": "Page to navigate to"
+    },
+    "related_entity_id": {
+      "type": "string",
+      "description": "ID of related entity"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data": {
+      "type": "object",
+      "description": "Additional notification data"
+    }
+  },
+  "required": [
+    "player_id",
+    "notification_type",
+    "title",
+    "message"
+  ]
+}

@@ -1,0 +1,147 @@
+{
+  "name": "CombatEncounter",
+  "type": "object",
+  "properties": {
+    "encounter_type": {
+      "type": "string",
+      "enum": [
+        "heist_combat",
+        "territory_defense",
+        "ambush",
+        "boss_fight",
+        "crew_battle"
+      ],
+      "default": "territory_defense"
+    },
+    "player_id": {
+      "type": "string"
+    },
+    "enemy_type": {
+      "type": "string",
+      "enum": [
+        "police",
+        "rival_crew",
+        "faction_forces",
+        "elite_unit",
+        "boss"
+      ],
+      "default": "rival_crew"
+    },
+    "enemy_count": {
+      "type": "number",
+      "default": 3
+    },
+    "enemy_stats": {
+      "type": "object",
+      "properties": {
+        "health": {
+          "type": "number"
+        },
+        "attack": {
+          "type": "number"
+        },
+        "defense": {
+          "type": "number"
+        },
+        "tactics_level": {
+          "type": "number"
+        }
+      }
+    },
+    "difficulty_scale": {
+      "type": "number",
+      "default": 1,
+      "description": "Multiplier based on player performance"
+    },
+    "combat_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "round": {
+            "type": "number"
+          },
+          "action": {
+            "type": "string"
+          },
+          "damage": {
+            "type": "number"
+          },
+          "actor": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ai_tactics": {
+      "type": "object",
+      "properties": {
+        "current_strategy": {
+          "type": "string"
+        },
+        "adaptations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "special_attacks_used": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "player_actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action_type": {
+            "type": "string"
+          },
+          "effectiveness": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "victory",
+        "defeat",
+        "retreat",
+        "ongoing"
+      ],
+      "default": "ongoing"
+    },
+    "rewards": {
+      "type": "object",
+      "properties": {
+        "experience": {
+          "type": "number"
+        },
+        "loot": {
+          "type": "number"
+        },
+        "reputation": {
+          "type": "number"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "player_id",
+    "enemy_type"
+  ]
+}

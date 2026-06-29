@@ -1,0 +1,85 @@
+{
+  "name": "BusinessAudit",
+  "type": "object",
+  "properties": {
+    "business_id": {
+      "type": "string",
+      "description": "Target business"
+    },
+    "player_id": {
+      "type": "string"
+    },
+    "audit_type": {
+      "type": "string",
+      "enum": [
+        "routine_inspection",
+        "financial_review",
+        "raid",
+        "undercover_sting"
+      ],
+      "description": "Type of audit"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "in_progress",
+        "completed",
+        "avoided"
+      ],
+      "default": "scheduled"
+    },
+    "suspicion_trigger": {
+      "type": "number",
+      "description": "Suspicion level that triggered audit"
+    },
+    "scheduled_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "minor",
+        "moderate",
+        "major",
+        "critical"
+      ],
+      "default": "minor"
+    },
+    "potential_loss": {
+      "type": "number",
+      "description": "Estimated financial penalty"
+    },
+    "evasion_options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "method": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "number"
+          },
+          "success_rate": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "outcome": {
+      "type": "string",
+      "description": "Audit result"
+    },
+    "evidence_found": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "business_id",
+    "player_id",
+    "audit_type"
+  ]
+}

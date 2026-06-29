@@ -1,0 +1,88 @@
+{
+  "name": "FacilityIntelligence",
+  "type": "object",
+  "properties": {
+    "facility_id": {
+      "type": "string",
+      "description": "Target facility"
+    },
+    "base_id": {
+      "type": "string",
+      "description": "Parent base"
+    },
+    "player_id": {
+      "type": "string"
+    },
+    "intel_level": {
+      "type": "number",
+      "default": 0,
+      "description": "Facility-specific intel 0-100"
+    },
+    "detected_activity": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "activity_type": {
+            "type": "string"
+          },
+          "detected_at": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Illegal activities detected"
+    },
+    "production_estimate": {
+      "type": "number",
+      "default": 0,
+      "description": "Estimated illegal production value"
+    },
+    "equipment_detected": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Equipment spotted"
+    },
+    "npc_activity_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "npc_name": {
+            "type": "string"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "risk_assessment": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "low"
+    },
+    "last_surveillance": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "facility_id",
+    "base_id",
+    "player_id"
+  ]
+}

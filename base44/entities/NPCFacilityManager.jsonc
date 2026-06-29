@@ -1,0 +1,79 @@
+{
+  "name": "NPCFacilityManager",
+  "type": "object",
+  "properties": {
+    "facility_id": {
+      "type": "string",
+      "description": "Managed facility"
+    },
+    "npc_id": {
+      "type": "string",
+      "description": "Manager NPC"
+    },
+    "npc_name": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "workshop_manager",
+        "security_chief",
+        "storage_master",
+        "lab_director",
+        "quartermaster",
+        "medic",
+        "gunsmith",
+        "hacker"
+      ],
+      "description": "Facility role"
+    },
+    "skill_level": {
+      "type": "number",
+      "default": 1,
+      "description": "Role expertise 1-10"
+    },
+    "morale": {
+      "type": "number",
+      "default": 70,
+      "description": "NPC morale 0-100"
+    },
+    "loyalty": {
+      "type": "number",
+      "default": 50,
+      "description": "Loyalty to player 0-100"
+    },
+    "wage": {
+      "type": "number",
+      "default": 5000,
+      "description": "Weekly wage"
+    },
+    "facility_efficiency_bonus": {
+      "type": "number",
+      "default": 0,
+      "description": "% efficiency boost"
+    },
+    "specialization": {
+      "type": "string",
+      "description": "Unique specialty"
+    },
+    "last_paid": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "assigned_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "performance_rating": {
+      "type": "number",
+      "default": 50,
+      "description": "Overall performance 0-100"
+    }
+  },
+  "required": [
+    "facility_id",
+    "npc_id",
+    "npc_name",
+    "role"
+  ]
+}

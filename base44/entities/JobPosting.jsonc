@@ -1,0 +1,138 @@
+{
+  "name": "JobPosting",
+  "type": "object",
+  "properties": {
+    "organization_id": {
+      "type": "string",
+      "description": "ID of the hiring organization"
+    },
+    "organization_name": {
+      "type": "string",
+      "description": "Display name of the hiring organization"
+    },
+    "organization_type": {
+      "type": "string",
+      "enum": [
+        "organization",
+        "government"
+      ],
+      "default": "organization"
+    },
+    "job_title": {
+      "type": "string"
+    },
+    "career_path": {
+      "type": "string",
+      "enum": [
+        "corporate",
+        "logistics",
+        "security",
+        "government",
+        "entrepreneurship"
+      ],
+      "default": "corporate"
+    },
+    "career_level": {
+      "type": "number",
+      "default": 1
+    },
+    "salary_min": {
+      "type": "number",
+      "default": 1500
+    },
+    "salary_max": {
+      "type": "number",
+      "default": 3000
+    },
+    "pay_type": {
+      "type": "string",
+      "enum": [
+        "hourly",
+        "fixed"
+      ],
+      "default": "fixed"
+    },
+    "contract_duration_days": {
+      "type": "number",
+      "default": 30
+    },
+    "description": {
+      "type": "string"
+    },
+    "requirements": {
+      "type": "object",
+      "properties": {
+        "min_experience": {
+          "type": "number"
+        },
+        "min_performance": {
+          "type": "number"
+        },
+        "min_education": {
+          "type": "string"
+        },
+        "min_leadership": {
+          "type": "number"
+        }
+      },
+      "default": {}
+    },
+    "benefits": {
+      "type": "object",
+      "properties": {
+        "profit_sharing_pct": {
+          "type": "number"
+        },
+        "vacation_days": {
+          "type": "number"
+        },
+        "health_insurance": {
+          "type": "boolean"
+        },
+        "pension_pct": {
+          "type": "number"
+        }
+      },
+      "default": {}
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "filled",
+        "closed"
+      ],
+      "default": "open"
+    },
+    "applicants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "applied_at": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "filled_by_player_id": {
+      "type": "string"
+    },
+    "posted_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "organization_name",
+    "job_title",
+    "career_path"
+  ]
+}

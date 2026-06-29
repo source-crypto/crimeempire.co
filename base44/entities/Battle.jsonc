@@ -1,0 +1,93 @@
+{
+  "name": "Battle",
+  "type": "object",
+  "properties": {
+    "territory_id": {
+      "type": "string",
+      "description": "Territory being fought over"
+    },
+    "attacking_crew_id": {
+      "type": "string"
+    },
+    "defending_crew_id": {
+      "type": "string"
+    },
+    "attack_power": {
+      "type": "number",
+      "default": 0
+    },
+    "defense_power": {
+      "type": "number",
+      "default": 0
+    },
+    "attacking_morale": {
+      "type": "number",
+      "default": 75,
+      "description": "Crew morale 0-100"
+    },
+    "defending_morale": {
+      "type": "number",
+      "default": 75
+    },
+    "attacking_fatigue": {
+      "type": "number",
+      "default": 0,
+      "description": "Fatigue level 0-100"
+    },
+    "defending_fatigue": {
+      "type": "number",
+      "default": 0
+    },
+    "attacking_equipment_condition": {
+      "type": "number",
+      "default": 100,
+      "description": "Equipment condition 0-100"
+    },
+    "defending_equipment_condition": {
+      "type": "number",
+      "default": 100
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "cancelled"
+      ],
+      "default": "active"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ends_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "winner_crew_id": {
+      "type": "string"
+    },
+    "participants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "side": {
+            "type": "string"
+          },
+          "contribution": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "territory_id",
+    "attacking_crew_id",
+    "defending_crew_id"
+  ]
+}

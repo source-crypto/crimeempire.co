@@ -1,0 +1,92 @@
+{
+  "name": "FactionActivity",
+  "type": "object",
+  "properties": {
+    "faction_id": {
+      "type": "string"
+    },
+    "faction_name": {
+      "type": "string"
+    },
+    "activity_type": {
+      "type": "string",
+      "enum": [
+        "supply_disruption",
+        "alliance_formation",
+        "trade_embargo",
+        "counter_investment",
+        "territory_expansion",
+        "diplomatic_pressure",
+        "market_manipulation"
+      ]
+    },
+    "target_type": {
+      "type": "string",
+      "enum": [
+        "player",
+        "faction",
+        "supply_line",
+        "territory",
+        "market"
+      ]
+    },
+    "target_id": {
+      "type": "string"
+    },
+    "target_name": {
+      "type": "string"
+    },
+    "ai_strategy": {
+      "type": "object",
+      "properties": {
+        "motivation": {
+          "type": "string"
+        },
+        "expected_outcome": {
+          "type": "string"
+        },
+        "counter_to_player_action": {
+          "type": "string"
+        },
+        "risk_assessment": {
+          "type": "number"
+        }
+      }
+    },
+    "success_probability": {
+      "type": "number"
+    },
+    "impact_metrics": {
+      "type": "object",
+      "properties": {
+        "economic_damage": {
+          "type": "number"
+        },
+        "diplomatic_shift": {
+          "type": "number"
+        },
+        "market_disruption": {
+          "type": "number"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "executing",
+        "completed",
+        "failed"
+      ],
+      "default": "planning"
+    },
+    "player_awareness": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "faction_name",
+    "activity_type"
+  ]
+}

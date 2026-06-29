@@ -1,0 +1,105 @@
+{
+  "name": "EnterpriseResearch",
+  "type": "object",
+  "properties": {
+    "enterprise_id": {
+      "type": "string"
+    },
+    "enterprise_type": {
+      "type": "string",
+      "enum": [
+        "marijuana_farm",
+        "chop_shop",
+        "money_laundering",
+        "material_production",
+        "weapons_cache"
+      ]
+    },
+    "research_node": {
+      "type": "string",
+      "description": "Unique identifier for research node"
+    },
+    "research_name": {
+      "type": "string"
+    },
+    "research_description": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "production",
+        "efficiency",
+        "security",
+        "special"
+      ],
+      "default": "production"
+    },
+    "tier": {
+      "type": "number",
+      "default": 1,
+      "description": "Research tier 1-5"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "locked",
+        "available",
+        "researching",
+        "completed"
+      ],
+      "default": "locked"
+    },
+    "prerequisites": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Required research nodes"
+    },
+    "cost": {
+      "type": "number"
+    },
+    "research_time": {
+      "type": "number",
+      "description": "Hours to complete"
+    },
+    "benefits": {
+      "type": "object",
+      "properties": {
+        "production_boost": {
+          "type": "number"
+        },
+        "new_items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "efficiency_bonus": {
+          "type": "number"
+        },
+        "security_bonus": {
+          "type": "number"
+        },
+        "passive_income": {
+          "type": "number"
+        }
+      }
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "enterprise_id",
+    "enterprise_type",
+    "research_node",
+    "research_name"
+  ]
+}

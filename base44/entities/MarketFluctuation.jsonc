@@ -1,0 +1,85 @@
+{
+  "name": "MarketFluctuation",
+  "type": "object",
+  "properties": {
+    "item_type": {
+      "type": "string"
+    },
+    "item_name": {
+      "type": "string"
+    },
+    "base_price": {
+      "type": "number"
+    },
+    "current_price": {
+      "type": "number"
+    },
+    "price_change_percentage": {
+      "type": "number"
+    },
+    "demand_level": {
+      "type": "number",
+      "default": 100,
+      "description": "0-200 demand index"
+    },
+    "supply_level": {
+      "type": "number",
+      "default": 100,
+      "description": "0-200 supply index"
+    },
+    "influencing_factors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "factor_type": {
+            "type": "string"
+          },
+          "factor_id": {
+            "type": "string"
+          },
+          "impact": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "trend": {
+      "type": "string",
+      "enum": [
+        "rising",
+        "falling",
+        "stable",
+        "volatile"
+      ],
+      "default": "stable"
+    },
+    "volatility_index": {
+      "type": "number",
+      "default": 1
+    },
+    "ai_prediction": {
+      "type": "object",
+      "properties": {
+        "next_24h_trend": {
+          "type": "string"
+        },
+        "confidence": {
+          "type": "number"
+        },
+        "reasoning": {
+          "type": "string"
+        }
+      }
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "item_type",
+    "item_name",
+    "base_price"
+  ]
+}

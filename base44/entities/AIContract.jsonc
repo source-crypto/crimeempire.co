@@ -1,0 +1,109 @@
+{
+  "name": "AIContract",
+  "type": "object",
+  "properties": {
+    "contract_type": {
+      "type": "string",
+      "enum": [
+        "buy",
+        "sell",
+        "trade",
+        "transport"
+      ],
+      "default": "buy"
+    },
+    "territory_id": {
+      "type": "string",
+      "description": "AI territory offering contract"
+    },
+    "territory_name": {
+      "type": "string"
+    },
+    "requested_item_type": {
+      "type": "string"
+    },
+    "requested_quantity": {
+      "type": "number"
+    },
+    "offered_price": {
+      "type": "number"
+    },
+    "bonus_payment": {
+      "type": "number",
+      "default": 0
+    },
+    "deadline": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "accepted",
+        "in_transit",
+        "completed",
+        "expired",
+        "failed"
+      ],
+      "default": "available"
+    },
+    "accepted_by_player": {
+      "type": "string"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard",
+        "extreme"
+      ],
+      "default": "medium"
+    },
+    "risk_level": {
+      "type": "number",
+      "default": 50,
+      "description": "Chance of interception 0-100"
+    },
+    "requirements": {
+      "type": "object",
+      "properties": {
+        "min_level": {
+          "type": "number"
+        },
+        "required_vehicle": {
+          "type": "boolean"
+        },
+        "crew_support": {
+          "type": "boolean"
+        }
+      }
+    },
+    "rewards": {
+      "type": "object",
+      "properties": {
+        "crypto": {
+          "type": "number"
+        },
+        "reputation": {
+          "type": "number"
+        },
+        "experience": {
+          "type": "number"
+        }
+      }
+    },
+    "ai_generated": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "territory_id",
+    "territory_name",
+    "requested_item_type",
+    "requested_quantity",
+    "offered_price"
+  ]
+}

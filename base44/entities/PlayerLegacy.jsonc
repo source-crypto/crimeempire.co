@@ -1,0 +1,76 @@
+{
+  "name": "PlayerLegacy",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player ID"
+    },
+    "legacy_score": {
+      "type": "number",
+      "default": 0,
+      "description": "Total legacy points accumulated"
+    },
+    "legacy_tier": {
+      "type": "number",
+      "default": 1,
+      "description": "Legacy level 1-5"
+    },
+    "legendary_actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "impact": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Significant player actions"
+    },
+    "world_influence": {
+      "type": "object",
+      "description": "Player's impact on game world",
+      "properties": {
+        "territories_controlled": {
+          "type": "number"
+        },
+        "npcs_recruited": {
+          "type": "number"
+        },
+        "factions_influenced": {
+          "type": "number"
+        },
+        "major_victories": {
+          "type": "number"
+        },
+        "alliances_forged": {
+          "type": "number"
+        }
+      }
+    },
+    "narrative_summary": {
+      "type": "string",
+      "description": "AI-generated summary of player's story"
+    },
+    "achievements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "last_legacy_event": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "player_id"
+  ]
+}

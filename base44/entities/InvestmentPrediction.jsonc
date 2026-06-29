@@ -1,0 +1,64 @@
+{
+  "name": "InvestmentPrediction",
+  "type": "object",
+  "properties": {
+    "investment_type": {
+      "type": "string",
+      "description": "Type of investment"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "Player receiving prediction"
+    },
+    "predicted_return": {
+      "type": "number",
+      "description": "AI-predicted return percentage"
+    },
+    "confidence_score": {
+      "type": "number",
+      "description": "Prediction confidence 0-100"
+    },
+    "macro_analysis": {
+      "type": "object",
+      "properties": {
+        "rate_environment": {
+          "type": "string"
+        },
+        "inflation_outlook": {
+          "type": "string"
+        },
+        "liquidity_conditions": {
+          "type": "string"
+        }
+      }
+    },
+    "risk_factors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_allocation": {
+      "type": "number",
+      "description": "Suggested investment amount"
+    },
+    "time_horizon": {
+      "type": "string",
+      "enum": [
+        "short",
+        "medium",
+        "long"
+      ],
+      "default": "medium"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "investment_type",
+    "predicted_return",
+    "confidence_score"
+  ]
+}

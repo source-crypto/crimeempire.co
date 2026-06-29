@@ -1,0 +1,127 @@
+{
+  "name": "CombatEncounterAI",
+  "type": "object",
+  "properties": {
+    "encounter_id": {
+      "type": "string"
+    },
+    "player_id": {
+      "type": "string"
+    },
+    "enemy_squad": {
+      "type": "object",
+      "properties": {
+        "leader": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "combat_style": {
+              "type": "string"
+            },
+            "special_abilities": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "tactics": {
+          "type": "string",
+          "enum": [
+            "aggressive_rush",
+            "defensive_hold",
+            "flanking_maneuver",
+            "cover_based",
+            "hit_and_run"
+          ],
+          "default": "aggressive_rush"
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "terrain": {
+          "type": "string"
+        },
+        "cover_positions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "hazards": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "player_crew_state": {
+      "type": "object",
+      "properties": {
+        "morale": {
+          "type": "number",
+          "default": 75
+        },
+        "fatigue": {
+          "type": "number",
+          "default": 0
+        },
+        "equipment_condition": {
+          "type": "number",
+          "default": 100
+        }
+      }
+    },
+    "combat_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "round": {
+            "type": "number"
+          },
+          "action": {
+            "type": "string"
+          },
+          "ai_adaptation": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ai_strategy_evolution": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "outcome": {
+      "type": "string",
+      "enum": [
+        "victory",
+        "defeat",
+        "tactical_retreat",
+        "ongoing"
+      ],
+      "default": "ongoing"
+    },
+    "rewards": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "player_id"
+  ]
+}

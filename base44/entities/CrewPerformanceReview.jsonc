@@ -1,0 +1,108 @@
+{
+  "name": "CrewPerformanceReview",
+  "type": "object",
+  "properties": {
+    "crew_member_id": {
+      "type": "string"
+    },
+    "crew_member_name": {
+      "type": "string"
+    },
+    "crew_id": {
+      "type": "string"
+    },
+    "review_period": {
+      "type": "string",
+      "description": "e.g. 'week', 'month'"
+    },
+    "ai_performance_analysis": {
+      "type": "object",
+      "properties": {
+        "overall_score": {
+          "type": "number",
+          "description": "0-100 performance score"
+        },
+        "strengths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "weaknesses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "improvement_recommendations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "skill_progression": {
+          "type": "object",
+          "properties": {
+            "combat_change": {
+              "type": "number"
+            },
+            "stealth_change": {
+              "type": "number"
+            },
+            "leadership_change": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "assignments_completed": {
+      "type": "number",
+      "default": 0
+    },
+    "assignments_failed": {
+      "type": "number",
+      "default": 0
+    },
+    "revenue_generated": {
+      "type": "number",
+      "default": 0
+    },
+    "territories_defended": {
+      "type": "number",
+      "default": 0
+    },
+    "loyalty_trend": {
+      "type": "string",
+      "enum": [
+        "increasing",
+        "stable",
+        "decreasing"
+      ],
+      "default": "stable"
+    },
+    "recommended_promotion": {
+      "type": "boolean",
+      "default": false
+    },
+    "recommended_training": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "public",
+        "crew_only",
+        "admin_only"
+      ],
+      "default": "crew_only"
+    }
+  },
+  "required": [
+    "crew_member_id",
+    "crew_id"
+  ]
+}

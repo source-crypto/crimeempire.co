@@ -1,0 +1,66 @@
+{
+  "name": "NPCRoutine",
+  "type": "object",
+  "properties": {
+    "npc_id": {
+      "type": "string",
+      "description": "NPC this routine belongs to"
+    },
+    "enterprise_id": {
+      "type": "string",
+      "description": "Associated enterprise"
+    },
+    "daily_schedule": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "hour": {
+            "type": "number"
+          },
+          "activity": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Hourly activities"
+    },
+    "work_efficiency": {
+      "type": "number",
+      "default": 100,
+      "description": "Current work efficiency 0-100"
+    },
+    "last_rest": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "stress_level": {
+      "type": "number",
+      "default": 0,
+      "description": "NPC stress from overwork 0-100"
+    },
+    "social_needs": {
+      "type": "number",
+      "default": 50,
+      "description": "Need for social interaction 0-100"
+    },
+    "current_activity": {
+      "type": "string",
+      "description": "What NPC is currently doing"
+    },
+    "location": {
+      "type": "string",
+      "description": "Current location"
+    }
+  },
+  "required": [
+    "npc_id",
+    "enterprise_id"
+  ]
+}

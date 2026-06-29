@@ -1,0 +1,80 @@
+{
+  "name": "RivalFaction",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "faction_type": {
+      "type": "string",
+      "enum": [
+        "gang",
+        "cartel",
+        "mafia",
+        "corporation",
+        "law_enforcement"
+      ],
+      "default": "gang"
+    },
+    "power_level": {
+      "type": "number",
+      "default": 100,
+      "description": "Overall faction strength"
+    },
+    "aggression": {
+      "type": "number",
+      "default": 50,
+      "description": "How aggressive 0-100"
+    },
+    "intelligence": {
+      "type": "number",
+      "default": 50,
+      "description": "Strategic capability"
+    },
+    "resources": {
+      "type": "number",
+      "default": 100000
+    },
+    "controlled_territories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "strategy": {
+      "type": "string",
+      "enum": [
+        "aggressive_expansion",
+        "defensive",
+        "economic",
+        "guerrilla",
+        "diplomatic"
+      ],
+      "default": "aggressive_expansion"
+    },
+    "current_target": {
+      "type": "string",
+      "description": "Territory or crew being targeted"
+    },
+    "reputation": {
+      "type": "number",
+      "default": 0,
+      "description": "Public standing"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "color": {
+      "type": "string",
+      "default": "#DC2626"
+    }
+  },
+  "required": [
+    "name",
+    "faction_type"
+  ]
+}

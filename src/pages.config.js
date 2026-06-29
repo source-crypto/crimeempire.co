@@ -51,6 +51,7 @@ import CrewTechTree from './pages/CrewTechTree';
 import AIEmployees from './pages/AIEmployees';
 import WorldEvents from './pages/WorldEvents';
 import DirectCombat from './pages/DirectCombat';
+import Employment from './pages/Employment';
 import SeasonalLeaderboard from './pages/SeasonalLeaderboard';
 import WorldTickMonitor from './pages/WorldTickMonitor';
 import EnforcementCenter from './pages/EnforcementCenter';
@@ -110,6 +111,7 @@ export const PAGES = {
     "AIEmployees": AIEmployees,
     "WorldEvents": WorldEvents,
     "DirectCombat": DirectCombat,
+    "Employment": Employment,
     "SeasonalLeaderboard": SeasonalLeaderboard,
     "EnforcementCenter": EnforcementCenter,
     "CommodityMarket": CommodityMarket,

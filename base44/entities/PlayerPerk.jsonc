@@ -1,0 +1,48 @@
+{
+  "name": "PlayerPerk",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player ID"
+    },
+    "perk_id": {
+      "type": "string",
+      "description": "Perk ID"
+    },
+    "perk_name": {
+      "type": "string",
+      "description": "Name of the perk"
+    },
+    "is_unlocked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether perk is available"
+    },
+    "unlock_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When perk was unlocked"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether perk is currently active"
+    },
+    "times_used": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of times perk was used"
+    },
+    "last_used": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time perk was used"
+    }
+  },
+  "required": [
+    "player_id",
+    "perk_id",
+    "perk_name"
+  ]
+}

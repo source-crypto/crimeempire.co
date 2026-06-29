@@ -1,0 +1,79 @@
+{
+  "name": "MissionModifier",
+  "type": "object",
+  "properties": {
+    "mission_id": {
+      "type": "string",
+      "description": "Mission being modified"
+    },
+    "player_id": {
+      "type": "string"
+    },
+    "original_difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard",
+        "extreme"
+      ]
+    },
+    "adjusted_difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard",
+        "extreme"
+      ]
+    },
+    "original_reward": {
+      "type": "number"
+    },
+    "adjusted_reward": {
+      "type": "number"
+    },
+    "difficulty_factors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "factor_type": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "What caused the adjustment"
+    },
+    "objective_modifications": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Changed objectives"
+    },
+    "time_limit_adjustment": {
+      "type": "number",
+      "description": "Time limit multiplier"
+    },
+    "enforcement_escalation": {
+      "type": "boolean",
+      "default": false,
+      "description": "Will trigger chase if mission fails"
+    },
+    "applied_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "mission_id",
+    "player_id"
+  ]
+}

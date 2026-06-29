@@ -1,0 +1,101 @@
+{
+  "name": "SupplyRoute",
+  "type": "object",
+  "properties": {
+    "route_name": {
+      "type": "string"
+    },
+    "from_territory_id": {
+      "type": "string"
+    },
+    "to_territory_id": {
+      "type": "string"
+    },
+    "waypoint_territories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Intermediate territories"
+    },
+    "crew_id": {
+      "type": "string"
+    },
+    "risk_score": {
+      "type": "number",
+      "description": "AI calculated risk 0-100"
+    },
+    "profit_potential": {
+      "type": "number"
+    },
+    "success_rate": {
+      "type": "number",
+      "default": 100
+    },
+    "total_distance": {
+      "type": "number"
+    },
+    "threat_factors": {
+      "type": "object",
+      "properties": {
+        "rival_presence": {
+          "type": "number"
+        },
+        "law_enforcement": {
+          "type": "number"
+        },
+        "world_events": {
+          "type": "number"
+        },
+        "territory_security": {
+          "type": "number"
+        }
+      }
+    },
+    "ai_recommendation": {
+      "type": "string",
+      "enum": [
+        "highly_recommended",
+        "recommended",
+        "risky",
+        "not_recommended"
+      ],
+      "default": "recommended"
+    },
+    "historical_runs": {
+      "type": "number",
+      "default": 0
+    },
+    "successful_runs": {
+      "type": "number",
+      "default": 0
+    },
+    "total_profit": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive",
+        "compromised"
+      ],
+      "default": "active"
+    },
+    "ai_analysis": {
+      "type": "object",
+      "description": "Detailed AI route analysis"
+    },
+    "last_used": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "route_name",
+    "from_territory_id",
+    "to_territory_id",
+    "crew_id"
+  ]
+}

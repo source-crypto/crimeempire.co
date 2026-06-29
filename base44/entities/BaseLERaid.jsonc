@@ -1,0 +1,93 @@
+{
+  "name": "BaseLERaid",
+  "type": "object",
+  "properties": {
+    "base_id": {
+      "type": "string",
+      "description": "Target base"
+    },
+    "player_id": {
+      "type": "string"
+    },
+    "raid_status": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "in_progress",
+        "breach",
+        "concluded"
+      ],
+      "default": "planning"
+    },
+    "trigger_heat": {
+      "type": "number",
+      "description": "Player heat that triggered raid"
+    },
+    "trigger_events": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Criminal event IDs that triggered raid"
+    },
+    "units_deployed": {
+      "type": "number",
+      "default": 5,
+      "description": "LE units sent"
+    },
+    "breach_progress": {
+      "type": "number",
+      "default": 0,
+      "description": "Breach progress 0-100"
+    },
+    "estimated_outcome": {
+      "type": "string",
+      "enum": [
+        "success",
+        "resistance",
+        "failure"
+      ],
+      "default": "success"
+    },
+    "assets_at_risk": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "detected_asset_value": {
+      "type": "number",
+      "default": 0,
+      "description": "Estimated contraband value in base"
+    },
+    "difficulty_multiplier": {
+      "type": "number",
+      "default": 1,
+      "description": "Raid difficulty based on assets/heat"
+    },
+    "specialized_units": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Special LE units deployed (SWAT, K9, etc.)"
+    },
+    "defense_effectiveness": {
+      "type": "number",
+      "default": 0,
+      "description": "How well base defended itself"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "concluded_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "base_id",
+    "player_id"
+  ]
+}

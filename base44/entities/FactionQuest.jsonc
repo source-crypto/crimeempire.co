@@ -1,0 +1,104 @@
+{
+  "name": "FactionQuest",
+  "type": "object",
+  "properties": {
+    "faction_id": {
+      "type": "string",
+      "description": "Faction offering this quest"
+    },
+    "quest_name": {
+      "type": "string"
+    },
+    "quest_type": {
+      "type": "string",
+      "enum": [
+        "assassination",
+        "sabotage",
+        "territory_claim",
+        "resource_delivery",
+        "intelligence_gathering",
+        "protection"
+      ],
+      "description": "Type of faction quest"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard",
+        "extreme"
+      ],
+      "default": "medium"
+    },
+    "required_rank": {
+      "type": "string",
+      "enum": [
+        "associate",
+        "soldier",
+        "captain",
+        "underboss",
+        "leader"
+      ],
+      "default": "associate"
+    },
+    "description": {
+      "type": "string"
+    },
+    "objectives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "objective": {
+            "type": "string"
+          },
+          "completed": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "rewards": {
+      "type": "object",
+      "properties": {
+        "crypto": {
+          "type": "number"
+        },
+        "reputation": {
+          "type": "number"
+        },
+        "faction_points": {
+          "type": "number"
+        },
+        "item_reward_id": {
+          "type": "string"
+        }
+      }
+    },
+    "time_limit_hours": {
+      "type": "number",
+      "default": 48
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "active",
+        "completed",
+        "failed",
+        "expired"
+      ],
+      "default": "available"
+    },
+    "is_repeatable": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "faction_id",
+    "quest_name",
+    "quest_type"
+  ]
+}

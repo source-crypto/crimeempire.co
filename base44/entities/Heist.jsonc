@@ -1,0 +1,126 @@
+{
+  "name": "Heist",
+  "type": "object",
+  "properties": {
+    "heist_name": {
+      "type": "string"
+    },
+    "target_type": {
+      "type": "string",
+      "enum": [
+        "bank",
+        "casino",
+        "jewelry_store",
+        "art_gallery",
+        "armored_truck",
+        "warehouse",
+        "mansion",
+        "corporate_office"
+      ],
+      "default": "bank"
+    },
+    "target_name": {
+      "type": "string"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard",
+        "expert",
+        "legendary"
+      ],
+      "default": "medium"
+    },
+    "crew_id": {
+      "type": "string"
+    },
+    "organizer_id": {
+      "type": "string",
+      "description": "Player who organized the heist"
+    },
+    "participants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "contribution_score": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "in_progress",
+        "completed",
+        "failed",
+        "busted"
+      ],
+      "default": "planning"
+    },
+    "estimated_payout": {
+      "type": "number"
+    },
+    "actual_payout": {
+      "type": "number"
+    },
+    "risk_level": {
+      "type": "number",
+      "default": 50,
+      "description": "0-100 risk percentage"
+    },
+    "success_probability": {
+      "type": "number",
+      "default": 50,
+      "description": "AI calculated success chance"
+    },
+    "scenario": {
+      "type": "object",
+      "description": "AI-generated scenario details"
+    },
+    "challenges": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ai_analysis": {
+      "type": "object",
+      "description": "AI recommendations and analysis"
+    },
+    "loot_distribution": {
+      "type": "object",
+      "description": "Post-heist payout breakdown"
+    },
+    "heat_generated": {
+      "type": "number",
+      "default": 0
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "heist_name",
+    "target_type",
+    "organizer_id"
+  ]
+}

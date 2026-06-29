@@ -1,0 +1,87 @@
+{
+  "name": "TerritoryDevelopment",
+  "type": "object",
+  "properties": {
+    "territory_id": {
+      "type": "string"
+    },
+    "territory_name": {
+      "type": "string"
+    },
+    "development_type": {
+      "type": "string",
+      "enum": [
+        "defense_turret",
+        "black_market",
+        "safe_house",
+        "weapons_depot",
+        "intel_network",
+        "surveillance_system"
+      ],
+      "default": "black_market"
+    },
+    "level": {
+      "type": "number",
+      "default": 1
+    },
+    "construction_progress": {
+      "type": "number",
+      "default": 0,
+      "description": "0-100 completion percentage"
+    },
+    "is_operational": {
+      "type": "boolean",
+      "default": false
+    },
+    "built_by_crew_id": {
+      "type": "string"
+    },
+    "maintenance_cost": {
+      "type": "number",
+      "default": 100
+    },
+    "benefits": {
+      "type": "object",
+      "properties": {
+        "defense_bonus": {
+          "type": "number"
+        },
+        "revenue_bonus": {
+          "type": "number"
+        },
+        "intel_bonus": {
+          "type": "number"
+        },
+        "storage_bonus": {
+          "type": "number"
+        }
+      }
+    },
+    "resources_generated": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "resource_type": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "frequency": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "last_generated": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "territory_id",
+    "development_type",
+    "built_by_crew_id"
+  ]
+}

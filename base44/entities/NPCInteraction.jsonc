@@ -1,0 +1,59 @@
+{
+  "name": "NPCInteraction",
+  "type": "object",
+  "properties": {
+    "npc_a_id": {
+      "type": "string",
+      "description": "First NPC"
+    },
+    "npc_b_id": {
+      "type": "string",
+      "description": "Second NPC"
+    },
+    "relationship_type": {
+      "type": "string",
+      "enum": [
+        "ally",
+        "rival",
+        "romantic",
+        "neutral",
+        "hostile"
+      ],
+      "default": "neutral"
+    },
+    "relationship_score": {
+      "type": "number",
+      "default": 0,
+      "description": "Relationship strength -100 to 100"
+    },
+    "shared_enterprise": {
+      "type": "string",
+      "description": "Enterprise they both work for"
+    },
+    "interaction_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Times they've interacted"
+    },
+    "last_interaction": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "gossip_shared": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Information exchanged"
+    },
+    "conflict_level": {
+      "type": "number",
+      "default": 0,
+      "description": "Tension between them 0-100"
+    }
+  },
+  "required": [
+    "npc_a_id",
+    "npc_b_id"
+  ]
+}

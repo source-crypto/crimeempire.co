@@ -1,0 +1,91 @@
+{
+  "name": "AIStrategicAdvice",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "advice_type": {
+      "type": "string",
+      "enum": [
+        "investment",
+        "combat",
+        "heist",
+        "territory",
+        "market",
+        "risk_warning"
+      ],
+      "description": "Type of strategic advice"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "title": {
+      "type": "string"
+    },
+    "advice_text": {
+      "type": "string",
+      "description": "AI-generated advice"
+    },
+    "recommended_actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "expected_outcome": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "risk_assessment": {
+      "type": "object",
+      "properties": {
+        "risk_level": {
+          "type": "number"
+        },
+        "reward_potential": {
+          "type": "number"
+        },
+        "confidence": {
+          "type": "number"
+        }
+      }
+    },
+    "context_data": {
+      "type": "object",
+      "description": "Player stats and situation that led to this advice"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_acted_upon": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "player_id",
+    "advice_type",
+    "title",
+    "advice_text"
+  ]
+}

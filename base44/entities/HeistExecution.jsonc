@@ -1,0 +1,91 @@
+{
+  "name": "HeistExecution",
+  "type": "object",
+  "properties": {
+    "heist_id": {
+      "type": "string"
+    },
+    "phase": {
+      "type": "string",
+      "enum": [
+        "approach",
+        "infiltration",
+        "execution",
+        "escape",
+        "completed"
+      ],
+      "default": "approach"
+    },
+    "current_challenge": {
+      "type": "object",
+      "description": "Current active challenge"
+    },
+    "completed_challenges": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "crew_actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "impact": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "events_log": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "detection_level": {
+      "type": "number",
+      "default": 0,
+      "description": "0-100 detection by authorities"
+    },
+    "progress": {
+      "type": "number",
+      "default": 0,
+      "description": "0-100 heist progress"
+    },
+    "loot_collected": {
+      "type": "number",
+      "default": 0
+    },
+    "casualties": {
+      "type": "number",
+      "default": 0
+    },
+    "heat_generated": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "success",
+        "failed",
+        "busted"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "heist_id"
+  ]
+}

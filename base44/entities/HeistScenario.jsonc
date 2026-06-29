@@ -1,0 +1,113 @@
+{
+  "name": "HeistScenario",
+  "type": "object",
+  "properties": {
+    "heist_id": {
+      "type": "string"
+    },
+    "execution_id": {
+      "type": "string"
+    },
+    "scenario_name": {
+      "type": "string"
+    },
+    "police_presence": {
+      "type": "string",
+      "enum": [
+        "minimal",
+        "standard",
+        "heavy",
+        "swat"
+      ],
+      "default": "standard"
+    },
+    "security_systems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "system_type": {
+            "type": "string"
+          },
+          "level": {
+            "type": "number"
+          },
+          "bypassed": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "unexpected_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "event_type": {
+            "type": "string"
+          },
+          "triggered_at": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "impact": {
+            "type": "string"
+          },
+          "resolved": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "time_pressure": {
+      "type": "number",
+      "default": 600,
+      "description": "Time limit in seconds"
+    },
+    "guard_patrols": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "alert_level": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "vault_complexity": {
+      "type": "number",
+      "default": 50,
+      "description": "1-100 difficulty"
+    },
+    "escape_routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "route_name": {
+            "type": "string"
+          },
+          "risk_level": {
+            "type": "number"
+          },
+          "blocked": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "heist_id",
+    "scenario_name"
+  ]
+}

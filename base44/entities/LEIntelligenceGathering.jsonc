@@ -1,0 +1,88 @@
+{
+  "name": "LEIntelligenceGathering",
+  "type": "object",
+  "properties": {
+    "base_id": {
+      "type": "string",
+      "description": "Target base"
+    },
+    "player_id": {
+      "type": "string"
+    },
+    "intelligence_level": {
+      "type": "number",
+      "default": 0,
+      "description": "Intel gathered 0-100"
+    },
+    "surveillance_days": {
+      "type": "number",
+      "default": 0,
+      "description": "Days of surveillance"
+    },
+    "detected_vulnerabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "vulnerability_type": {
+            "type": "string",
+            "enum": [
+              "low_security",
+              "poor_maintenance",
+              "weak_defense",
+              "predictable_schedule",
+              "understaffed"
+            ]
+          },
+          "severity": {
+            "type": "number"
+          },
+          "detected_date": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "estimated_assets": {
+      "type": "number",
+      "default": 0,
+      "description": "Estimated contraband value"
+    },
+    "optimal_raid_window": {
+      "type": "object",
+      "properties": {
+        "day": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string"
+        },
+        "success_probability": {
+          "type": "number"
+        }
+      }
+    },
+    "raid_recommendation": {
+      "type": "string",
+      "enum": [
+        "green",
+        "yellow",
+        "red",
+        "critical"
+      ],
+      "default": "green"
+    },
+    "last_surveillance": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "gathering_started": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "base_id",
+    "player_id"
+  ]
+}

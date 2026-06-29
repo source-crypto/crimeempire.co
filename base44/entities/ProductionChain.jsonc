@@ -1,0 +1,107 @@
+{
+  "name": "ProductionChain",
+  "type": "object",
+  "properties": {
+    "enterprise_id": {
+      "type": "string"
+    },
+    "chain_name": {
+      "type": "string"
+    },
+    "chain_type": {
+      "type": "string",
+      "enum": [
+        "raw_to_refined",
+        "assembly",
+        "conversion",
+        "multi_stage"
+      ],
+      "default": "raw_to_refined"
+    },
+    "input_resources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "resource_type": {
+            "type": "string"
+          },
+          "quantity_required": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    },
+    "output_products": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "product_name": {
+            "type": "string"
+          },
+          "quantity_produced": {
+            "type": "number"
+          },
+          "value_per_unit": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    },
+    "production_stages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "stage_number": {
+            "type": "number"
+          },
+          "stage_name": {
+            "type": "string"
+          },
+          "duration_hours": {
+            "type": "number"
+          },
+          "automation_level": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    },
+    "efficiency_rating": {
+      "type": "number",
+      "default": 100,
+      "description": "Production efficiency 0-100"
+    },
+    "automation_level": {
+      "type": "number",
+      "default": 0,
+      "description": "AI automation 0-100"
+    },
+    "ai_managed": {
+      "type": "boolean",
+      "default": false,
+      "description": "AI auto-management enabled"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "total_output_value": {
+      "type": "number",
+      "default": 0
+    },
+    "cycles_completed": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "enterprise_id",
+    "chain_name"
+  ]
+}

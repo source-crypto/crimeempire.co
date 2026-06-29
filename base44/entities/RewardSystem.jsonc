@@ -1,0 +1,49 @@
+{
+  "name": "RewardSystem",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "reward_type": {
+      "type": "string",
+      "enum": [
+        "daily_login",
+        "mission_complete",
+        "heist_bonus",
+        "territory_control",
+        "passive_income"
+      ],
+      "default": "daily_login"
+    },
+    "amount": {
+      "type": "number",
+      "default": 0
+    },
+    "experience": {
+      "type": "number",
+      "default": 0
+    },
+    "streak_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Daily login streak"
+    },
+    "last_claim_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "is_claimed": {
+      "type": "boolean",
+      "default": false
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional reward data"
+    }
+  },
+  "required": [
+    "player_id",
+    "reward_type"
+  ]
+}

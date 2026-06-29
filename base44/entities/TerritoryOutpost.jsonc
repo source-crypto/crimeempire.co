@@ -1,0 +1,81 @@
+{
+  "name": "TerritoryOutpost",
+  "type": "object",
+  "properties": {
+    "territory_id": {
+      "type": "string"
+    },
+    "outpost_type": {
+      "type": "string",
+      "enum": [
+        "drug_lab",
+        "weapon_factory",
+        "chop_shop",
+        "safehouse",
+        "surveillance"
+      ],
+      "default": "safehouse"
+    },
+    "name": {
+      "type": "string"
+    },
+    "owner_faction_id": {
+      "type": "string"
+    },
+    "coordinates": {
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        }
+      }
+    },
+    "fortification_level": {
+      "type": "number",
+      "default": 1,
+      "description": "Defense level 1-10"
+    },
+    "production_rate": {
+      "type": "number",
+      "default": 100,
+      "description": "Units per hour"
+    },
+    "capacity": {
+      "type": "number",
+      "default": 1000
+    },
+    "current_stock": {
+      "type": "number",
+      "default": 0
+    },
+    "assigned_units": {
+      "type": "number",
+      "default": 5,
+      "description": "Guards/workers"
+    },
+    "upgrade_level": {
+      "type": "number",
+      "default": 1
+    },
+    "is_operational": {
+      "type": "boolean",
+      "default": true
+    },
+    "heat_level": {
+      "type": "number",
+      "default": 0
+    },
+    "revenue_per_hour": {
+      "type": "number",
+      "default": 1000
+    }
+  },
+  "required": [
+    "territory_id",
+    "outpost_type",
+    "owner_faction_id"
+  ]
+}

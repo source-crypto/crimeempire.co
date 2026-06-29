@@ -1,0 +1,57 @@
+{
+  "name": "Crew",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Crew name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Crew description"
+    },
+    "boss_id": {
+      "type": "string",
+      "description": "Player ID of the crew boss"
+    },
+    "member_count": {
+      "type": "number",
+      "default": 1
+    },
+    "territory_count": {
+      "type": "number",
+      "default": 0
+    },
+    "total_power": {
+      "type": "number",
+      "default": 0,
+      "description": "Combined crew strength"
+    },
+    "total_revenue": {
+      "type": "number",
+      "default": 0
+    },
+    "reputation": {
+      "type": "number",
+      "default": 0,
+      "description": "Crew reputation score"
+    },
+    "color": {
+      "type": "string",
+      "default": "#9333EA",
+      "description": "Crew color theme"
+    },
+    "emblem": {
+      "type": "string",
+      "description": "Crew emblem/logo"
+    },
+    "is_recruiting": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "name",
+    "boss_id"
+  ]
+}

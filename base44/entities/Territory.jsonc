@@ -1,0 +1,70 @@
+{
+  "name": "Territory",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Territory name"
+    },
+    "controlling_crew_id": {
+      "type": "string",
+      "description": "Crew that controls this territory"
+    },
+    "coordinates": {
+      "type": "object",
+      "description": "Map coordinates",
+      "properties": {
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        }
+      }
+    },
+    "control_percentage": {
+      "type": "number",
+      "default": 100,
+      "description": "Control level 0-100"
+    },
+    "revenue_multiplier": {
+      "type": "number",
+      "default": 1,
+      "description": "Income boost from territory"
+    },
+    "defense_bonus": {
+      "type": "number",
+      "default": 0,
+      "description": "Defensive structures bonus"
+    },
+    "is_contested": {
+      "type": "boolean",
+      "default": false
+    },
+    "battle_id": {
+      "type": "string",
+      "description": "Active battle ID if contested"
+    },
+    "benefits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Special benefits this territory provides"
+    },
+    "resource_type": {
+      "type": "string",
+      "enum": [
+        "financial",
+        "industrial",
+        "tactical",
+        "residential"
+      ],
+      "default": "residential"
+    }
+  },
+  "required": [
+    "name",
+    "controlling_crew_id"
+  ]
+}

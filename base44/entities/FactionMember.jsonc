@@ -1,0 +1,46 @@
+{
+  "name": "FactionMember",
+  "type": "object",
+  "properties": {
+    "faction_id": {
+      "type": "string"
+    },
+    "player_id": {
+      "type": "string"
+    },
+    "rank": {
+      "type": "string",
+      "enum": [
+        "leader",
+        "underboss",
+        "captain",
+        "soldier",
+        "associate"
+      ],
+      "default": "associate"
+    },
+    "contribution_points": {
+      "type": "number",
+      "default": 0
+    },
+    "joined_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "loyalty_score": {
+      "type": "number",
+      "default": 50
+    }
+  },
+  "required": [
+    "faction_id",
+    "player_id"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "name": "LaunderingAccessory",
+  "type": "object",
+  "properties": {
+    "accessory_name": {
+      "type": "string",
+      "description": "Name of accessory/upgrade"
+    },
+    "accessory_type": {
+      "type": "string",
+      "enum": [
+        "efficiency_boost",
+        "capacity_increase",
+        "heat_reduction",
+        "automation",
+        "security"
+      ],
+      "description": "Type of upgrade"
+    },
+    "tier": {
+      "type": "number",
+      "default": 1,
+      "description": "Accessory tier 1-5"
+    },
+    "cost": {
+      "type": "number",
+      "description": "Purchase cost"
+    },
+    "bonus_value": {
+      "type": "number",
+      "description": "Numerical bonus provided"
+    },
+    "description": {
+      "type": "string"
+    },
+    "compatible_business_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Business types this works with"
+    },
+    "is_available": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "accessory_name",
+    "accessory_type",
+    "cost",
+    "bonus_value"
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "name": "BaseFacility",
+  "type": "object",
+  "properties": {
+    "base_id": {
+      "type": "string",
+      "description": "Parent base"
+    },
+    "facility_type": {
+      "type": "string",
+      "enum": [
+        "garage",
+        "workshop",
+        "storage",
+        "laboratory",
+        "barracks",
+        "medical",
+        "armory",
+        "intelligence"
+      ],
+      "default": "storage"
+    },
+    "facility_name": {
+      "type": "string",
+      "description": "Custom facility name"
+    },
+    "level": {
+      "type": "number",
+      "default": 1,
+      "description": "Facility upgrade level 1-5"
+    },
+    "position": {
+      "type": "object",
+      "properties": {
+        "x": {
+          "type": "number"
+        },
+        "y": {
+          "type": "number"
+        },
+        "z": {
+          "type": "number"
+        }
+      }
+    },
+    "efficiency": {
+      "type": "number",
+      "default": 100,
+      "description": "Operating efficiency 0-100"
+    },
+    "capacity": {
+      "type": "number",
+      "description": "Facility-specific capacity"
+    },
+    "current_usage": {
+      "type": "number",
+      "default": 0
+    },
+    "upgrade_cost": {
+      "type": "number",
+      "description": "Cost to upgrade next level"
+    },
+    "maintenance_cost": {
+      "type": "number",
+      "default": 1000,
+      "description": "Weekly maintenance"
+    },
+    "assigned_npc_id": {
+      "type": "string",
+      "description": "NPC managing this facility"
+    },
+    "production_rate": {
+      "type": "number",
+      "default": 0,
+      "description": "Production per hour (workshop)"
+    },
+    "security_contribution": {
+      "type": "number",
+      "default": 0,
+      "description": "Security boost this facility provides"
+    },
+    "operational": {
+      "type": "boolean",
+      "default": true
+    },
+    "aesthetics": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "type": "string",
+          "default": "#3b82f6"
+        },
+        "material": {
+          "type": "string",
+          "enum": [
+            "metal",
+            "concrete",
+            "glass",
+            "reinforced"
+          ]
+        },
+        "lighting": {
+          "type": "number",
+          "default": 100
+        },
+        "custom_name": {
+          "type": "string"
+        }
+      }
+    },
+    "grid_position": {
+      "type": "object",
+      "properties": {
+        "row": {
+          "type": "number"
+        },
+        "col": {
+          "type": "number"
+        },
+        "rotation": {
+          "type": "number",
+          "default": 0
+        }
+      }
+    }
+  },
+  "required": [
+    "base_id",
+    "facility_type"
+  ]
+}

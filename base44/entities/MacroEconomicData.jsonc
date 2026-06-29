@@ -1,0 +1,82 @@
+{
+  "name": "MacroEconomicData",
+  "type": "object",
+  "properties": {
+    "data_type": {
+      "type": "string",
+      "enum": [
+        "ecb_rates",
+        "fed_rates",
+        "target2_balances",
+        "inflation_data",
+        "balance_sheets"
+      ],
+      "description": "Type of economic data"
+    },
+    "region": {
+      "type": "string",
+      "enum": [
+        "eurozone",
+        "usa",
+        "germany",
+        "italy",
+        "spain",
+        "france"
+      ],
+      "description": "Geographic region"
+    },
+    "indicator_name": {
+      "type": "string",
+      "description": "Name of the economic indicator"
+    },
+    "current_value": {
+      "type": "number",
+      "description": "Current value of the indicator"
+    },
+    "previous_value": {
+      "type": "number",
+      "description": "Previous period value"
+    },
+    "change_percent": {
+      "type": "number",
+      "description": "Percentage change"
+    },
+    "game_impact": {
+      "type": "object",
+      "properties": {
+        "credit_cost_modifier": {
+          "type": "number"
+        },
+        "market_volatility": {
+          "type": "number"
+        },
+        "growth_modifier": {
+          "type": "number"
+        },
+        "risk_level": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        }
+      },
+      "description": "How this data affects game mechanics"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "data_snapshot": {
+      "type": "object",
+      "description": "Full data snapshot from API"
+    }
+  },
+  "required": [
+    "data_type",
+    "indicator_name",
+    "current_value"
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "name": "EconomicSabotage",
+  "type": "object",
+  "properties": {
+    "sabotage_type": {
+      "type": "string",
+      "enum": [
+        "supply_disruption",
+        "price_manipulation",
+        "resource_theft",
+        "employee_poaching",
+        "reputation_attack",
+        "market_flooding"
+      ],
+      "default": "supply_disruption"
+    },
+    "attacker_faction_id": {
+      "type": "string"
+    },
+    "attacker_name": {
+      "type": "string"
+    },
+    "target_enterprise_id": {
+      "type": "string"
+    },
+    "target_player_id": {
+      "type": "string"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "minor",
+        "moderate",
+        "major",
+        "catastrophic"
+      ],
+      "default": "moderate"
+    },
+    "economic_damage": {
+      "type": "number",
+      "default": 0,
+      "description": "Total monetary loss"
+    },
+    "production_impact": {
+      "type": "number",
+      "default": 0,
+      "description": "Percentage reduction in output"
+    },
+    "duration_hours": {
+      "type": "number",
+      "default": 24
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "executing",
+        "completed",
+        "thwarted"
+      ],
+      "default": "planned"
+    },
+    "detection_difficulty": {
+      "type": "number",
+      "default": 50,
+      "description": "How hard to detect 0-100"
+    },
+    "countermeasures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "action": {
+            "type": "string"
+          },
+          "effectiveness": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "sabotage_type",
+    "attacker_faction_id",
+    "target_enterprise_id"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "name": "AdvancedSupplyChain",
+  "type": "object",
+  "properties": {
+    "enterprise_id": {
+      "type": "string",
+      "description": "Enterprise this supply chain serves"
+    },
+    "chain_name": {
+      "type": "string",
+      "description": "Name of supply chain"
+    },
+    "source_territory": {
+      "type": "string",
+      "description": "Where supplies originate"
+    },
+    "destination_territory": {
+      "type": "string",
+      "description": "Where supplies are delivered"
+    },
+    "intermediate_points": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "location": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "safety_rating": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Waypoints along the route"
+    },
+    "resource_type": {
+      "type": "string",
+      "description": "Type of resource transported"
+    },
+    "weekly_volume": {
+      "type": "number",
+      "description": "Units transported per week"
+    },
+    "profit_per_unit": {
+      "type": "number",
+      "description": "Revenue per unit"
+    },
+    "risk_level": {
+      "type": "number",
+      "default": 50,
+      "description": "Route danger level 0-100"
+    },
+    "disruption_status": {
+      "type": "string",
+      "enum": [
+        "operational",
+        "disrupted",
+        "blocked"
+      ],
+      "default": "operational"
+    },
+    "npc_manager_id": {
+      "type": "string",
+      "description": "NPC managing this chain"
+    },
+    "efficiency": {
+      "type": "number",
+      "default": 100,
+      "description": "Operational efficiency 0-100"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "enterprise_id",
+    "chain_name",
+    "source_territory",
+    "destination_territory"
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "name": "Investigation",
+  "type": "object",
+  "properties": {
+    "investigation_type": {
+      "type": "string",
+      "enum": [
+        "law_enforcement",
+        "player_initiated",
+        "detective_case"
+      ],
+      "description": "Type of investigation"
+    },
+    "target_player_id": {
+      "type": "string",
+      "description": "Player being investigated"
+    },
+    "target_player_username": {
+      "type": "string"
+    },
+    "investigator_id": {
+      "type": "string",
+      "description": "Who initiated investigation (player or LE)"
+    },
+    "investigator_name": {
+      "type": "string"
+    },
+    "case_title": {
+      "type": "string",
+      "description": "Investigation title"
+    },
+    "case_description": {
+      "type": "string",
+      "description": "Investigation details"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "closed",
+        "suspended",
+        "escalated"
+      ],
+      "default": "active"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "evidence_collected": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "evidence_id": {
+            "type": "string"
+          },
+          "evidence_type": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "suspects": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": []
+    },
+    "progress_percentage": {
+      "type": "number",
+      "default": 0,
+      "description": "Investigation progress 0-100"
+    },
+    "discovered_activities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Criminal activities discovered"
+    },
+    "risk_level": {
+      "type": "number",
+      "default": 0,
+      "description": "Risk to target player 0-100"
+    },
+    "estimated_completion": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "budget_allocated": {
+      "type": "number",
+      "default": 0
+    },
+    "budget_spent": {
+      "type": "number",
+      "default": 0
+    },
+    "leads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "lead_description": {
+            "type": "string"
+          },
+          "credibility": {
+            "type": "number"
+          },
+          "followed_up": {
+            "type": "boolean"
+          }
+        }
+      },
+      "default": []
+    },
+    "outcome": {
+      "type": "string",
+      "description": "Investigation outcome if closed"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "investigation_type",
+    "target_player_id",
+    "case_title"
+  ]
+}

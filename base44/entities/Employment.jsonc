@@ -1,0 +1,170 @@
+{
+  "name": "Employment",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "ID of the player this employment record belongs to"
+    },
+    "username": {
+      "type": "string",
+      "description": "Player username for display"
+    },
+    "employment_status": {
+      "type": "string",
+      "enum": [
+        "employed",
+        "self_employed",
+        "seeking",
+        "unemployed",
+        "retired"
+      ],
+      "default": "seeking",
+      "description": "Current status in the labor market"
+    },
+    "employer_id": {
+      "type": "string",
+      "description": "ID of the organization/owner the player works for"
+    },
+    "employer_name": {
+      "type": "string",
+      "description": "Display name of the employer"
+    },
+    "employer_type": {
+      "type": "string",
+      "enum": [
+        "organization",
+        "government",
+        "self_owned"
+      ],
+      "default": "organization"
+    },
+    "business_id": {
+      "type": "string",
+      "description": "Specific business/facility the player is assigned to"
+    },
+    "career_path": {
+      "type": "string",
+      "enum": [
+        "corporate",
+        "logistics",
+        "security",
+        "government",
+        "entrepreneurship"
+      ],
+      "default": "corporate",
+      "description": "Which career track the player is on"
+    },
+    "job_title": {
+      "type": "string",
+      "default": "Intern"
+    },
+    "career_level": {
+      "type": "number",
+      "default": 1,
+      "description": "Progression level within the career path (1-9)"
+    },
+    "salary": {
+      "type": "number",
+      "default": 1500,
+      "description": "Gross salary per pay cycle"
+    },
+    "pay_type": {
+      "type": "string",
+      "enum": [
+        "hourly",
+        "fixed"
+      ],
+      "default": "fixed"
+    },
+    "performance_rating": {
+      "type": "number",
+      "default": 70,
+      "description": "Overall performance score 0-100"
+    },
+    "experience_points": {
+      "type": "number",
+      "default": 0,
+      "description": "Accumulated XP toward next promotion"
+    },
+    "tenure_days": {
+      "type": "number",
+      "default": 0,
+      "description": "Days employed at current job"
+    },
+    "hired_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_paid_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "pension_accrued": {
+      "type": "number",
+      "default": 0,
+      "description": "Retirement savings accumulated"
+    },
+    "retirement_eligible": {
+      "type": "boolean",
+      "default": false
+    },
+    "certifications": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Education/certifications earned"
+    },
+    "employment_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "employer_name": {
+            "type": "string"
+          },
+          "job_title": {
+            "type": "string"
+          },
+          "career_path": {
+            "type": "string"
+          },
+          "level": {
+            "type": "number"
+          },
+          "salary": {
+            "type": "number"
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "end_date": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "default": [],
+      "description": "Past positions held"
+    }
+  },
+  "required": [
+    "player_id",
+    "username",
+    "career_path"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

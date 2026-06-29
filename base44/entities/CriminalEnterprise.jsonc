@@ -1,0 +1,159 @@
+{
+  "name": "CriminalEnterprise",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "marijuana_farm",
+        "chop_shop",
+        "money_laundering",
+        "material_production",
+        "weapons_cache",
+        "arms_manufacturing",
+        "counterfeiting_operation",
+        "human_trafficking_ring"
+      ],
+      "default": "marijuana_farm"
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "crew_id": {
+      "type": "string"
+    },
+    "level": {
+      "type": "number",
+      "default": 1,
+      "description": "Upgrade level"
+    },
+    "production_rate": {
+      "type": "number",
+      "default": 100,
+      "description": "Units per hour"
+    },
+    "storage_capacity": {
+      "type": "number",
+      "default": 1000
+    },
+    "current_stock": {
+      "type": "number",
+      "default": 0
+    },
+    "heat_level": {
+      "type": "number",
+      "default": 0,
+      "description": "Law enforcement attention 0-100"
+    },
+    "security_level": {
+      "type": "number",
+      "default": 1,
+      "description": "Security upgrades"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_raided": {
+      "type": "boolean",
+      "default": false
+    },
+    "location": {
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        }
+      }
+    },
+    "last_production": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "total_revenue": {
+      "type": "number",
+      "default": 0
+    },
+    "stored_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string"
+          },
+          "item_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    },
+    "production_queue": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_type": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "completion_time": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "specialized_equipment": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "equipment_name": {
+            "type": "string"
+          },
+          "efficiency_bonus": {
+            "type": "number"
+          }
+        }
+      },
+      "default": [],
+      "description": "Specialized equipment for arms/counterfeiting"
+    },
+    "security_measures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Active security measures against PvP attacks"
+    },
+    "alliance_status": {
+      "type": "string",
+      "enum": [
+        "neutral",
+        "protected",
+        "allied"
+      ],
+      "default": "neutral",
+      "description": "Protection level from alliances"
+    }
+  },
+  "required": [
+    "name",
+    "type",
+    "owner_id"
+  ]
+}

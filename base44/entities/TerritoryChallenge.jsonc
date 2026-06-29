@@ -1,0 +1,85 @@
+{
+  "name": "TerritoryChallenge",
+  "type": "object",
+  "properties": {
+    "territory_id": {
+      "type": "string"
+    },
+    "challenge_type": {
+      "type": "string",
+      "enum": [
+        "police_raid",
+        "rival_attack",
+        "civil_unrest",
+        "resource_shortage",
+        "epidemic"
+      ],
+      "default": "police_raid"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "minor",
+        "moderate",
+        "major",
+        "critical"
+      ],
+      "default": "moderate"
+    },
+    "threat_level": {
+      "type": "number",
+      "default": 50
+    },
+    "description": {
+      "type": "string"
+    },
+    "reward_for_success": {
+      "type": "number",
+      "default": 10000
+    },
+    "penalty_for_failure": {
+      "type": "number",
+      "default": 5000
+    },
+    "time_limit_hours": {
+      "type": "number",
+      "default": 24
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "resolved",
+        "failed",
+        "expired"
+      ],
+      "default": "active"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resolution_options": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "option_name": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "number"
+          },
+          "success_probability": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "territory_id",
+    "challenge_type"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "name": "EnterpriseLeaderboard",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "player_username": {
+      "type": "string"
+    },
+    "total_revenue": {
+      "type": "number",
+      "default": 0,
+      "description": "Lifetime enterprise revenue"
+    },
+    "total_enterprises": {
+      "type": "number",
+      "default": 0
+    },
+    "criminal_influence_score": {
+      "type": "number",
+      "default": 0,
+      "description": "Overall criminal empire influence"
+    },
+    "successful_defenses": {
+      "type": "number",
+      "default": 0,
+      "description": "Times defended against sabotage"
+    },
+    "successful_attacks": {
+      "type": "number",
+      "default": 0,
+      "description": "Successful sabotage attacks"
+    },
+    "rank": {
+      "type": "number",
+      "description": "Current leaderboard rank"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "player_id",
+    "player_username"
+  ]
+}

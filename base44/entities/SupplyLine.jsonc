@@ -1,0 +1,95 @@
+{
+  "name": "SupplyLine",
+  "type": "object",
+  "properties": {
+    "crew_id": {
+      "type": "string"
+    },
+    "from_territory_id": {
+      "type": "string"
+    },
+    "to_territory_id": {
+      "type": "string"
+    },
+    "from_territory_name": {
+      "type": "string"
+    },
+    "to_territory_name": {
+      "type": "string"
+    },
+    "efficiency": {
+      "type": "number",
+      "default": 100,
+      "description": "0-100% operational efficiency"
+    },
+    "revenue_boost": {
+      "type": "number",
+      "default": 1.15,
+      "description": "Revenue multiplier"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_disrupted": {
+      "type": "boolean",
+      "default": false
+    },
+    "disrupted_by_crew_id": {
+      "type": "string"
+    },
+    "total_value_transferred": {
+      "type": "number",
+      "default": 0
+    },
+    "security_level": {
+      "type": "number",
+      "default": 1,
+      "description": "Protection against disruption"
+    },
+    "shipments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_type": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string"
+          },
+          "eta": {
+            "type": "string"
+          }
+        }
+      },
+      "default": []
+    },
+    "objectives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "reward": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "crew_id",
+    "from_territory_id",
+    "to_territory_id"
+  ]
+}

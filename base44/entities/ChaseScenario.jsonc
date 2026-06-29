@@ -1,0 +1,92 @@
+{
+  "name": "ChaseScenario",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player being chased"
+    },
+    "trigger_event": {
+      "type": "string",
+      "description": "What triggered the chase"
+    },
+    "trigger_heat_level": {
+      "type": "number",
+      "description": "Heat when chase started"
+    },
+    "chase_type": {
+      "type": "string",
+      "enum": [
+        "pursuit",
+        "ambush",
+        "surveillance_breach",
+        "heist_gone_wrong",
+        "contract_execution"
+      ],
+      "default": "pursuit"
+    },
+    "law_enforcement_units": {
+      "type": "number",
+      "default": 1,
+      "description": "Number of LE units deployed"
+    },
+    "unit_types": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Types of LE units (patrol, swat, helicopter)"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard",
+        "extreme"
+      ],
+      "default": "medium"
+    },
+    "escape_routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "route_name": {
+            "type": "string"
+          },
+          "risk_level": {
+            "type": "number"
+          },
+          "success_probability": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Available escape options"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "escaped",
+        "captured",
+        "negotiated"
+      ],
+      "default": "active"
+    },
+    "time_remaining": {
+      "type": "number",
+      "description": "Seconds before capture"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "player_id",
+    "trigger_event",
+    "chase_type"
+  ]
+}

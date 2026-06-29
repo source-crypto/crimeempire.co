@@ -1,0 +1,51 @@
+{
+  "name": "EnterpriseRivalry",
+  "type": "object",
+  "properties": {
+    "player_1_id": {
+      "type": "string",
+      "description": "First player"
+    },
+    "player_2_id": {
+      "type": "string",
+      "description": "Second player"
+    },
+    "rivalry_level": {
+      "type": "number",
+      "default": 1,
+      "description": "Intensity of rivalry 1-10"
+    },
+    "initiated_by": {
+      "type": "string",
+      "description": "Player who started the rivalry"
+    },
+    "sabotage_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Total sabotage actions between them"
+    },
+    "total_damage_dealt": {
+      "type": "number",
+      "default": 0,
+      "description": "Total economic damage"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "resolved",
+        "escalated"
+      ],
+      "default": "active"
+    },
+    "resolution_terms": {
+      "type": "string",
+      "description": "How rivalry was resolved"
+    }
+  },
+  "required": [
+    "player_1_id",
+    "player_2_id",
+    "initiated_by"
+  ]
+}

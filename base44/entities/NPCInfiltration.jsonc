@@ -1,0 +1,86 @@
+{
+  "name": "NPCInfiltration",
+  "type": "object",
+  "properties": {
+    "npc_manager_id": {
+      "type": "string",
+      "description": "Target NPC"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "NPC's employer"
+    },
+    "infiltration_type": {
+      "type": "string",
+      "enum": [
+        "bribery",
+        "blackmail",
+        "undercover_agent",
+        "surveillance"
+      ],
+      "description": "Method of infiltration"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "attempting",
+        "successful",
+        "failed",
+        "discovered"
+      ],
+      "default": "attempting"
+    },
+    "success_chance": {
+      "type": "number",
+      "default": 50,
+      "description": "Probability of success 0-100"
+    },
+    "bribe_amount": {
+      "type": "number",
+      "description": "Money offered to NPC"
+    },
+    "information_leaked": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "info_type": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "number"
+          },
+          "leaked_at": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Information revealed to LE"
+    },
+    "npc_loyalty_before": {
+      "type": "number",
+      "description": "NPC loyalty before attempt"
+    },
+    "npc_loyalty_after": {
+      "type": "number",
+      "description": "NPC loyalty after attempt"
+    },
+    "discovered_by_player": {
+      "type": "boolean",
+      "default": false
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resolved_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "npc_manager_id",
+    "player_id",
+    "infiltration_type"
+  ]
+}

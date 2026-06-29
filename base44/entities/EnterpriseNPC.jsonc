@@ -1,0 +1,84 @@
+{
+  "name": "EnterpriseNPC",
+  "type": "object",
+  "properties": {
+    "enterprise_id": {
+      "type": "string",
+      "description": "Enterprise this NPC works for"
+    },
+    "npc_name": {
+      "type": "string",
+      "description": "Unique NPC name"
+    },
+    "npc_type": {
+      "type": "string",
+      "enum": [
+        "manager",
+        "scientist",
+        "enforcer",
+        "negotiator",
+        "hacker",
+        "dealer"
+      ],
+      "description": "NPC role type"
+    },
+    "rarity": {
+      "type": "string",
+      "enum": [
+        "common",
+        "uncommon",
+        "rare",
+        "epic",
+        "legendary"
+      ],
+      "default": "common"
+    },
+    "specialization": {
+      "type": "string",
+      "description": "Unique specialty (e.g., 'Drug Synthesis', 'Black Market Trading')"
+    },
+    "skill_level": {
+      "type": "number",
+      "default": 1,
+      "description": "NPC skill level 1-10"
+    },
+    "loyalty": {
+      "type": "number",
+      "default": 50,
+      "description": "Loyalty to employer 0-100"
+    },
+    "salary_cost_hourly": {
+      "type": "number",
+      "default": 100,
+      "description": "Hourly wage cost"
+    },
+    "production_bonus": {
+      "type": "number",
+      "default": 0,
+      "description": "% boost to enterprise output"
+    },
+    "trait": {
+      "type": "string",
+      "description": "Special trait (e.g., 'Perfectionist', 'Greedy', 'Loyal')"
+    },
+    "employment_start_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "morale": {
+      "type": "number",
+      "default": 75,
+      "description": "NPC morale 0-100"
+    },
+    "risk_of_betrayal": {
+      "type": "number",
+      "default": 10,
+      "description": "Chance of betrayal if mistreated"
+    }
+  },
+  "required": [
+    "enterprise_id",
+    "npc_name",
+    "npc_type"
+  ]
+}

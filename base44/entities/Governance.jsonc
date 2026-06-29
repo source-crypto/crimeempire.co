@@ -1,0 +1,87 @@
+{
+  "name": "Governance",
+  "type": "object",
+  "properties": {
+    "escalation_phase": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "four_minute_crisis",
+        "galactic_propo",
+        "ununiversal"
+      ],
+      "default": "normal"
+    },
+    "crisis_timer": {
+      "type": "number",
+      "default": 0,
+      "description": "Seconds remaining in crisis"
+    },
+    "crisis_active": {
+      "type": "boolean",
+      "default": false
+    },
+    "crisis_started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "universal_constants": {
+      "type": "object",
+      "properties": {
+        "experience_multiplier": {
+          "type": "number",
+          "default": 1
+        },
+        "volatility_multiplier": {
+          "type": "number",
+          "default": 1
+        },
+        "player_impact_multiplier": {
+          "type": "number",
+          "default": 1
+        },
+        "diplomatic_tension_multiplier": {
+          "type": "number",
+          "default": 1
+        }
+      }
+    },
+    "galactic_propo_unlocked": {
+      "type": "boolean",
+      "default": false
+    },
+    "ununiversal_unlocked": {
+      "type": "boolean",
+      "default": false
+    },
+    "cosmic_commodities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "unlock_phase": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "reality_fracture_level": {
+      "type": "number",
+      "default": 0,
+      "description": "0-100 reality instability in ununiversal mode"
+    },
+    "player_survivors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": []
+}

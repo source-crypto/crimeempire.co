@@ -1,0 +1,126 @@
+{
+  "name": "WorldEvent",
+  "type": "object",
+  "properties": {
+    "event_name": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "law_crackdown",
+        "economic_crisis",
+        "faction_alliance",
+        "faction_betrayal",
+        "gang_war",
+        "market_boom",
+        "police_raid",
+        "territory_uprising"
+      ],
+      "default": "law_crackdown"
+    },
+    "description": {
+      "type": "string"
+    },
+    "narrative": {
+      "type": "string",
+      "description": "Story context for the event"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "minor",
+        "moderate",
+        "major",
+        "catastrophic"
+      ],
+      "default": "moderate"
+    },
+    "affected_territories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "affected_factions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "market_impact": {
+      "type": "object",
+      "properties": {
+        "price_modifier": {
+          "type": "number"
+        },
+        "demand_change": {
+          "type": "number"
+        },
+        "supply_change": {
+          "type": "number"
+        }
+      }
+    },
+    "gameplay_effects": {
+      "type": "object",
+      "properties": {
+        "wanted_level_increase": {
+          "type": "number"
+        },
+        "heat_modifier": {
+          "type": "number"
+        },
+        "revenue_modifier": {
+          "type": "number"
+        },
+        "defense_modifier": {
+          "type": "number"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "resolved"
+      ],
+      "default": "active"
+    },
+    "starts_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ends_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "player_participation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "contribution": {
+            "type": "number"
+          },
+          "side": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ai_generated": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "event_name",
+    "event_type",
+    "description"
+  ]
+}

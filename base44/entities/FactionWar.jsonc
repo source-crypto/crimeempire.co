@@ -1,0 +1,76 @@
+{
+  "name": "FactionWar",
+  "type": "object",
+  "properties": {
+    "attacker_faction_id": {
+      "type": "string"
+    },
+    "defender_faction_id": {
+      "type": "string"
+    },
+    "war_type": {
+      "type": "string",
+      "enum": [
+        "territory_dispute",
+        "resource_conflict",
+        "revenge",
+        "expansion"
+      ],
+      "default": "territory_dispute"
+    },
+    "target_territory_id": {
+      "type": "string",
+      "description": "Territory being contested"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "declared",
+        "active",
+        "concluded"
+      ],
+      "default": "declared"
+    },
+    "attacker_power": {
+      "type": "number",
+      "default": 0
+    },
+    "defender_power": {
+      "type": "number",
+      "default": 0
+    },
+    "battle_phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "phase_number": {
+            "type": "number"
+          },
+          "winner": {
+            "type": "string"
+          },
+          "casualties": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "winner_faction_id": {
+      "type": "string"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ended_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "attacker_faction_id",
+    "defender_faction_id",
+    "war_type"
+  ]
+}

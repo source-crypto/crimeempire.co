@@ -1,0 +1,83 @@
+{
+  "name": "ContrabandRoute",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Owner of route"
+    },
+    "route_name": {
+      "type": "string",
+      "description": "Custom route name"
+    },
+    "origin_location": {
+      "type": "string",
+      "description": "Starting point"
+    },
+    "destination_location": {
+      "type": "string",
+      "description": "End point"
+    },
+    "cargo_type": {
+      "type": "string",
+      "description": "Type of contraband"
+    },
+    "cargo_quantity": {
+      "type": "number",
+      "description": "Amount being smuggled"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard",
+        "extreme"
+      ],
+      "default": "medium"
+    },
+    "law_enforcement_risk": {
+      "type": "number",
+      "default": 50,
+      "description": "Chance of being caught 0-100"
+    },
+    "profit_per_unit": {
+      "type": "number",
+      "description": "Expected profit per unit"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "in_transit",
+        "completed",
+        "busted"
+      ],
+      "default": "planning"
+    },
+    "success_rate": {
+      "type": "number",
+      "default": 75,
+      "description": "Historical success rate"
+    },
+    "times_run": {
+      "type": "number",
+      "default": 0
+    },
+    "times_successful": {
+      "type": "number",
+      "default": 0
+    },
+    "npc_manager_id": {
+      "type": "string",
+      "description": "NPC managing this route"
+    }
+  },
+  "required": [
+    "player_id",
+    "route_name",
+    "origin_location",
+    "destination_location",
+    "cargo_type"
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "name": "MoneyLaunderingBusiness",
+  "type": "object",
+  "properties": {
+    "owner_id": {
+      "type": "string",
+      "description": "Player who owns this business"
+    },
+    "business_name": {
+      "type": "string",
+      "description": "Name of laundering front"
+    },
+    "business_type": {
+      "type": "string",
+      "enum": [
+        "casino",
+        "car_wash",
+        "restaurant",
+        "nightclub",
+        "real_estate",
+        "art_gallery",
+        "crypto_exchange"
+      ],
+      "description": "Type of front business"
+    },
+    "level": {
+      "type": "number",
+      "default": 1,
+      "description": "Business upgrade level 1-10"
+    },
+    "capacity_per_hour": {
+      "type": "number",
+      "default": 10000,
+      "description": "Max money laundered per hour"
+    },
+    "efficiency": {
+      "type": "number",
+      "default": 70,
+      "description": "Laundering efficiency 0-100"
+    },
+    "dirty_money_pool": {
+      "type": "number",
+      "default": 0,
+      "description": "Dirty money waiting to be laundered"
+    },
+    "clean_money_generated": {
+      "type": "number",
+      "default": 0,
+      "description": "Total clean money produced"
+    },
+    "transaction_fee": {
+      "type": "number",
+      "default": 15,
+      "description": "Fee % charged for laundering"
+    },
+    "heat_generation": {
+      "type": "number",
+      "default": 5,
+      "description": "Heat generated per transaction"
+    },
+    "suspicion_level": {
+      "type": "number",
+      "default": 0,
+      "description": "LE suspicion 0-100"
+    },
+    "accessories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "accessory_name": {
+            "type": "string"
+          },
+          "bonus_type": {
+            "type": "string"
+          },
+          "bonus_value": {
+            "type": "number"
+          }
+        }
+      },
+      "description": "Installed upgrades/accessories"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "marketplace_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Can facilitate currency exchanges"
+    }
+  },
+  "required": [
+    "owner_id",
+    "business_name",
+    "business_type"
+  ]
+}

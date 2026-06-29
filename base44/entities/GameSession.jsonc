@@ -1,0 +1,45 @@
+{
+  "name": "GameSession",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "session_start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "session_end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "default": 0
+    },
+    "actions_taken": {
+      "type": "number",
+      "default": 0
+    },
+    "crypto_earned": {
+      "type": "number",
+      "default": 0
+    },
+    "experience_gained": {
+      "type": "number",
+      "default": 0
+    },
+    "session_type": {
+      "type": "string",
+      "enum": [
+        "active",
+        "idle",
+        "completed"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "player_id"
+  ]
+}

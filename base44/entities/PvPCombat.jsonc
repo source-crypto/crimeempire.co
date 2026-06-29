@@ -1,0 +1,111 @@
+{
+  "name": "PvPCombat",
+  "type": "object",
+  "properties": {
+    "combat_type": {
+      "type": "string",
+      "enum": [
+        "duel",
+        "ambush",
+        "syndicate_war",
+        "territory_raid"
+      ],
+      "default": "duel"
+    },
+    "attacker_id": {
+      "type": "string"
+    },
+    "attacker_username": {
+      "type": "string"
+    },
+    "defender_id": {
+      "type": "string"
+    },
+    "defender_username": {
+      "type": "string"
+    },
+    "attacker_syndicate_id": {
+      "type": "string"
+    },
+    "defender_syndicate_id": {
+      "type": "string"
+    },
+    "attacker_power": {
+      "type": "number",
+      "default": 0
+    },
+    "defender_power": {
+      "type": "number",
+      "default": 0
+    },
+    "winner_id": {
+      "type": "string"
+    },
+    "loser_id": {
+      "type": "string"
+    },
+    "rewards": {
+      "type": "object",
+      "properties": {
+        "crypto": {
+          "type": "number"
+        },
+        "reputation": {
+          "type": "number"
+        },
+        "territory_gained": {
+          "type": "string"
+        }
+      },
+      "default": {}
+    },
+    "penalties": {
+      "type": "object",
+      "properties": {
+        "crypto_lost": {
+          "type": "number"
+        },
+        "reputation_lost": {
+          "type": "number"
+        },
+        "territory_lost": {
+          "type": "string"
+        }
+      },
+      "default": {}
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "completed",
+        "cancelled"
+      ],
+      "default": "pending"
+    },
+    "combat_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string"
+          },
+          "damage": {
+            "type": "number"
+          }
+        }
+      },
+      "default": []
+    }
+  },
+  "required": [
+    "combat_type",
+    "attacker_id",
+    "defender_id"
+  ]
+}

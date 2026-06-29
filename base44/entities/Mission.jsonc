@@ -1,0 +1,122 @@
+{
+  "name": "Mission",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "narrative": {
+      "type": "string",
+      "description": "Story context"
+    },
+    "mission_type": {
+      "type": "string",
+      "enum": [
+        "story",
+        "side_quest",
+        "crew_mission",
+        "faction_conflict",
+        "heist_preparation"
+      ],
+      "default": "side_quest"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard",
+        "extreme"
+      ],
+      "default": "medium"
+    },
+    "objectives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "completed": {
+            "type": "boolean"
+          },
+          "progress": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "rewards": {
+      "type": "object",
+      "properties": {
+        "crypto": {
+          "type": "number"
+        },
+        "experience": {
+          "type": "number"
+        },
+        "reputation": {
+          "type": "number"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "properties": {
+        "min_level": {
+          "type": "number"
+        },
+        "crew_required": {
+          "type": "boolean"
+        },
+        "territory_control": {
+          "type": "number"
+        }
+      }
+    },
+    "assigned_to_player": {
+      "type": "string"
+    },
+    "assigned_to_crew": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "active",
+        "completed",
+        "failed",
+        "expired"
+      ],
+      "default": "available"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "generated_by_ai": {
+      "type": "boolean",
+      "default": true
+    },
+    "context_data": {
+      "type": "object",
+      "description": "Player state when generated"
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "mission_type"
+  ]
+}

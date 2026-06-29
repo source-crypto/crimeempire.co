@@ -1,0 +1,54 @@
+{
+  "name": "Evidence",
+  "type": "object",
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "description": "ID of the associated case"
+    },
+    "evidence_number": {
+      "type": "string",
+      "description": "Unique evidence identifier"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "physical",
+        "digital",
+        "document",
+        "testimony",
+        "photo",
+        "video",
+        "forensic"
+      ],
+      "description": "Type of evidence"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed evidence description"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL to evidence file if applicable"
+    },
+    "collected_by": {
+      "type": "string",
+      "description": "Officer who collected the evidence"
+    },
+    "collection_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date evidence was collected"
+    },
+    "chain_of_custody": {
+      "type": "string",
+      "description": "Chain of custody notes"
+    }
+  },
+  "required": [
+    "case_id",
+    "evidence_number",
+    "type",
+    "description"
+  ]
+}

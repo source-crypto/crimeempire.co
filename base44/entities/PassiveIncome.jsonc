@@ -1,0 +1,48 @@
+{
+  "name": "PassiveIncome",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "territory",
+        "enterprise",
+        "investment",
+        "crew_share"
+      ],
+      "default": "territory"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "ID of the income source"
+    },
+    "hourly_rate": {
+      "type": "number",
+      "default": 0
+    },
+    "accumulated_amount": {
+      "type": "number",
+      "default": 0
+    },
+    "last_collected": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "efficiency": {
+      "type": "number",
+      "default": 100,
+      "description": "Production efficiency 0-100"
+    }
+  },
+  "required": [
+    "player_id",
+    "source_type"
+  ]
+}

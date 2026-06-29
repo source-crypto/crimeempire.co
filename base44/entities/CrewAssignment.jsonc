@@ -1,0 +1,84 @@
+{
+  "name": "CrewAssignment",
+  "type": "object",
+  "properties": {
+    "crew_member_id": {
+      "type": "string"
+    },
+    "crew_member_name": {
+      "type": "string"
+    },
+    "assignment_type": {
+      "type": "string",
+      "enum": [
+        "territory_defense",
+        "enterprise_management",
+        "heist_preparation",
+        "training",
+        "recruitment",
+        "intelligence"
+      ],
+      "default": "territory_defense"
+    },
+    "assigned_to_id": {
+      "type": "string",
+      "description": "Territory or enterprise ID"
+    },
+    "assigned_to_name": {
+      "type": "string"
+    },
+    "crew_id": {
+      "type": "string"
+    },
+    "efficiency_score": {
+      "type": "number",
+      "default": 75,
+      "description": "AI calculated efficiency"
+    },
+    "workload": {
+      "type": "number",
+      "default": 50,
+      "description": "0-100 current workload"
+    },
+    "performance": {
+      "type": "object",
+      "properties": {
+        "tasks_completed": {
+          "type": "number"
+        },
+        "success_rate": {
+          "type": "number"
+        },
+        "contribution": {
+          "type": "number"
+        }
+      }
+    },
+    "ai_recommendation": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed",
+        "failed",
+        "reassigned"
+      ],
+      "default": "active"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ends_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "crew_member_id",
+    "assignment_type",
+    "crew_id"
+  ]
+}

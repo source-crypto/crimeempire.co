@@ -1,0 +1,74 @@
+{
+  "name": "CurrencyExchange",
+  "type": "object",
+  "properties": {
+    "seller_id": {
+      "type": "string",
+      "description": "Player offering exchange"
+    },
+    "business_id": {
+      "type": "string",
+      "description": "Money laundering business facilitating"
+    },
+    "exchange_type": {
+      "type": "string",
+      "enum": [
+        "crypto_to_cash",
+        "cash_to_crypto",
+        "asset_swap"
+      ],
+      "description": "Type of exchange"
+    },
+    "crypto_amount": {
+      "type": "number",
+      "description": "Digital currency amount"
+    },
+    "cash_amount": {
+      "type": "number",
+      "description": "In-game cash amount"
+    },
+    "exchange_rate": {
+      "type": "number",
+      "description": "Current conversion rate"
+    },
+    "fee_percentage": {
+      "type": "number",
+      "default": 5,
+      "description": "Transaction fee %"
+    },
+    "minimum_order": {
+      "type": "number",
+      "default": 10000
+    },
+    "available_volume": {
+      "type": "number",
+      "description": "Remaining volume"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "pending",
+        "completed",
+        "cancelled"
+      ],
+      "default": "active"
+    },
+    "risk_rating": {
+      "type": "number",
+      "default": 50,
+      "description": "Transaction risk 0-100"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "seller_id",
+    "exchange_type",
+    "crypto_amount",
+    "cash_amount",
+    "exchange_rate"
+  ]
+}

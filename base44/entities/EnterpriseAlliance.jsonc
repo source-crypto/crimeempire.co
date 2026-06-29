@@ -1,0 +1,64 @@
+{
+  "name": "EnterpriseAlliance",
+  "type": "object",
+  "properties": {
+    "alliance_name": {
+      "type": "string",
+      "description": "Name of the alliance"
+    },
+    "leader_player_id": {
+      "type": "string",
+      "description": "Alliance leader"
+    },
+    "member_player_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Member player IDs"
+    },
+    "alliance_type": {
+      "type": "string",
+      "enum": [
+        "trade_pact",
+        "mutual_defense",
+        "joint_venture"
+      ],
+      "default": "mutual_defense",
+      "description": "Type of alliance"
+    },
+    "benefits": {
+      "type": "object",
+      "properties": {
+        "shared_resources": {
+          "type": "boolean"
+        },
+        "joint_defense": {
+          "type": "boolean"
+        },
+        "trade_discount": {
+          "type": "number"
+        }
+      },
+      "description": "Alliance benefits"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "dissolved",
+        "under_review"
+      ],
+      "default": "active"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "alliance_name",
+    "leader_player_id"
+  ]
+}

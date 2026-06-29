@@ -1,0 +1,88 @@
+{
+  "name": "PerformanceMetric",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player this metric belongs to"
+    },
+    "username": {
+      "type": "string"
+    },
+    "period": {
+      "type": "string",
+      "enum": [
+        "weekly",
+        "monthly",
+        "annual",
+        "lifetime"
+      ],
+      "default": "monthly"
+    },
+    "period_label": {
+      "type": "string",
+      "description": "Human-readable period identifier (e.g. 2026-W22)"
+    },
+    "productivity": {
+      "type": "number",
+      "default": 70
+    },
+    "attendance": {
+      "type": "number",
+      "default": 80
+    },
+    "reliability": {
+      "type": "number",
+      "default": 75
+    },
+    "leadership": {
+      "type": "number",
+      "default": 50
+    },
+    "teamwork": {
+      "type": "number",
+      "default": 70
+    },
+    "efficiency": {
+      "type": "number",
+      "default": 72
+    },
+    "innovation": {
+      "type": "number",
+      "default": 60
+    },
+    "customer_satisfaction": {
+      "type": "number",
+      "default": 75
+    },
+    "training_progress": {
+      "type": "number",
+      "default": 40
+    },
+    "overall_score": {
+      "type": "number",
+      "default": 70
+    },
+    "notes": {
+      "type": "string"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "player_id",
+    "period"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

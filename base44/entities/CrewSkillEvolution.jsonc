@@ -1,0 +1,139 @@
+{
+  "name": "CrewSkillEvolution",
+  "type": "object",
+  "properties": {
+    "crew_member_id": {
+      "type": "string"
+    },
+    "crew_member_name": {
+      "type": "string"
+    },
+    "specialization_path": {
+      "type": "string",
+      "enum": [
+        "shadow_saboteur",
+        "quantum_navigator",
+        "war_prophet",
+        "siege_technician",
+        "supply_line_commander",
+        "ambush_architect",
+        "diplomat_sage",
+        "economic_analyst"
+      ]
+    },
+    "evolution_stage": {
+      "type": "number",
+      "default": 1,
+      "description": "1-5 progression stages"
+    },
+    "unlocked_abilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "ability_name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "unlock_condition": {
+            "type": "string"
+          },
+          "performance_bonus": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "skill_progression": {
+      "type": "object",
+      "properties": {
+        "base_skills": {
+          "type": "object"
+        },
+        "evolved_skills": {
+          "type": "object"
+        },
+        "growth_rate": {
+          "type": "number"
+        }
+      }
+    },
+    "mission_performance": {
+      "type": "object",
+      "properties": {
+        "successful_missions": {
+          "type": "number",
+          "default": 0
+        },
+        "tactical_precision": {
+          "type": "number",
+          "default": 0
+        },
+        "specialty_actions": {
+          "type": "number",
+          "default": 0
+        }
+      }
+    },
+    "ai_training_recommendations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "recommendation": {
+            "type": "string"
+          },
+          "reasoning": {
+            "type": "string"
+          },
+          "expected_outcome": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "transparency_log": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string"
+          },
+          "skill_change": {
+            "type": "object"
+          },
+          "trigger": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "next_evolution_requirements": {
+      "type": "object",
+      "properties": {
+        "missions_needed": {
+          "type": "number"
+        },
+        "precision_threshold": {
+          "type": "number"
+        },
+        "specialty_count": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "required": [
+    "crew_member_id",
+    "specialization_path"
+  ]
+}

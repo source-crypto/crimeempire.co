@@ -1,0 +1,76 @@
+{
+  "name": "CrewActivity",
+  "type": "object",
+  "properties": {
+    "crew_id": {
+      "type": "string"
+    },
+    "activity_type": {
+      "type": "string",
+      "enum": [
+        "territory_captured",
+        "territory_lost",
+        "heist_completed",
+        "member_joined",
+        "member_left",
+        "member_promoted",
+        "role_changed",
+        "supply_line_created",
+        "supply_line_disrupted",
+        "major_payout",
+        "battle_won",
+        "battle_lost"
+      ],
+      "default": "member_joined"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "Player involved in activity"
+    },
+    "player_username": {
+      "type": "string"
+    },
+    "value": {
+      "type": "number",
+      "description": "Monetary value or score"
+    },
+    "icon": {
+      "type": "string",
+      "description": "Icon identifier"
+    },
+    "metadata": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "crew_id",
+    "activity_type",
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "crew_id": "{{user.data.crew_id}}"
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "write": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

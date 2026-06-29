@@ -1,0 +1,85 @@
+{
+  "name": "TransactionLog",
+  "type": "object",
+  "properties": {
+    "transaction_type": {
+      "type": "string",
+      "enum": [
+        "trade",
+        "transfer",
+        "purchase",
+        "sale",
+        "enterprise_revenue",
+        "territory_income",
+        "heist_payout",
+        "crew_payment",
+        "item_transfer",
+        "property_acquisition"
+      ],
+      "default": "transfer"
+    },
+    "player_id": {
+      "type": "string"
+    },
+    "player_username": {
+      "type": "string"
+    },
+    "counterparty_id": {
+      "type": "string",
+      "description": "Other player, crew, or AI entity involved"
+    },
+    "counterparty_name": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number"
+    },
+    "item_details": {
+      "type": "object",
+      "properties": {
+        "item_id": {
+          "type": "string"
+        },
+        "item_name": {
+          "type": "string"
+        },
+        "quantity": {
+          "type": "number"
+        }
+      }
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "completed",
+        "pending",
+        "failed",
+        "cancelled"
+      ],
+      "default": "completed"
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "enterprise_id": {
+          "type": "string"
+        },
+        "territory_id": {
+          "type": "string"
+        },
+        "trade_id": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [
+    "transaction_type",
+    "player_id",
+    "amount",
+    "description"
+  ]
+}

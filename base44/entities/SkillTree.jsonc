@@ -1,0 +1,65 @@
+{
+  "name": "SkillTree",
+  "type": "object",
+  "properties": {
+    "skill_name": {
+      "type": "string",
+      "description": "Name of the skill"
+    },
+    "skill_type": {
+      "type": "string",
+      "enum": [
+        "combat",
+        "stealth",
+        "driving",
+        "hacking",
+        "leadership",
+        "negotiation"
+      ],
+      "description": "Category of the skill"
+    },
+    "tier": {
+      "type": "number",
+      "default": 1,
+      "description": "Skill tier/depth in tree (1-5)"
+    },
+    "required_level": {
+      "type": "number",
+      "default": 1,
+      "description": "Minimum player level to unlock"
+    },
+    "required_parent_skill": {
+      "type": "string",
+      "description": "Parent skill ID that must be unlocked first"
+    },
+    "cost_in_points": {
+      "type": "number",
+      "default": 1,
+      "description": "Skill points required to unlock"
+    },
+    "description": {
+      "type": "string",
+      "description": "Skill description and benefits"
+    },
+    "passive_bonus": {
+      "type": "object",
+      "properties": {
+        "bonus_type": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "description": "Passive stat bonuses"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "skill_name",
+    "skill_type"
+  ]
+}

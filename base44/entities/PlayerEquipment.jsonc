@@ -1,0 +1,72 @@
+{
+  "name": "PlayerEquipment",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "item_id": {
+      "type": "string",
+      "description": "Reference to Item entity"
+    },
+    "equipment_slot": {
+      "type": "string",
+      "enum": [
+        "weapon",
+        "armor",
+        "accessory_1",
+        "accessory_2",
+        "vehicle"
+      ],
+      "description": "Equipment slot"
+    },
+    "item_name": {
+      "type": "string"
+    },
+    "item_type": {
+      "type": "string"
+    },
+    "stat_bonuses": {
+      "type": "object",
+      "properties": {
+        "combat": {
+          "type": "number"
+        },
+        "stealth": {
+          "type": "number"
+        },
+        "driving": {
+          "type": "number"
+        },
+        "hacking": {
+          "type": "number"
+        },
+        "defense": {
+          "type": "number"
+        },
+        "speed": {
+          "type": "number"
+        }
+      }
+    },
+    "durability": {
+      "type": "number",
+      "default": 100,
+      "description": "Item condition 0-100"
+    },
+    "upgrade_level": {
+      "type": "number",
+      "default": 0
+    },
+    "is_equipped": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "player_id",
+    "item_id",
+    "equipment_slot",
+    "item_name"
+  ]
+}

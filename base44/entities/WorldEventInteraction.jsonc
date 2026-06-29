@@ -1,0 +1,80 @@
+{
+  "name": "WorldEventInteraction",
+  "type": "object",
+  "properties": {
+    "primary_event_id": {
+      "type": "string"
+    },
+    "primary_event_name": {
+      "type": "string"
+    },
+    "triggered_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string"
+          },
+          "event_name": {
+            "type": "string"
+          },
+          "trigger_reason": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "cascade_effects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "affected_territory": {
+            "type": "string"
+          },
+          "effect_type": {
+            "type": "string"
+          },
+          "magnitude": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "market_impacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_type": {
+            "type": "string"
+          },
+          "price_change": {
+            "type": "number"
+          },
+          "demand_change": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "interaction_type": {
+      "type": "string",
+      "enum": [
+        "cascade",
+        "synergy",
+        "mitigation",
+        "amplification"
+      ],
+      "default": "cascade"
+    },
+    "ai_generated": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "primary_event_id"
+  ]
+}

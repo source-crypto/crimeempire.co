@@ -1,0 +1,73 @@
+{
+  "name": "EnterpriseMarket",
+  "type": "object",
+  "properties": {
+    "enterprise_id": {
+      "type": "string"
+    },
+    "listing_type": {
+      "type": "string",
+      "enum": [
+        "goods_sale",
+        "service_offer",
+        "resource_trade",
+        "contract_bid"
+      ],
+      "default": "goods_sale"
+    },
+    "item_name": {
+      "type": "string"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 0
+    },
+    "unit_price": {
+      "type": "number"
+    },
+    "total_value": {
+      "type": "number"
+    },
+    "quality": {
+      "type": "number",
+      "default": 100,
+      "description": "Product quality 0-100"
+    },
+    "demand_score": {
+      "type": "number",
+      "default": 50,
+      "description": "Market demand 0-100"
+    },
+    "seller_id": {
+      "type": "string"
+    },
+    "seller_reputation": {
+      "type": "number",
+      "default": 50
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "sales_count": {
+      "type": "number",
+      "default": 0
+    },
+    "revenue_generated": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "enterprise_id",
+    "listing_type",
+    "item_name",
+    "quantity",
+    "unit_price",
+    "seller_id"
+  ]
+}

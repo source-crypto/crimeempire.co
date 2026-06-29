@@ -1,0 +1,47 @@
+{
+  "name": "PlayerSkill",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player ID"
+    },
+    "skill_tree_id": {
+      "type": "string",
+      "description": "Reference to SkillTree entity"
+    },
+    "skill_name": {
+      "type": "string",
+      "description": "Name of the skill"
+    },
+    "level": {
+      "type": "number",
+      "default": 1,
+      "description": "Current skill level (1-10)"
+    },
+    "experience_points": {
+      "type": "number",
+      "default": 0,
+      "description": "Experience accumulated in this skill"
+    },
+    "is_unlocked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether skill is available"
+    },
+    "unlock_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When skill was first unlocked"
+    },
+    "proficiency": {
+      "type": "number",
+      "default": 0,
+      "description": "Mastery level 0-100"
+    }
+  },
+  "required": [
+    "player_id",
+    "skill_name"
+  ]
+}

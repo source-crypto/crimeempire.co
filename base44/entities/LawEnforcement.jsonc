@@ -1,0 +1,55 @@
+{
+  "name": "LawEnforcement",
+  "type": "object",
+  "properties": {
+    "unit_type": {
+      "type": "string",
+      "enum": [
+        "patrol",
+        "swat",
+        "detective",
+        "federal",
+        "helicopter"
+      ],
+      "default": "patrol"
+    },
+    "coordinates": {
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        }
+      }
+    },
+    "threat_level": {
+      "type": "number",
+      "default": 50,
+      "description": "Danger level 0-100"
+    },
+    "patrol_radius": {
+      "type": "number",
+      "default": 5,
+      "description": "Patrol radius in km"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "target_player_id": {
+      "type": "string",
+      "description": "Player being tracked"
+    },
+    "response_time": {
+      "type": "number",
+      "default": 5,
+      "description": "Minutes to respond"
+    }
+  },
+  "required": [
+    "unit_type",
+    "coordinates"
+  ]
+}

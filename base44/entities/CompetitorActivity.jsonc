@@ -1,0 +1,62 @@
+{
+  "name": "CompetitorActivity",
+  "type": "object",
+  "properties": {
+    "competitor_name": {
+      "type": "string",
+      "description": "AI competitor name"
+    },
+    "activity_type": {
+      "type": "string",
+      "enum": [
+        "price_war",
+        "market_expansion",
+        "enforcement_raid",
+        "supply_disruption",
+        "alliance_formed",
+        "territory_invasion"
+      ],
+      "description": "Type of competitor action"
+    },
+    "target_market": {
+      "type": "string",
+      "description": "Market being targeted"
+    },
+    "impact_level": {
+      "type": "number",
+      "default": 50,
+      "description": "How much it affects market 0-100"
+    },
+    "duration_hours": {
+      "type": "number",
+      "default": 48
+    },
+    "description": {
+      "type": "string",
+      "description": "Details of competitor action"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "resolved",
+        "failed"
+      ],
+      "default": "active"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "player_threat_level": {
+      "type": "number",
+      "default": 0,
+      "description": "If directed at player, threat level 0-100"
+    }
+  },
+  "required": [
+    "competitor_name",
+    "activity_type",
+    "target_market"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "DailyReward",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "day_number": {
+      "type": "number",
+      "default": 1,
+      "description": "Day in the reward cycle (1-7)"
+    },
+    "crypto_reward": {
+      "type": "number",
+      "default": 5000
+    },
+    "experience_reward": {
+      "type": "number",
+      "default": 100
+    },
+    "bonus_multiplier": {
+      "type": "number",
+      "default": 1,
+      "description": "Streak bonus multiplier"
+    },
+    "claimed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "streak_days": {
+      "type": "number",
+      "default": 0
+    },
+    "is_claimed_today": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "player_id"
+  ]
+}

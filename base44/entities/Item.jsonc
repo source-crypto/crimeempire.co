@@ -1,0 +1,135 @@
+{
+  "name": "Item",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "item_type": {
+      "type": "string",
+      "enum": [
+        "weapon",
+        "equipment",
+        "material",
+        "contraband",
+        "vehicle_part",
+        "intel",
+        "blueprint"
+      ],
+      "default": "material"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "marijuana",
+        "weapons",
+        "vehicles",
+        "money",
+        "materials",
+        "intel"
+      ],
+      "default": "materials"
+    },
+    "rarity": {
+      "type": "string",
+      "enum": [
+        "common",
+        "uncommon",
+        "rare",
+        "epic",
+        "legendary"
+      ],
+      "default": "common"
+    },
+    "quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "base_value": {
+      "type": "number",
+      "default": 100
+    },
+    "current_market_value": {
+      "type": "number",
+      "default": 100
+    },
+    "owner_id": {
+      "type": "string"
+    },
+    "owner_type": {
+      "type": "string",
+      "enum": [
+        "player",
+        "enterprise",
+        "crew",
+        "territory"
+      ],
+      "default": "player"
+    },
+    "location": {
+      "type": "string",
+      "description": "Enterprise ID or Territory ID"
+    },
+    "is_equipped": {
+      "type": "boolean",
+      "default": false
+    },
+    "is_tradeable": {
+      "type": "boolean",
+      "default": true
+    },
+    "attributes": {
+      "type": "object",
+      "properties": {
+        "weight": {
+          "type": "number"
+        },
+        "risk_level": {
+          "type": "number"
+        },
+        "production_time": {
+          "type": "number"
+        }
+      }
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "market_data": {
+      "type": "object",
+      "properties": {
+        "purchase_price": {
+          "type": "number"
+        },
+        "purchase_date": {
+          "type": "string"
+        },
+        "territory_source": {
+          "type": "string"
+        },
+        "enterprise_source": {
+          "type": "string"
+        },
+        "market_trend": {
+          "type": "string"
+        },
+        "last_price_check": {
+          "type": "string"
+        }
+      }
+    },
+    "territory_id": {
+      "type": "string",
+      "description": "Associated territory"
+    },
+    "enterprise_id": {
+      "type": "string",
+      "description": "Source enterprise"
+    }
+  },
+  "required": [
+    "name",
+    "item_type",
+    "owner_id"
+  ]
+}

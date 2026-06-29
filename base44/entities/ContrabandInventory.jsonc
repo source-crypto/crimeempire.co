@@ -1,0 +1,59 @@
+{
+  "name": "ContrabandInventory",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player who owns this inventory"
+    },
+    "item_name": {
+      "type": "string",
+      "description": "Name of contraband"
+    },
+    "item_type": {
+      "type": "string",
+      "enum": [
+        "drugs",
+        "weapons",
+        "stolen_goods",
+        "hacking_service",
+        "assassination",
+        "forgery",
+        "data_breach",
+        "contraband"
+      ]
+    },
+    "quantity": {
+      "type": "number",
+      "default": 0,
+      "description": "Amount in inventory"
+    },
+    "quality": {
+      "type": "number",
+      "default": 70,
+      "description": "Item quality 0-100"
+    },
+    "acquisition_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "storage_location": {
+      "type": "string",
+      "description": "Where item is stored (territory/safehouse)"
+    },
+    "risk_level": {
+      "type": "number",
+      "default": 50,
+      "description": "Risk of being caught with it 0-100"
+    },
+    "estimated_value": {
+      "type": "number",
+      "description": "Total value of inventory"
+    }
+  },
+  "required": [
+    "player_id",
+    "item_name",
+    "item_type"
+  ]
+}

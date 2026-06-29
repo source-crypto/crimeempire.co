@@ -1,0 +1,87 @@
+{
+  "name": "PlayerInitiatedEvent",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "player_username": {
+      "type": "string"
+    },
+    "event_request_type": {
+      "type": "string",
+      "enum": [
+        "turf_war",
+        "market_manipulation",
+        "law_crackdown",
+        "rival_sabotage",
+        "black_market_surge",
+        "faction_conflict"
+      ],
+      "default": "turf_war"
+    },
+    "target_territory_id": {
+      "type": "string"
+    },
+    "target_territory_name": {
+      "type": "string"
+    },
+    "resource_cost": {
+      "type": "number"
+    },
+    "reputation_cost": {
+      "type": "number",
+      "default": 0
+    },
+    "ai_generated_event": {
+      "type": "object",
+      "properties": {
+        "event_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "effects": {
+          "type": "object"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "completed",
+        "failed"
+      ],
+      "default": "pending"
+    },
+    "success_rate": {
+      "type": "number",
+      "description": "AI calculated probability"
+    },
+    "outcomes": {
+      "type": "object",
+      "properties": {
+        "territory_impact": {
+          "type": "number"
+        },
+        "market_changes": {
+          "type": "object"
+        },
+        "reputation_gained": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "required": [
+    "player_id",
+    "event_request_type",
+    "target_territory_id"
+  ]
+}

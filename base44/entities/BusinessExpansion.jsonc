@@ -1,0 +1,62 @@
+{
+  "name": "BusinessExpansion",
+  "type": "object",
+  "properties": {
+    "business_id": {
+      "type": "string",
+      "description": "Parent business"
+    },
+    "expansion_type": {
+      "type": "string",
+      "enum": [
+        "new_location",
+        "security_upgrade",
+        "automation_center",
+        "offshore_network",
+        "partnership"
+      ],
+      "description": "Type of expansion"
+    },
+    "location_name": {
+      "type": "string",
+      "description": "New location/branch name"
+    },
+    "cost": {
+      "type": "number"
+    },
+    "capacity_boost": {
+      "type": "number",
+      "default": 0
+    },
+    "efficiency_boost": {
+      "type": "number",
+      "default": 0
+    },
+    "heat_reduction": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "construction",
+        "operational"
+      ],
+      "default": "planning"
+    },
+    "completion_time": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "business_id",
+    "expansion_type",
+    "cost"
+  ]
+}

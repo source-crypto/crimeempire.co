@@ -1,0 +1,108 @@
+{
+  "name": "TradeOffer",
+  "type": "object",
+  "properties": {
+    "initiator_id": {
+      "type": "string",
+      "description": "Player initiating trade"
+    },
+    "initiator_username": {
+      "type": "string"
+    },
+    "recipient_id": {
+      "type": "string",
+      "description": "Player receiving offer"
+    },
+    "recipient_username": {
+      "type": "string"
+    },
+    "trade_type": {
+      "type": "string",
+      "enum": [
+        "item",
+        "currency",
+        "service",
+        "mixed"
+      ],
+      "default": "item",
+      "description": "Type of trade"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "rejected",
+        "cancelled",
+        "completed"
+      ],
+      "default": "pending"
+    },
+    "initiator_offer": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "crypto": {
+          "type": "number"
+        },
+        "buy_power": {
+          "type": "number"
+        },
+        "service_description": {
+          "type": "string"
+        }
+      },
+      "description": "What initiator offers"
+    },
+    "recipient_offer": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "crypto": {
+          "type": "number"
+        },
+        "buy_power": {
+          "type": "number"
+        },
+        "service_description": {
+          "type": "string"
+        }
+      },
+      "description": "What recipient offers"
+    },
+    "message": {
+      "type": "string",
+      "description": "Trade proposal message"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "transaction_fee": {
+      "type": "number",
+      "default": 50,
+      "description": "Platform fee"
+    }
+  },
+  "required": [
+    "initiator_id",
+    "initiator_username",
+    "recipient_id",
+    "recipient_username",
+    "trade_type"
+  ]
+}

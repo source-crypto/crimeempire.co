@@ -1,0 +1,107 @@
+{
+  "name": "TrainingProgram",
+  "type": "object",
+  "properties": {
+    "program_name": {
+      "type": "string"
+    },
+    "crew_member_id": {
+      "type": "string"
+    },
+    "crew_member_name": {
+      "type": "string"
+    },
+    "skill_focus": {
+      "type": "string",
+      "enum": [
+        "combat",
+        "stealth",
+        "driving",
+        "hacking",
+        "leadership",
+        "negotiation"
+      ],
+      "default": "combat"
+    },
+    "current_level": {
+      "type": "number"
+    },
+    "target_level": {
+      "type": "number"
+    },
+    "duration_hours": {
+      "type": "number"
+    },
+    "cost": {
+      "type": "number"
+    },
+    "progress": {
+      "type": "number",
+      "default": 0,
+      "description": "0-100 completion"
+    },
+    "ai_curriculum": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unlocked_abilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "trainer_quality": {
+      "type": "number",
+      "default": 75,
+      "description": "Quality of training 0-100"
+    },
+    "training_effectiveness": {
+      "type": "number",
+      "default": 100,
+      "description": "Bonus to training speed/quality"
+    },
+    "bonus_xp": {
+      "type": "number",
+      "default": 0
+    },
+    "crew_id": {
+      "type": "string"
+    },
+    "training_facility_level": {
+      "type": "number",
+      "default": 1
+    },
+    "special_conditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Weather, events affecting training"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "in_progress",
+        "completed",
+        "cancelled"
+      ],
+      "default": "scheduled"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "program_name",
+    "crew_member_id",
+    "skill_focus"
+  ]
+}

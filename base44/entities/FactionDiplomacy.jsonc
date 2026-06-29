@@ -1,0 +1,76 @@
+{
+  "name": "FactionDiplomacy",
+  "type": "object",
+  "properties": {
+    "faction_a_id": {
+      "type": "string"
+    },
+    "faction_b_id": {
+      "type": "string"
+    },
+    "relationship_type": {
+      "type": "string",
+      "enum": [
+        "alliance",
+        "rivalry",
+        "neutral",
+        "war",
+        "trade_partner"
+      ],
+      "default": "neutral"
+    },
+    "trust_level": {
+      "type": "number",
+      "default": 50,
+      "description": "Trust between factions 0-100"
+    },
+    "trade_agreements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "resource_type": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          },
+          "price": {
+            "type": "number"
+          },
+          "active": {
+            "type": "boolean"
+          }
+        }
+      },
+      "default": []
+    },
+    "alliance_benefits": {
+      "type": "object",
+      "properties": {
+        "shared_intelligence": {
+          "type": "boolean"
+        },
+        "military_support": {
+          "type": "boolean"
+        },
+        "resource_sharing": {
+          "type": "boolean"
+        }
+      },
+      "default": {}
+    },
+    "negotiated_by_ai": {
+      "type": "boolean",
+      "default": false
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "faction_a_id",
+    "faction_b_id"
+  ]
+}

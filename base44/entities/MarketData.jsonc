@@ -1,0 +1,86 @@
+{
+  "name": "MarketData",
+  "type": "object",
+  "properties": {
+    "item_type": {
+      "type": "string",
+      "enum": [
+        "vehicle",
+        "weapon",
+        "equipment",
+        "property",
+        "material"
+      ],
+      "default": "vehicle"
+    },
+    "item_name": {
+      "type": "string"
+    },
+    "current_price": {
+      "type": "number"
+    },
+    "base_price": {
+      "type": "number"
+    },
+    "price_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "supply": {
+      "type": "number",
+      "default": 100,
+      "description": "Available supply"
+    },
+    "demand": {
+      "type": "number",
+      "default": 50,
+      "description": "Market demand"
+    },
+    "trend": {
+      "type": "string",
+      "enum": [
+        "rising",
+        "falling",
+        "stable",
+        "volatile"
+      ],
+      "default": "stable"
+    },
+    "volatility": {
+      "type": "number",
+      "default": 0.1,
+      "description": "Price variance 0-1"
+    },
+    "ai_recommendation": {
+      "type": "string",
+      "enum": [
+        "strong_buy",
+        "buy",
+        "hold",
+        "sell",
+        "strong_sell"
+      ],
+      "default": "hold"
+    },
+    "analysis_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "item_type",
+    "item_name",
+    "current_price",
+    "base_price"
+  ]
+}

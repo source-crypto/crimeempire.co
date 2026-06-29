@@ -1,0 +1,86 @@
+{
+  "name": "AIMissionDirector",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player this director manages"
+    },
+    "active_missions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Currently assigned missions"
+    },
+    "difficulty_modifier": {
+      "type": "number",
+      "default": 1,
+      "description": "Dynamic difficulty multiplier 0.5-2.0"
+    },
+    "performance_rating": {
+      "type": "number",
+      "default": 50,
+      "description": "Player's current performance score 0-100"
+    },
+    "missions_completed": {
+      "type": "number",
+      "default": 0
+    },
+    "missions_failed": {
+      "type": "number",
+      "default": 0
+    },
+    "average_success_rate": {
+      "type": "number",
+      "default": 50,
+      "description": "Historical success rate %"
+    },
+    "current_market_conditions": {
+      "type": "object",
+      "properties": {
+        "demand_spike": {
+          "type": "string"
+        },
+        "pricing_shift": {
+          "type": "number"
+        },
+        "enforcement_activity": {
+          "type": "number"
+        }
+      }
+    },
+    "reputation_factor": {
+      "type": "number",
+      "default": 1,
+      "description": "Reputation impact on mission difficulty"
+    },
+    "next_difficulty_adjustment": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "mission_suggestions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mission_type": {
+            "type": "string"
+          },
+          "difficulty": {
+            "type": "string"
+          },
+          "reward": {
+            "type": "number"
+          },
+          "urgency": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "player_id"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "name": "EconomicEvent",
+  "type": "object",
+  "properties": {
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "rate_hike",
+        "rate_cut",
+        "liquidity_crisis",
+        "target2_stress",
+        "policy_divergence",
+        "balance_sheet_contraction",
+        "inflation_spike"
+      ],
+      "description": "Type of economic event"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "minor",
+        "moderate",
+        "major",
+        "critical"
+      ],
+      "default": "moderate"
+    },
+    "title": {
+      "type": "string",
+      "description": "Event title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Event description"
+    },
+    "trigger_conditions": {
+      "type": "object",
+      "description": "What triggered this event"
+    },
+    "game_effects": {
+      "type": "object",
+      "properties": {
+        "credit_cost_change": {
+          "type": "number"
+        },
+        "enterprise_profit_modifier": {
+          "type": "number"
+        },
+        "market_crash_probability": {
+          "type": "number"
+        },
+        "territory_value_change": {
+          "type": "number"
+        },
+        "crypto_volatility": {
+          "type": "number"
+        }
+      }
+    },
+    "affected_regions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "duration_hours": {
+      "type": "number",
+      "default": 24
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "event_type",
+    "title",
+    "description"
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "name": "MissionStage",
+  "type": "object",
+  "properties": {
+    "mission_id": {
+      "type": "string"
+    },
+    "stage_number": {
+      "type": "number",
+      "default": 1
+    },
+    "stage_title": {
+      "type": "string"
+    },
+    "narrative_text": {
+      "type": "string"
+    },
+    "objectives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "progress": {
+            "type": "number"
+          },
+          "completed": {
+            "type": "boolean"
+          }
+        }
+      },
+      "default": []
+    },
+    "choices": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "choice_text": {
+            "type": "string"
+          },
+          "next_stage": {
+            "type": "number"
+          },
+          "consequences": {
+            "type": "object"
+          }
+        }
+      },
+      "default": []
+    },
+    "difficulty_adjustment": {
+      "type": "number",
+      "default": 1,
+      "description": "Multiplier for this stage"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "locked",
+        "active",
+        "completed",
+        "failed"
+      ],
+      "default": "locked"
+    },
+    "completion_rewards": {
+      "type": "object",
+      "properties": {
+        "crypto": {
+          "type": "number"
+        },
+        "experience": {
+          "type": "number"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "default": {}
+    }
+  },
+  "required": [
+    "mission_id",
+    "stage_number",
+    "stage_title"
+  ]
+}

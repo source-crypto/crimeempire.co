@@ -1,0 +1,67 @@
+{
+  "name": "BaseDefense",
+  "type": "object",
+  "properties": {
+    "base_id": {
+      "type": "string",
+      "description": "Protected base"
+    },
+    "guard_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of assigned guards"
+    },
+    "surveillance_system": {
+      "type": "number",
+      "default": 0,
+      "description": "Surveillance level 0-100"
+    },
+    "alarm_system": {
+      "type": "number",
+      "default": 0,
+      "description": "Alarm effectiveness 0-100"
+    },
+    "access_control": {
+      "type": "number",
+      "default": 0,
+      "description": "Access control level 0-100"
+    },
+    "defense_rating": {
+      "type": "number",
+      "default": 0,
+      "description": "Overall defense 0-100"
+    },
+    "last_breach_attempt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "breach_success": {
+      "type": "boolean",
+      "default": false
+    },
+    "security_upgrades": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "upgrade_name": {
+            "type": "string"
+          },
+          "level": {
+            "type": "number"
+          },
+          "effectiveness": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "alarm_triggered_count": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "base_id"
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "name": "LawEnforcementResponse",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Target player"
+    },
+    "investigation_tier": {
+      "type": "number",
+      "default": 0,
+      "description": "Investigation level 0-5"
+    },
+    "current_investigation": {
+      "type": "string",
+      "enum": [
+        "none",
+        "monitoring",
+        "active",
+        "urgent",
+        "apprehension"
+      ],
+      "default": "none"
+    },
+    "evidence_collected": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "evidence_type": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "credibility": {
+            "type": "number"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Evidence against player"
+    },
+    "surveillance_units": {
+      "type": "number",
+      "default": 0,
+      "description": "Active surveillance units deployed"
+    },
+    "raid_probability": {
+      "type": "number",
+      "default": 0,
+      "description": "Chance of raid 0-100"
+    },
+    "infiltration_status": {
+      "type": "string",
+      "enum": [
+        "none",
+        "suspected_informant",
+        "active_informant",
+        "undercover_agent"
+      ],
+      "default": "none"
+    },
+    "tactics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Active investigation tactics"
+    },
+    "agency_type": {
+      "type": "string",
+      "enum": [
+        "local_police",
+        "state_police",
+        "federal_fbi",
+        "dea",
+        "multiple"
+      ],
+      "default": "local_police"
+    },
+    "task_force_level": {
+      "type": "number",
+      "default": 0,
+      "description": "Multi-agency task force involvement 0-100"
+    },
+    "investigation_started": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_activity": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "player_id"
+  ]
+}

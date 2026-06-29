@@ -1,0 +1,74 @@
+{
+  "name": "UserPreferences",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string"
+    },
+    "auto_login": {
+      "type": "boolean",
+      "default": false
+    },
+    "notification_settings": {
+      "type": "object",
+      "properties": {
+        "crew_activity": {
+          "type": "boolean",
+          "default": true
+        },
+        "territory_alerts": {
+          "type": "boolean",
+          "default": true
+        },
+        "market_updates": {
+          "type": "boolean",
+          "default": false
+        },
+        "world_events": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "display_preferences": {
+      "type": "object",
+      "properties": {
+        "theme": {
+          "type": "string",
+          "default": "dark"
+        },
+        "dashboard_layout": {
+          "type": "string",
+          "default": "default"
+        },
+        "compact_mode": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "gameplay_settings": {
+      "type": "object",
+      "properties": {
+        "auto_collect_revenue": {
+          "type": "boolean",
+          "default": false
+        },
+        "auto_accept_contracts": {
+          "type": "boolean",
+          "default": false
+        },
+        "difficulty_preference": {
+          "type": "string",
+          "default": "balanced"
+        }
+      }
+    },
+    "saved_filters": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "user_email"
+  ]
+}

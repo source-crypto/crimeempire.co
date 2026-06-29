@@ -1,0 +1,96 @@
+{
+  "name": "PlayerReputation",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player ID"
+    },
+    "faction_reputation": {
+      "type": "object",
+      "description": "Reputation with various factions",
+      "properties": {
+        "faction_id": {
+          "type": "number",
+          "description": "Reputation score -100 to 100"
+        }
+      }
+    },
+    "law_enforcement_heat": {
+      "type": "number",
+      "default": 0,
+      "description": "Police/FBI wanted level -100 to 100"
+    },
+    "underworld_respect": {
+      "type": "number",
+      "default": 0,
+      "description": "Criminal underworld reputation -100 to 100"
+    },
+    "corporate_standing": {
+      "type": "number",
+      "default": 0,
+      "description": "Corporate sector reputation -100 to 100"
+    },
+    "hacker_network_status": {
+      "type": "number",
+      "default": 0,
+      "description": "Hacker collective reputation -100 to 100"
+    },
+    "street_credibility": {
+      "type": "number",
+      "default": 0,
+      "description": "Street level reputation -100 to 100"
+    },
+    "government_infiltration": {
+      "type": "number",
+      "default": 0,
+      "description": "Government/political contacts -100 to 100"
+    },
+    "overall_tier": {
+      "type": "number",
+      "default": 1,
+      "description": "Overall reputation tier 1-5"
+    },
+    "reputation_events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "event_type": {
+            "type": "string"
+          },
+          "group": {
+            "type": "string"
+          },
+          "change": {
+            "type": "number"
+          },
+          "reason": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "History of reputation changes"
+    },
+    "active_missions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Reputation-altering missions in progress"
+    },
+    "unlocked_opportunities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Unlocked based on reputation tiers"
+    }
+  },
+  "required": [
+    "player_id"
+  ]
+}

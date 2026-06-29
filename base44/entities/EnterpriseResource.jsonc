@@ -1,0 +1,53 @@
+{
+  "name": "EnterpriseResource",
+  "type": "object",
+  "properties": {
+    "enterprise_id": {
+      "type": "string"
+    },
+    "resource_type": {
+      "type": "string",
+      "enum": [
+        "materials",
+        "labor",
+        "equipment",
+        "energy",
+        "capital"
+      ],
+      "default": "materials"
+    },
+    "resource_name": {
+      "type": "string"
+    },
+    "current_amount": {
+      "type": "number",
+      "default": 0
+    },
+    "max_capacity": {
+      "type": "number",
+      "default": 1000
+    },
+    "consumption_rate": {
+      "type": "number",
+      "default": 10,
+      "description": "Units per hour"
+    },
+    "replenishment_cost": {
+      "type": "number"
+    },
+    "efficiency_impact": {
+      "type": "number",
+      "default": 100,
+      "description": "How resource level affects production"
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "enterprise_id",
+    "resource_type",
+    "resource_name"
+  ]
+}

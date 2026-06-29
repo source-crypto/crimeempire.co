@@ -1,0 +1,45 @@
+{
+  "name": "AccessoryTrade",
+  "type": "object",
+  "properties": {
+    "seller_id": {
+      "type": "string",
+      "description": "Player selling accessory"
+    },
+    "accessory_id": {
+      "type": "string",
+      "description": "Accessory being sold"
+    },
+    "accessory_name": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number"
+    },
+    "condition": {
+      "type": "number",
+      "default": 100,
+      "description": "Accessory condition 0-100"
+    },
+    "durability_remaining": {
+      "type": "number",
+      "default": 100,
+      "description": "Durability left %"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "sold",
+        "cancelled"
+      ],
+      "default": "active"
+    }
+  },
+  "required": [
+    "seller_id",
+    "accessory_id",
+    "accessory_name",
+    "price"
+  ]
+}

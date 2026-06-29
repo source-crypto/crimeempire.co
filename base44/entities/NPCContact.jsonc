@@ -1,0 +1,152 @@
+{
+  "name": "NPCContact",
+  "type": "object",
+  "properties": {
+    "npc_name": {
+      "type": "string"
+    },
+    "npc_type": {
+      "type": "string",
+      "enum": [
+        "informant",
+        "fixer",
+        "corrupt_official",
+        "arms_dealer",
+        "money_launderer",
+        "hacker"
+      ],
+      "default": "informant"
+    },
+    "territory_id": {
+      "type": "string"
+    },
+    "territory_name": {
+      "type": "string"
+    },
+    "loyalty": {
+      "type": "number",
+      "default": 50,
+      "description": "0-100 loyalty to player"
+    },
+    "trustworthiness": {
+      "type": "number",
+      "default": 70,
+      "description": "0-100 reliability"
+    },
+    "level": {
+      "type": "number",
+      "default": 1,
+      "description": "NPC level/rank"
+    },
+    "upgrade_cost": {
+      "type": "number",
+      "description": "Cost to upgrade to next level"
+    },
+    "production_capabilities": {
+      "type": "object",
+      "properties": {
+        "can_produce": {
+          "type": "boolean",
+          "default": false
+        },
+        "production_type": {
+          "type": "string"
+        },
+        "production_rate": {
+          "type": "number"
+        },
+        "quality_multiplier": {
+          "type": "number",
+          "default": 1
+        }
+      }
+    },
+    "network_size": {
+      "type": "number",
+      "default": 1,
+      "description": "Size of NPC's network/influence"
+    },
+    "specializations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "service_name": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "cooldown_hours": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "personality": {
+      "type": "object",
+      "properties": {
+        "traits": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "backstory": {
+          "type": "string"
+        }
+      }
+    },
+    "relationship_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "interactions": {
+            "type": "number"
+          },
+          "last_interaction": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "current_intel": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "available",
+        "busy",
+        "compromised",
+        "deceased"
+      ],
+      "default": "available"
+    },
+    "ai_generated": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "npc_name",
+    "npc_type",
+    "territory_id"
+  ]
+}

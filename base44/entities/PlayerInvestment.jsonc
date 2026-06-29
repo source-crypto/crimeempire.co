@@ -1,0 +1,124 @@
+{
+  "name": "PlayerInvestment",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string"
+    },
+    "player_username": {
+      "type": "string"
+    },
+    "investment_type": {
+      "type": "string",
+      "enum": [
+        "supply_line",
+        "enterprise",
+        "territory",
+        "faction_trade",
+        "market_speculation"
+      ]
+    },
+    "target_id": {
+      "type": "string"
+    },
+    "target_name": {
+      "type": "string"
+    },
+    "amount_invested": {
+      "type": "number"
+    },
+    "expected_return": {
+      "type": "number"
+    },
+    "actual_return": {
+      "type": "number",
+      "default": 0
+    },
+    "transparency_data": {
+      "type": "object",
+      "properties": {
+        "base_market_price": {
+          "type": "number"
+        },
+        "demand_pressure": {
+          "type": "number"
+        },
+        "supply_volume": {
+          "type": "number"
+        },
+        "route_stability": {
+          "type": "number"
+        },
+        "faction_influence": {
+          "type": "number"
+        },
+        "player_impact_coefficient": {
+          "type": "number"
+        },
+        "modifiers_applied": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "modifier_name": {
+                "type": "string"
+              },
+              "value": {
+                "type": "number"
+              },
+              "reason": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "ai_reasoning": {
+      "type": "object",
+      "properties": {
+        "prediction": {
+          "type": "string"
+        },
+        "success_factors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "risk_factors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outcome_explanation": {
+          "type": "string"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "matured",
+        "failed",
+        "processing"
+      ],
+      "default": "active"
+    },
+    "roi_percentage": {
+      "type": "number",
+      "default": 0
+    },
+    "maturity_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "player_id",
+    "investment_type",
+    "amount_invested"
+  ]
+}

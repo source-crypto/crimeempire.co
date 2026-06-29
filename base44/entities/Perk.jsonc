@@ -1,0 +1,83 @@
+{
+  "name": "Perk",
+  "type": "object",
+  "properties": {
+    "perk_name": {
+      "type": "string",
+      "description": "Name of the perk"
+    },
+    "perk_type": {
+      "type": "string",
+      "enum": [
+        "passive",
+        "active",
+        "utility"
+      ],
+      "default": "passive",
+      "description": "Type of perk"
+    },
+    "required_skill": {
+      "type": "string",
+      "description": "Required skill to unlock"
+    },
+    "required_skill_level": {
+      "type": "number",
+      "default": 5,
+      "description": "Required skill level"
+    },
+    "required_player_level": {
+      "type": "number",
+      "default": 1,
+      "description": "Minimum player level"
+    },
+    "description": {
+      "type": "string",
+      "description": "Perk description and effects"
+    },
+    "stat_bonuses": {
+      "type": "object",
+      "description": "Stat bonuses this perk grants",
+      "properties": {
+        "combat_damage": {
+          "type": "number"
+        },
+        "stealth_bonus": {
+          "type": "number"
+        },
+        "evasion": {
+          "type": "number"
+        },
+        "hacking_speed": {
+          "type": "number"
+        },
+        "negotiation_persuasion": {
+          "type": "number"
+        },
+        "crew_morale": {
+          "type": "number"
+        }
+      }
+    },
+    "effect_description": {
+      "type": "string",
+      "description": "Detailed effect mechanics"
+    },
+    "cooldown_seconds": {
+      "type": "number",
+      "description": "Cooldown for active perks"
+    },
+    "icon_class": {
+      "type": "string",
+      "description": "Icon identifier"
+    },
+    "tier": {
+      "type": "number",
+      "default": 1,
+      "description": "Rarity tier 1-5"
+    }
+  },
+  "required": [
+    "perk_name",
+    "required_skill"
+  ]
+}

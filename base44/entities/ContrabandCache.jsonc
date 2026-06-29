@@ -1,0 +1,57 @@
+{
+  "name": "ContrabandCache",
+  "type": "object",
+  "properties": {
+    "cache_type": {
+      "type": "string",
+      "enum": [
+        "weapons",
+        "drugs",
+        "stolen_goods",
+        "counterfeit",
+        "intel"
+      ],
+      "default": "drugs"
+    },
+    "coordinates": {
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        }
+      }
+    },
+    "value": {
+      "type": "number",
+      "default": 10000
+    },
+    "quantity": {
+      "type": "number",
+      "default": 100
+    },
+    "discovered_by": {
+      "type": "string",
+      "description": "Player who found it"
+    },
+    "is_claimed": {
+      "type": "boolean",
+      "default": false
+    },
+    "heat_level": {
+      "type": "number",
+      "default": 0,
+      "description": "Police attention 0-100"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "cache_type",
+    "coordinates"
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "name": "MarketTrendData",
+  "type": "object",
+  "properties": {
+    "item_type": {
+      "type": "string",
+      "enum": [
+        "drugs",
+        "weapons",
+        "stolen_goods",
+        "hacking_service",
+        "assassination",
+        "forgery",
+        "data_breach"
+      ],
+      "description": "Market category"
+    },
+    "current_price": {
+      "type": "number",
+      "description": "Average market price"
+    },
+    "price_trend": {
+      "type": "string",
+      "enum": [
+        "rising",
+        "stable",
+        "falling"
+      ],
+      "default": "stable"
+    },
+    "price_volatility": {
+      "type": "number",
+      "default": 50,
+      "description": "Price change frequency 0-100"
+    },
+    "demand_level": {
+      "type": "number",
+      "default": 50,
+      "description": "Current demand 0-100"
+    },
+    "supply_level": {
+      "type": "number",
+      "default": 50,
+      "description": "Current supply 0-100"
+    },
+    "police_heat": {
+      "type": "number",
+      "default": 0,
+      "description": "Law enforcement focus 0-100"
+    },
+    "market_event": {
+      "type": "string",
+      "description": "Current event affecting market"
+    },
+    "trend_summary": {
+      "type": "string",
+      "description": "AI-generated market analysis"
+    },
+    "next_update": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "item_type"
+  ]
+}

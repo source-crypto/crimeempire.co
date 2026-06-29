@@ -1,0 +1,118 @@
+{
+  "name": "CrewPermission",
+  "type": "object",
+  "properties": {
+    "crew_id": {
+      "type": "string"
+    },
+    "player_id": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string",
+      "enum": [
+        "boss",
+        "underboss",
+        "capo",
+        "soldier",
+        "associate"
+      ],
+      "default": "associate"
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "manage_members": {
+          "type": "boolean"
+        },
+        "assign_roles": {
+          "type": "boolean"
+        },
+        "initiate_battles": {
+          "type": "boolean"
+        },
+        "manage_territories": {
+          "type": "boolean"
+        },
+        "approve_heists": {
+          "type": "boolean"
+        },
+        "access_treasury": {
+          "type": "boolean"
+        },
+        "create_supply_lines": {
+          "type": "boolean"
+        },
+        "kick_members": {
+          "type": "boolean"
+        },
+        "view_analytics": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "required": [
+    "crew_id",
+    "player_id",
+    "role"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "player_id": "{{user.data.player_id}}"
+        },
+        {
+          "crew_id": "{{user.data.crew_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "player_id": "{{user.data.player_id}}"
+        },
+        {
+          "$and": [
+            {
+              "crew_id": "{{user.data.crew_id}}"
+            },
+            {
+              "user_condition": {
+                "role": "boss"
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "crew_id": "{{user.data.crew_id}}"
+            },
+            {
+              "user_condition": {
+                "role": "underboss"
+              }
+            }
+          ]
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

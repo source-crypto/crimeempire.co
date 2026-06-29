@@ -1,0 +1,110 @@
+{
+  "name": "Policy",
+  "type": "object",
+  "properties": {
+    "policy_name": {
+      "type": "string",
+      "description": "Name of the policy/law"
+    },
+    "policy_type": {
+      "type": "string",
+      "enum": [
+        "taxation",
+        "security",
+        "trade",
+        "crime_control",
+        "economic",
+        "social"
+      ],
+      "description": "Type of policy"
+    },
+    "enacted_by": {
+      "type": "string",
+      "description": "Player ID of governor"
+    },
+    "governor_name": {
+      "type": "string",
+      "description": "Name of governor"
+    },
+    "territory_id": {
+      "type": "string",
+      "description": "Territory where policy applies"
+    },
+    "territory_name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "description": "Policy description"
+    },
+    "effects": {
+      "type": "object",
+      "properties": {
+        "tax_rate_change": {
+          "type": "number"
+        },
+        "crime_heat_modifier": {
+          "type": "number"
+        },
+        "trade_bonus": {
+          "type": "number"
+        },
+        "security_level_change": {
+          "type": "number"
+        },
+        "income_modifier": {
+          "type": "number"
+        },
+        "faction_influence_change": {
+          "type": "number"
+        }
+      },
+      "description": "Numeric effects on game mechanics"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "suspended",
+        "repealed"
+      ],
+      "default": "active"
+    },
+    "public_support": {
+      "type": "number",
+      "default": 50,
+      "description": "Public approval 0-100"
+    },
+    "enforcement_cost": {
+      "type": "number",
+      "default": 1000,
+      "description": "Weekly cost to maintain"
+    },
+    "duration_weeks": {
+      "type": "number",
+      "description": "How long policy lasts (null = permanent)"
+    },
+    "enacted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "affected_factions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Faction IDs affected by this policy"
+    }
+  },
+  "required": [
+    "policy_name",
+    "policy_type",
+    "enacted_by",
+    "territory_id"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "name": "LaunderingMission",
+  "type": "object",
+  "properties": {
+    "mission_name": {
+      "type": "string",
+      "description": "Mission title"
+    },
+    "business_type_required": {
+      "type": "string",
+      "enum": [
+        "casino",
+        "car_wash",
+        "restaurant",
+        "nightclub",
+        "real_estate",
+        "art_gallery",
+        "crypto_exchange",
+        "any"
+      ],
+      "description": "Required business type"
+    },
+    "difficulty": {
+      "type": "string",
+      "enum": [
+        "easy",
+        "medium",
+        "hard",
+        "extreme"
+      ],
+      "default": "medium"
+    },
+    "dirty_money_amount": {
+      "type": "number",
+      "description": "Amount to launder"
+    },
+    "time_limit_hours": {
+      "type": "number",
+      "default": 48
+    },
+    "reward_cash": {
+      "type": "number"
+    },
+    "reward_reputation": {
+      "type": "number"
+    },
+    "risk_level": {
+      "type": "number",
+      "default": 50,
+      "description": "Mission risk 0-100"
+    },
+    "special_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Special conditions"
+    },
+    "description": {
+      "type": "string"
+    },
+    "is_available": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "mission_name",
+    "dirty_money_amount",
+    "reward_cash"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "name": "AIPricingModel",
+  "type": "object",
+  "properties": {
+    "item_type": {
+      "type": "string",
+      "description": "Type of item being priced"
+    },
+    "base_price": {
+      "type": "number",
+      "description": "Base price before AI adjustments"
+    },
+    "current_price": {
+      "type": "number",
+      "description": "AI-calculated current market price"
+    },
+    "demand_score": {
+      "type": "number",
+      "default": 50,
+      "description": "Market demand 0-100"
+    },
+    "supply_score": {
+      "type": "number",
+      "default": 50,
+      "description": "Market supply 0-100"
+    },
+    "volatility": {
+      "type": "number",
+      "default": 10,
+      "description": "Price volatility percentage"
+    },
+    "macro_factors": {
+      "type": "object",
+      "properties": {
+        "interest_rate_impact": {
+          "type": "number"
+        },
+        "inflation_impact": {
+          "type": "number"
+        },
+        "law_enforcement_heat": {
+          "type": "number"
+        }
+      }
+    },
+    "price_history": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Historical price data points"
+    },
+    "ai_prediction": {
+      "type": "object",
+      "properties": {
+        "next_price": {
+          "type": "number"
+        },
+        "confidence": {
+          "type": "number"
+        },
+        "trend": {
+          "type": "string",
+          "enum": [
+            "bullish",
+            "bearish",
+            "neutral"
+          ]
+        }
+      }
+    }
+  },
+  "required": [
+    "item_type",
+    "base_price",
+    "current_price"
+  ]
+}

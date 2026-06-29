@@ -1,0 +1,53 @@
+{
+  "name": "MaterialDeposit",
+  "type": "object",
+  "properties": {
+    "material_type": {
+      "type": "string",
+      "enum": [
+        "steel",
+        "electronics",
+        "chemicals",
+        "rare_metals",
+        "explosives"
+      ],
+      "default": "steel"
+    },
+    "coordinates": {
+      "type": "object",
+      "properties": {
+        "lat": {
+          "type": "number"
+        },
+        "lng": {
+          "type": "number"
+        }
+      }
+    },
+    "quantity_available": {
+      "type": "number",
+      "default": 1000
+    },
+    "extraction_cost": {
+      "type": "number",
+      "default": 500,
+      "description": "Cost per unit"
+    },
+    "controlled_by_crew_id": {
+      "type": "string"
+    },
+    "extraction_rate": {
+      "type": "number",
+      "default": 50,
+      "description": "Units per hour"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "material_type",
+    "coordinates"
+  ]
+}

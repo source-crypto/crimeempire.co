@@ -1,0 +1,40 @@
+{
+  "name": "BusinessRating",
+  "type": "object",
+  "properties": {
+    "business_id": {
+      "type": "string",
+      "description": "Rated business"
+    },
+    "rater_id": {
+      "type": "string",
+      "description": "Player who rated"
+    },
+    "rating": {
+      "type": "number",
+      "default": 5,
+      "description": "Rating 1-5"
+    },
+    "trust_score": {
+      "type": "number",
+      "default": 50,
+      "description": "Trustworthiness 0-100"
+    },
+    "transaction_success": {
+      "type": "boolean",
+      "default": true
+    },
+    "review_text": {
+      "type": "string",
+      "description": "Review comments"
+    },
+    "transaction_id": {
+      "type": "string",
+      "description": "Related exchange"
+    }
+  },
+  "required": [
+    "business_id",
+    "rater_id"
+  ]
+}

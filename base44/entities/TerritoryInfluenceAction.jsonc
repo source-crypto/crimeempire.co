@@ -1,0 +1,73 @@
+{
+  "name": "TerritoryInfluenceAction",
+  "type": "object",
+  "properties": {
+    "territory_id": {
+      "type": "string",
+      "description": "Target territory"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "Player executing action"
+    },
+    "action_type": {
+      "type": "string",
+      "enum": [
+        "economic_sabotage",
+        "political_campaign",
+        "diplomatic_gift",
+        "cultural_influence",
+        "economic_investment",
+        "intelligence_gathering"
+      ],
+      "description": "Type of influence action"
+    },
+    "cost": {
+      "type": "number",
+      "description": "Cost in crypto or resources"
+    },
+    "influence_gained": {
+      "type": "number",
+      "default": 0,
+      "description": "Influence points gained"
+    },
+    "duration_hours": {
+      "type": "number",
+      "default": 24,
+      "description": "How long effect lasts"
+    },
+    "success_rate": {
+      "type": "number",
+      "default": 75,
+      "description": "% chance of success"
+    },
+    "current_progress": {
+      "type": "number",
+      "default": 0,
+      "description": "Progress 0-100"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "planning",
+        "active",
+        "completed",
+        "failed"
+      ],
+      "default": "planning"
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completion_bonus": {
+      "type": "object",
+      "description": "Rewards for successful completion"
+    }
+  },
+  "required": [
+    "territory_id",
+    "player_id",
+    "action_type"
+  ]
+}

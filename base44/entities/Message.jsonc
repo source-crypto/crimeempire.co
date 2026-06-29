@@ -1,0 +1,58 @@
+{
+  "name": "Message",
+  "type": "object",
+  "properties": {
+    "sender_id": {
+      "type": "string",
+      "description": "Player ID of sender"
+    },
+    "sender_username": {
+      "type": "string",
+      "description": "Username of sender"
+    },
+    "recipient_id": {
+      "type": "string",
+      "description": "Player ID of recipient (null for group)"
+    },
+    "conversation_type": {
+      "type": "string",
+      "enum": [
+        "direct",
+        "crew",
+        "alliance",
+        "faction"
+      ],
+      "default": "direct",
+      "description": "Type of conversation"
+    },
+    "conversation_id": {
+      "type": "string",
+      "description": "Crew/Alliance/Faction ID for group chats"
+    },
+    "message_text": {
+      "type": "string",
+      "description": "Message content"
+    },
+    "is_read": {
+      "type": "boolean",
+      "default": false
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "attachments": {
+          "type": "array"
+        },
+        "mentions": {
+          "type": "array"
+        }
+      }
+    }
+  },
+  "required": [
+    "sender_id",
+    "sender_username",
+    "conversation_type",
+    "message_text"
+  ]
+}

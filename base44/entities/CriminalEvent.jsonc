@@ -1,0 +1,72 @@
+{
+  "name": "CriminalEvent",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player who committed the event"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "heist",
+        "turf_war",
+        "mass_production",
+        "large_transaction",
+        "npc_violence",
+        "territory_takeover"
+      ],
+      "description": "Type of criminal activity"
+    },
+    "severity": {
+      "type": "number",
+      "default": 50,
+      "description": "Event severity 0-100"
+    },
+    "location": {
+      "type": "string",
+      "description": "Where event occurred"
+    },
+    "related_base_id": {
+      "type": "string",
+      "description": "Base linked to this event"
+    },
+    "vulnerability_increase": {
+      "type": "number",
+      "default": 10,
+      "description": "How much base vulnerability increased"
+    },
+    "heat_generated": {
+      "type": "number",
+      "default": 0,
+      "description": "Player heat gained from event"
+    },
+    "witnesses": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of witnesses"
+    },
+    "evidence_collected": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether LE collected evidence"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "investigated",
+        "resolved"
+      ],
+      "default": "active"
+    },
+    "event_details": {
+      "type": "object",
+      "description": "Event-specific data"
+    }
+  },
+  "required": [
+    "player_id",
+    "event_type"
+  ]
+}
