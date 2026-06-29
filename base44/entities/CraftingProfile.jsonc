@@ -1,0 +1,63 @@
+{
+  "name": "CraftingProfile",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "Player this crafting profile belongs to"
+    },
+    "username": {
+      "type": "string"
+    },
+    "crafting_level": {
+      "type": "number",
+      "default": 1,
+      "description": "Crafting skill level 1-50"
+    },
+    "crafting_xp": {
+      "type": "number",
+      "default": 0,
+      "description": "XP toward next crafting level"
+    },
+    "total_crafted": {
+      "type": "number",
+      "default": 0
+    },
+    "total_earned": {
+      "type": "number",
+      "default": 0
+    },
+    "last_gather_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last material-gather action (cooldown gate)"
+    },
+    "specialty": {
+      "type": "string",
+      "enum": [
+        "vehicle_parts",
+        "electronics",
+        "clothing",
+        "medical",
+        "building_materials",
+        "furniture",
+        "generalist"
+      ],
+      "default": "generalist",
+      "description": "Specialty grants bonus XP/value in that category"
+    }
+  },
+  "required": [
+    "player_id"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

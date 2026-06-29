@@ -59,6 +59,7 @@ import CommodityMarket from './pages/CommodityMarket';
 import TerritoryControl from './pages/TerritoryControl';
 import CurrencyExchange from './pages/CurrencyExchange';
 import ContractHits from './pages/ContractHits';
+import Crafting from './pages/Crafting';
 import Embassy from './pages/Embassy';
 import FleetManagement from './pages/FleetManagement';
 import AIManagement from './pages/AIManagement';
@@ -118,6 +119,7 @@ export const PAGES = {
     "TerritoryControl": TerritoryControl,
     "CurrencyExchange": CurrencyExchange,
     "ContractHits": ContractHits,
+    "Crafting": Crafting,
     "Embassy": Embassy,
     "FleetManagement": FleetManagement,
     "AIManagement": AIManagement,

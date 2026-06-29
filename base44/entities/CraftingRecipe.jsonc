@@ -1,0 +1,84 @@
+{
+  "name": "CraftingRecipe",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Recipe name / crafted product name"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "vehicle_parts",
+        "electronics",
+        "clothing",
+        "medical",
+        "building_materials",
+        "furniture"
+      ],
+      "default": "electronics"
+    },
+    "icon": {
+      "type": "string",
+      "default": "\ud83d\udd27"
+    },
+    "output_item_type": {
+      "type": "string",
+      "description": "Maps to Item.item_type for the crafted output",
+      "default": "equipment"
+    },
+    "output_quantity": {
+      "type": "number",
+      "default": 1
+    },
+    "output_value": {
+      "type": "number",
+      "default": 200,
+      "description": "Market value of one crafted unit"
+    },
+    "materials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "material": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      },
+      "default": [],
+      "description": "Required raw materials and quantities"
+    },
+    "required_level": {
+      "type": "number",
+      "default": 1,
+      "description": "Minimum crafting level to attempt this recipe"
+    },
+    "craft_xp": {
+      "type": "number",
+      "default": 50,
+      "description": "Crafting XP awarded on success"
+    },
+    "rarity": {
+      "type": "string",
+      "enum": [
+        "common",
+        "uncommon",
+        "rare",
+        "epic",
+        "legendary"
+      ],
+      "default": "common"
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name",
+    "category"
+  ]
+}
