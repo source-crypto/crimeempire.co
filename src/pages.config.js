@@ -60,6 +60,7 @@ import TerritoryControl from './pages/TerritoryControl';
 import CurrencyExchange from './pages/CurrencyExchange';
 import ContractHits from './pages/ContractHits';
 import Crafting from './pages/Crafting';
+import TransparencyPlatform from './pages/TransparencyPlatform';
 import Embassy from './pages/Embassy';
 import FleetManagement from './pages/FleetManagement';
 import AIManagement from './pages/AIManagement';
@@ -120,6 +121,7 @@ export const PAGES = {
     "CurrencyExchange": CurrencyExchange,
     "ContractHits": ContractHits,
     "Crafting": Crafting,
+    "TransparencyPlatform": TransparencyPlatform,
     "Embassy": Embassy,
     "FleetManagement": FleetManagement,
     "AIManagement": AIManagement,

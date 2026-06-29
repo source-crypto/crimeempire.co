@@ -1,0 +1,87 @@
+{
+  "name": "AIDecisionLog",
+  "type": "object",
+  "properties": {
+    "decision_id": {
+      "type": "string",
+      "description": "Unique decision transaction ID"
+    },
+    "agent_name": {
+      "type": "string",
+      "description": "Which AI agent made the decision (e.g. MissionDirector, PricingModel, DiplomaticAdvisor)"
+    },
+    "goal": {
+      "type": "string",
+      "description": "The objective the AI was optimizing for"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "default": "medium"
+    },
+    "inputs": {
+      "type": "object",
+      "description": "The data/context the AI considered (key-value)"
+    },
+    "decision": {
+      "type": "string",
+      "description": "What the AI decided to do"
+    },
+    "reasoning": {
+      "type": "string",
+      "description": "Plain-language explanation of why"
+    },
+    "expected_result": {
+      "type": "string"
+    },
+    "actual_result": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "number",
+      "default": 75,
+      "description": "AI confidence 0-100"
+    },
+    "risk": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "extreme"
+      ],
+      "default": "medium"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "executing",
+        "completed",
+        "failed"
+      ],
+      "default": "completed"
+    },
+    "affected_entity_id": {
+      "type": "string"
+    },
+    "affected_entity_name": {
+      "type": "string"
+    },
+    "audit_event_id": {
+      "type": "string",
+      "description": "Link to the AuditEvent this decision produced"
+    }
+  },
+  "required": [
+    "decision_id",
+    "agent_name",
+    "goal",
+    "decision"
+  ]
+}
