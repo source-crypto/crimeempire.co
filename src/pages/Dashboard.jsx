@@ -25,6 +25,7 @@ const PlayerActionEventSystem = lazy(() => import('../components/economy/PlayerA
 import RewardsHistory from '../components/missions/RewardsHistory';
 import CrewMissionAssignment from '../components/missions/CrewMissionAssignment';
 import MissionObjectivesDashboard from '../components/missions/MissionObjectivesDashboard';
+import LogisticsDataFlow from '../components/missions/LogisticsDataFlow';
 import WantedSystem from '../components/wanted/WantedSystem';
 import WantedHUD from '../components/wanted/WantedHUD';
 import { 
@@ -429,6 +430,7 @@ export default function Dashboard() {
         <TabsContent value="missions" className="space-y-6">
           <MissionObjectivesDashboard playerData={playerData} />
           <CrewMissionAssignment playerData={playerData} />
+          <LogisticsDataFlow playerData={playerData} />
           <RewardsHistory playerData={playerData} />
         </TabsContent>
 
