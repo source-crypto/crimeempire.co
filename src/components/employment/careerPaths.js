@@ -1,10 +1,15 @@
 // Career path definitions — the living labor market tracks.
 // Each path has named levels with rising base salaries and unlocked responsibilities.
 
+// Lawful paths pay into buy_power (clean money).
+// Non-lawful paths pay into crypto_balance (dirty crypto).
+export const LAWFUL_PATHS = new Set(['corporate', 'government']);
+
 export const CAREER_PATHS = [
   {
     key: 'corporate',
     name: 'Corporate',
+    lawful: true,
     icon: '🏢',
     color: 'text-blue-400',
     accent: 'border-blue-500/40 bg-blue-900/20',
@@ -24,6 +29,7 @@ export const CAREER_PATHS = [
   {
     key: 'logistics',
     name: 'Logistics',
+    lawful: false,
     icon: '🚚',
     color: 'text-amber-400',
     accent: 'border-amber-500/40 bg-amber-900/20',
@@ -39,6 +45,7 @@ export const CAREER_PATHS = [
   {
     key: 'security',
     name: 'Security',
+    lawful: false,
     icon: '🛡️',
     color: 'text-red-400',
     accent: 'border-red-500/40 bg-red-900/20',
@@ -53,6 +60,7 @@ export const CAREER_PATHS = [
   {
     key: 'government',
     name: 'Government',
+    lawful: true,
     icon: '🏛️',
     color: 'text-emerald-400',
     accent: 'border-emerald-500/40 bg-emerald-900/20',
@@ -69,6 +77,7 @@ export const CAREER_PATHS = [
   {
     key: 'entrepreneurship',
     name: 'Entrepreneurship',
+    lawful: false,
     icon: '🚀',
     color: 'text-purple-400',
     accent: 'border-purple-500/40 bg-purple-900/20',

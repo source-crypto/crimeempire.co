@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Briefcase, LineChart, Receipt, Handshake, Loader2 } from 'lucide-react';
 
-import { CAREER_PATHS, getCareerPath, getLevel, getNextLevel, xpToPromote } from '@/components/employment/careerPaths';
+import { CAREER_PATHS, LAWFUL_PATHS, getCareerPath, getLevel, getNextLevel, xpToPromote } from '@/components/employment/careerPaths';
 import CareerDashboard from '@/components/employment/CareerDashboard';
 import JobMarket from '@/components/employment/JobMarket';
 import PerformanceCenter from '@/components/employment/PerformanceCenter';
@@ -141,21 +141,33 @@ export default function Employment() {
   });
 
   // ---- Collect paycheck ----
+  // Lawful paths (corporate, government) → clean cash (buy_power)
+  // Non-lawful paths (logistics, security, entrepreneurship) → crypto (crypto_balance)
   const collectPay = useMutation({
     mutationFn: async () => {
       const b = computeSalaryBreakdown(employment);
+      const isLawful = LAWFUL_PATHS.has(employment.career_path);
+
       if (employment.employment_status === 'retired') {
         const pension = Math.floor((employment.pension_accrued || 0) * 0.02);
         if (pension <= 0) throw new Error('No pension available');
+        // Pension always pays as clean cash regardless of path
         await base44.entities.Player.update(playerData.id, { buy_power: (playerData.buy_power || 0) + pension });
         await base44.entities.Employment.update(employment.id, { last_paid_at: new Date().toISOString() });
-        return pension;
+        return { amount: pension, crypto: false };
       }
+
       // employed: gain net pay + XP + pension accrual + tenure
       const xpGain = 80 + Math.floor(employment.career_level * 20);
       const newXp = (employment.experience_points || 0) + xpGain;
+
+      // Route payment to the right balance
+      const playerUpdate = isLawful
+        ? { buy_power: (playerData.buy_power || 0) + b.net }
+        : { crypto_balance: (playerData.crypto_balance || 0) + b.net };
+
       await base44.entities.Player.update(playerData.id, {
-        buy_power: (playerData.buy_power || 0) + b.net,
+        ...playerUpdate,
         experience: (playerData.experience || 0) + xpGain,
       });
       await base44.entities.Employment.update(employment.id, {
@@ -164,10 +176,16 @@ export default function Employment() {
         pension_accrued: (employment.pension_accrued || 0) + b.pension,
         last_paid_at: new Date().toISOString(),
       });
-      return b.net;
+      return { amount: b.net, crypto: !isLawful };
     },
     onMutate: () => setPendingPay(true),
-    onSuccess: (amt) => { toast.success(`💰 Collected $${amt.toLocaleString()} net pay.`); invalidateAll(); },
+    onSuccess: ({ amount, crypto }) => {
+      toast.success(crypto
+        ? `₿ $${amount.toLocaleString()} paid in crypto (non-lawful path)`
+        : `💰 Collected $${amount.toLocaleString()} net pay`
+      );
+      invalidateAll();
+    },
     onError: (e) => toast.error(e.message || 'Could not collect pay'),
     onSettled: () => setPendingPay(false),
   });

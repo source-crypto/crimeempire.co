@@ -2,11 +2,12 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { CAREER_PATHS, getCareerPath, getLevel, getNextLevel, xpToPromote } from './careerPaths';
-import { Briefcase, TrendingUp, Award, Coins, ArrowUpCircle } from 'lucide-react';
+import { CAREER_PATHS, LAWFUL_PATHS, getCareerPath, getLevel, getNextLevel, xpToPromote } from './careerPaths';
+import { Briefcase, TrendingUp, Award, Coins, ArrowUpCircle, Bitcoin, DollarSign } from 'lucide-react';
 
 export default function CareerDashboard({ employment, onPromote, onCollect, pendingPay }) {
   const path = getCareerPath(employment.career_path);
+  const isLawful = LAWFUL_PATHS.has(employment.career_path);
   const level = getLevel(employment.career_path, employment.career_level);
   const next = getNextLevel(employment.career_path, employment.career_level);
   const xpNeeded = xpToPromote(employment.career_level);
@@ -51,9 +52,17 @@ export default function CareerDashboard({ employment, onPromote, onCollect, pend
             <Stat label="Pension" value={`$${(employment.pension_accrued || 0).toLocaleString()}`} icon={<Coins className="w-3 h-3" />} tone="text-blue-400" />
           </div>
 
+          {/* Pay type indicator */}
+          <div className={`flex items-center gap-2 px-3 py-2 rounded-lg border text-xs ${isLawful ? 'border-green-500/30 bg-green-900/20 text-green-300' : 'border-amber-500/30 bg-amber-900/20 text-amber-300'}`}>
+            {isLawful ? <DollarSign className="w-4 h-4" /> : <Bitcoin className="w-4 h-4" />}
+            <span className="font-medium">{isLawful ? 'Lawful Path — pays clean cash (buy power)' : 'Non-Lawful Path — pays in crypto balance'}</span>
+          </div>
+
           {employment.employment_status !== 'retired' && employment.employment_status !== 'self_employed' && (
-            <Button onClick={onCollect} disabled={pendingPay} className="w-full bg-green-600 hover:bg-green-700">
-              {pendingPay ? 'Collecting…' : `💰 Collect Paycheck (+$${Math.floor((employment.salary || level.salary) * 0.78).toLocaleString()} net)`}
+            <Button onClick={onCollect} disabled={pendingPay} className={`w-full ${isLawful ? 'bg-green-600 hover:bg-green-700' : 'bg-amber-600 hover:bg-amber-700'}`}>
+              {pendingPay ? 'Collecting…' : isLawful
+                ? `💰 Collect Paycheck (+$${Math.floor((employment.salary || level.salary) * 0.78).toLocaleString()} net)`
+                : `₿ Collect Crypto Pay (+$${Math.floor((employment.salary || level.salary) * 0.78).toLocaleString()} crypto)`}
             </Button>
           )}
         </CardContent>
@@ -121,6 +130,9 @@ export default function CareerDashboard({ employment, onPromote, onCollect, pend
                 <span className="text-xl">{p.icon}</span>
                 <span className={`font-semibold ${p.color}`}>{p.name}</span>
                 <Badge variant="secondary" className="ml-auto text-xs">{p.levels.length} levels</Badge>
+                {p.lawful
+                  ? <Badge className="bg-green-900/50 text-green-300 text-xs border border-green-500/30">💵 Cash</Badge>
+                  : <Badge className="bg-amber-900/50 text-amber-300 text-xs border border-amber-500/30">₿ Crypto</Badge>}
               </div>
               <p className="text-xs text-gray-400">{p.description}</p>
             </div>
