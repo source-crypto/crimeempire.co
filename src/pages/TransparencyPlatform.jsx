@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { Activity, Database, Brain, Network, Globe, ArrowRight } from 'lucide-react';
+import { Activity, Database, Brain, Network, Globe, ArrowRight, Play, Hammer } from 'lucide-react';
 import WorldAnalytics from '@/components/transparency/WorldAnalytics';
 import EventLedger from '@/components/transparency/EventLedger';
 import AIInspector from '@/components/transparency/AIInspector';
 import KnowledgeGraph from '@/components/transparency/KnowledgeGraph';
 import APILayer from '@/components/transparency/APILayer';
+import SimulationReplay from '@/components/transparency/SimulationReplay';
+import InfrastructureMonitor from '@/components/transparency/InfrastructureMonitor';
 
 const TABS = [
   { id: 'analytics', label: 'World Analytics', icon: Activity },
   { id: 'ledger', label: 'Event Ledger', icon: Database },
+  { id: 'replay', label: 'Sim Replay', icon: Play },
+  { id: 'infrastructure', label: 'Infrastructure', icon: Hammer },
   { id: 'ai', label: 'AI Inspector', icon: Brain },
   { id: 'graph', label: 'Knowledge Graph', icon: Network },
   { id: 'api', label: 'API Layer', icon: Globe },
@@ -54,6 +58,8 @@ export default function TransparencyPlatform() {
 
       {tab === 'analytics' && <WorldAnalytics />}
       {tab === 'ledger' && <EventLedger />}
+      {tab === 'replay' && <SimulationReplay />}
+      {tab === 'infrastructure' && <InfrastructureMonitor />}
       {tab === 'ai' && <AIInspector />}
       {tab === 'graph' && <KnowledgeGraph />}
       {tab === 'api' && <APILayer />}

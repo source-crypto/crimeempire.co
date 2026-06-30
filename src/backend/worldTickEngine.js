@@ -37,9 +37,14 @@ const COMMODITY_BASE_PRICES = {
 const HEAT_DECAY_RATE = 3;
 
 // ─────────────────────────────────────────────────────────
-// UTILITY: log a tick event to the TickEvent ledger
+// UTILITY: log a tick event to BOTH TickEvent and AuditEvent ledgers
+// Every tick event is immutably recorded in the transparency layer.
 // ─────────────────────────────────────────────────────────
 async function logEvent(tickId, tickNumber, eventType, entityId, entityName, before, after, metadata = {}, phase = "") {
+  const delta = (after || 0) - (before || 0);
+  const ts = new Date().toISOString();
+
+  // TickEvent ledger (existing)
   await base44.entities.TickEvent.create({
     tick_id: tickId,
     tick_number: tickNumber,
@@ -48,9 +53,50 @@ async function logEvent(tickId, tickNumber, eventType, entityId, entityName, bef
     entity_name: entityName || "",
     before_value: before || 0,
     after_value: after || 0,
-    delta: (after || 0) - (before || 0),
+    delta,
     metadata,
     phase,
+  });
+
+  // AuditEvent — immutable transparency ledger
+  const auditTypeMap = {
+    enterprise_production: "enterprise_production",
+    heat_decay: "player_action",
+    market_update: "market_update",
+    territory_income: "territory_change",
+    gang_war_update: "combat",
+    gang_war_ended: "combat",
+    gang_war_started: "combat",
+    error: "world_tick",
+  };
+
+  const descriptions = {
+    enterprise_production: `Enterprise "${entityName}" produced ${delta > 0 ? delta : 0} units (stock: ${before}→${after})`,
+    heat_decay: `Heat decay on "${entityName}": ${before}→${after} (Δ${delta})`,
+    market_update: `Commodity "${entityName}" price updated: $${before}→$${after} (${delta >= 0 ? '+' : ''}${delta})`,
+    territory_income: `Territory "${entityName}" distributed $${after} income this tick`,
+    gang_war_update: `Gang war at "${entityName}" progressed: attacker score ${before}→${after}`,
+    gang_war_ended: `Gang war at "${entityName}" ended. Winner score: ${after}`,
+  };
+
+  await base44.entities.AuditEvent.create({
+    event_id: `evt_tick${tickNumber}_${phase}_${(entityId || "sys").slice(0, 8)}_${Date.now().toString(36)}`,
+    event_type: auditTypeMap[eventType] || "world_tick",
+    category: phase,
+    actor_id: "world_engine",
+    actor_name: `WorldTick #${tickNumber}`,
+    actor_type: "world_engine",
+    target_id: entityId || "",
+    target_name: entityName || "",
+    target_type: phase,
+    source: `world_tick_engine:${phase}`,
+    description: descriptions[eventType] || `[${eventType}] ${entityName}: ${before}→${after}`,
+    metadata: { ...metadata, tick_id: tickId, tick_number: tickNumber, phase },
+    dependencies: [tickId],
+    value_before: before || 0,
+    value_after: after || 0,
+    delta,
+    audit_hash: `0x${(tickNumber * 31 + (before || 0) + (after || 0)).toString(16)}`,
   });
 }
 
@@ -492,6 +538,33 @@ export default async function worldTickEngine(payload) {
       territory_ms: results.phases.territory?.duration_ms || 0,
       gang_wars_ms: results.phases.gang_wars?.duration_ms || 0,
     },
+  });
+
+  // Emit a single summary AuditEvent for this completed tick
+  await base44.entities.AuditEvent.create({
+    event_id: `evt_tick${tickNumber}_summary_${Date.now().toString(36)}`,
+    event_type: "world_tick",
+    category: "tick_summary",
+    actor_name: "WorldTickEngine",
+    actor_type: "world_engine",
+    source: "world_tick_engine",
+    description: `World tick #${tickNumber} completed in ${duration}ms — ${results.phases.enterprise?.processed || 0} enterprises, $${(results.phases.territory?.totalDistributed || 0).toLocaleString()} distributed`,
+    metadata: {
+      tick_number: tickNumber,
+      duration_ms: duration,
+      enterprises_processed: results.phases.enterprise?.processed || 0,
+      players_processed: results.phases.heat_decay?.processed || 0,
+      markets_updated: results.phases.market?.updated || 0,
+      territories_processed: results.phases.territory?.processed || 0,
+      wars_processed: results.phases.gang_wars?.processed || 0,
+      income_distributed: results.phases.territory?.totalDistributed || 0,
+      errors: results.errors.length,
+    },
+    dependencies: [],
+    value_before: tickNumber - 1,
+    value_after: tickNumber,
+    delta: 1,
+    audit_hash: `0x${(tickNumber * 997 + duration).toString(16)}`,
   });
 
   console.log(`[Tick ${tickNumber}] ✅ Completed in ${duration}ms`);
