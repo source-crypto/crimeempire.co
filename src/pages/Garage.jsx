@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import VehicleCard from '../components/garage/VehicleCard';
 import RouteAssignModal from '../components/garage/RouteAssignModal';
-import { Car, ShoppingCart, Loader2, TrendingUp } from 'lucide-react';
+import MaintenanceLog from '../components/garage/MaintenanceLog';
+import { Car, ShoppingCart, Loader2, TrendingUp, Wrench } from 'lucide-react';
 import { toast } from 'sonner';
 
 // ─── Purchasable Vehicle Catalog ─────────────────────────────────────────────
@@ -192,6 +193,7 @@ export default function Garage() {
         <TabsList className="glass-panel border border-purple-500/20">
           <TabsTrigger value="garage">🚗 My Garage ({vehicles.length})</TabsTrigger>
           <TabsTrigger value="shop">🛒 Vehicle Shop</TabsTrigger>
+          <TabsTrigger value="maintenance"><Wrench className="w-4 h-4 inline mr-1" />Maintenance</TabsTrigger>
         </TabsList>
 
         {/* MY GARAGE */}
@@ -274,6 +276,11 @@ export default function Garage() {
           </div>
         </TabsContent>
       </Tabs>
+
+        {/* MAINTENANCE LOG */}
+        <TabsContent value="maintenance" className="mt-4">
+          <MaintenanceLog vehicles={vehicles} playerId={playerData.id} playerData={playerData} />
+        </TabsContent>
 
       {/* Route Assign Modal */}
       {assigningVehicle && (
