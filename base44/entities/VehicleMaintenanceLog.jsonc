@@ -1,0 +1,98 @@
+{
+  "name": "VehicleMaintenanceLog",
+  "type": "object",
+  "properties": {
+    "vehicle_id": {
+      "type": "string",
+      "description": "ID of the vehicle this maintenance record belongs to"
+    },
+    "vehicle_name": {
+      "type": "string",
+      "description": "Vehicle display name for quick reference"
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "Player ID who owns the vehicle"
+    },
+    "repair_type": {
+      "type": "string",
+      "enum": [
+        "routine",
+        "major",
+        "emergency",
+        "inspection"
+      ],
+      "default": "routine",
+      "description": "Type of maintenance performed"
+    },
+    "wear_tear_level": {
+      "type": "number",
+      "default": 0,
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Current wear-and-tear percentage 0-100 (higher = more worn)"
+    },
+    "damage_level": {
+      "type": "number",
+      "default": 0,
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Current damage level 0-100 (higher = more damaged)"
+    },
+    "repair_cost": {
+      "type": "number",
+      "default": 0,
+      "description": "Cost of this repair in crypto"
+    },
+    "total_repair_cost": {
+      "type": "number",
+      "default": 0,
+      "description": "Cumulative repair cost across all logs for this vehicle"
+    },
+    "operational_status": {
+      "type": "string",
+      "enum": [
+        "operational",
+        "needs_repair",
+        "critical",
+        "grounded"
+      ],
+      "default": "operational",
+      "description": "Whether the vehicle is fit for smuggling duty"
+    },
+    "parts_replaced": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "List of parts replaced during this repair"
+    },
+    "mechanic_notes": {
+      "type": "string",
+      "default": "",
+      "description": "Notes from the mechanic about this maintenance"
+    },
+    "repaired_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this repair was completed"
+    }
+  },
+  "required": [
+    "vehicle_id",
+    "vehicle_name",
+    "owner_id",
+    "repair_type"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}
