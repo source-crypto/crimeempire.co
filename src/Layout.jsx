@@ -83,6 +83,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Street Combat', page: 'DirectCombat', icon: Shield },
     { name: 'Crew Tech Tree', page: 'CrewTechTree', icon: Cpu },
     { name: 'Crew Performance', page: 'CrewPerformance', icon: Users },
+    { name: 'Mission Director', page: 'MissionDirector', icon: Brain },
     { name: 'Leaderboard', page: 'SeasonalLeaderboard', icon: Crown },
     { name: '⚙️ World Tick', page: 'WorldTickMonitor', icon: Activity },
   ];
