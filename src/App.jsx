@@ -10,6 +10,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import PropertyMarket from './pages/PropertyMarket';
+import CrewPerformance from './pages/CrewPerformance';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -64,6 +65,11 @@ const AuthenticatedApp = () => {
       <Route path="/PropertyMarket" element={
         <LayoutWrapper currentPageName="PropertyMarket">
           <PropertyMarket />
+        </LayoutWrapper>
+      } />
+      <Route path="/CrewPerformance" element={
+        <LayoutWrapper currentPageName="CrewPerformance">
+          <CrewPerformance />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />
