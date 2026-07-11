@@ -71,6 +71,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Embassy', page: 'Embassy', icon: Users },
     { name: 'Fleet Management', page: 'FleetManagement', icon: Building2 },
     { name: 'Currency Exchange', page: 'CurrencyExchange', icon: DollarSign },
+    { name: 'Property Market', page: 'PropertyMarket', icon: Building2 },
     { name: 'Careers', page: 'Employment', icon: Briefcase },
     { name: 'Crafting', page: 'Crafting', icon: Hammer },
     { name: 'Transparency', page: 'TransparencyPlatform', icon: Activity },

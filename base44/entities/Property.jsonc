@@ -1,0 +1,120 @@
+{
+  "name": "Property",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Property display name"
+    },
+    "property_type": {
+      "type": "string",
+      "enum": [
+        "apartment",
+        "warehouse",
+        "safehouse",
+        "luxury_home",
+        "hotel",
+        "nightclub",
+        "factory",
+        "casino",
+        "garage",
+        "airport",
+        "private_island",
+        "office_tower",
+        "restaurant",
+        "gas_station"
+      ],
+      "default": "apartment",
+      "description": "Category of property from the empire property system"
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "Player ID who owns this property"
+    },
+    "owner_name": {
+      "type": "string"
+    },
+    "district": {
+      "type": "string",
+      "description": "City district where the property is located"
+    },
+    "purchase_price": {
+      "type": "number",
+      "default": 0
+    },
+    "market_value": {
+      "type": "number",
+      "default": 0,
+      "description": "Current fluctuating market value"
+    },
+    "income_per_hour": {
+      "type": "number",
+      "default": 0,
+      "description": "Passive income generated per hour"
+    },
+    "upkeep_per_hour": {
+      "type": "number",
+      "default": 0,
+      "description": "Maintenance cost per hour"
+    },
+    "condition": {
+      "type": "number",
+      "default": 100,
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Property condition 0-100 (affects income)"
+    },
+    "happiness": {
+      "type": "number",
+      "default": 70,
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Staff/tenant happiness 0-100 (affects income)"
+    },
+    "staff_count": {
+      "type": "number",
+      "default": 0
+    },
+    "upgrade_level": {
+      "type": "number",
+      "default": 0
+    },
+    "legitimacy": {
+      "type": "string",
+      "enum": [
+        "legitimate",
+        "front",
+        "illicit"
+      ],
+      "default": "legitimate",
+      "description": "Whether this is a legitimate business, a criminal front, or an illicit asset"
+    },
+    "emoji": {
+      "type": "string",
+      "default": "\ud83c\udfe2"
+    },
+    "last_collected_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "acquired_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "name",
+    "property_type",
+    "owner_id"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}
