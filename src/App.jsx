@@ -14,6 +14,7 @@ import CrewPerformance from './pages/CrewPerformance';
 import MissionDirector from './pages/MissionDirector';
 import CityCommand from './pages/CityCommand';
 import WorldEventDirector from './pages/WorldEventDirector';
+import CareerPaths from './pages/CareerPaths';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -88,6 +89,11 @@ const AuthenticatedApp = () => {
       <Route path="/WorldEventDirector" element={
         <LayoutWrapper currentPageName="WorldEventDirector">
           <WorldEventDirector />
+        </LayoutWrapper>
+      } />
+      <Route path="/CareerPaths" element={
+        <LayoutWrapper currentPageName="CareerPaths">
+          <CareerPaths />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />

@@ -97,7 +97,9 @@ export default function CityCommand() {
                 <li>• <span className="text-cyan-300">Blue/green/orange/red dots</span> = territories by resource type; red = contested.</li>
                 <li>• <span className="text-blue-300">Blue circles</span> = police patrol coverage; color by unit type.</li>
                 <li>• <span className="text-red-300">Red rings</span> = active world events, located at affected territories.</li>
-                <li>• Toggle layers to focus your strategic view.</li>
+                <li>• <span className="text-orange-300">Crime heat blobs</span> = high-crime sectors (yellow to orange to red); hotspots = intensity above 70.</li>
+                <li>• <span className="text-gray-300">Dashed circles</span> = district boundaries; <span className="text-green-300">green</span>/<span className="text-amber-300">amber</span>/<span className="text-purple-300">purple</span> dots = businesses by legitimacy.</li>
+                <li>• Toggle <span className="text-cyan-300">Satellite</span> for aerial command view. Toggle layers to focus your read.</li>
               </ul>
             </CardContent>
           </Card>
