@@ -84,6 +84,8 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Crew Tech Tree', page: 'CrewTechTree', icon: Cpu },
     { name: 'Crew Performance', page: 'CrewPerformance', icon: Users },
     { name: 'Mission Director', page: 'MissionDirector', icon: Brain },
+    { name: 'City Command', page: 'CityCommand', icon: Map },
+    { name: 'World Event Director', page: 'WorldEventDirector', icon: Activity },
     { name: 'Leaderboard', page: 'SeasonalLeaderboard', icon: Crown },
     { name: '⚙️ World Tick', page: 'WorldTickMonitor', icon: Activity },
   ];

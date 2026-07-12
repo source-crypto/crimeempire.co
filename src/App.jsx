@@ -12,6 +12,8 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import PropertyMarket from './pages/PropertyMarket';
 import CrewPerformance from './pages/CrewPerformance';
 import MissionDirector from './pages/MissionDirector';
+import CityCommand from './pages/CityCommand';
+import WorldEventDirector from './pages/WorldEventDirector';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -76,6 +78,16 @@ const AuthenticatedApp = () => {
       <Route path="/MissionDirector" element={
         <LayoutWrapper currentPageName="MissionDirector">
           <MissionDirector />
+        </LayoutWrapper>
+      } />
+      <Route path="/CityCommand" element={
+        <LayoutWrapper currentPageName="CityCommand">
+          <CityCommand />
+        </LayoutWrapper>
+      } />
+      <Route path="/WorldEventDirector" element={
+        <LayoutWrapper currentPageName="WorldEventDirector">
+          <WorldEventDirector />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />
