@@ -102,6 +102,12 @@ export default function CityIntelligenceMap({ territories = [], lawEnforcement =
         </CircleMarker>
       ))}
 
+      {activeLayers.heatmap && territories.filter(t => t.coordinates?.lat != null && t.is_contested).map(t => (
+        <CircleMarker key={`conflict-${t.id}`} center={[t.coordinates.lat, t.coordinates.lng]} radius={15} pathOptions={{ color: '#f97316', fillOpacity: 0.04, weight: 2, dashArray: '2 4' }}>
+          <Tooltip>⚔️ Active Conflict Zone — {t.name}</Tooltip>
+        </CircleMarker>
+      ))}
+
       {activeLayers.police && lawEnforcement.filter(u => u.coordinates?.lat != null && u.is_active !== false).map(u => (
         <React.Fragment key={u.id}>
           <Circle center={[u.coordinates.lat, u.coordinates.lng]} radius={(u.patrol_radius || 5) * 100} pathOptions={{ color: UNIT_COLOR[u.unit_type] || '#60a5fa', fillOpacity: 0.05, weight: 1 }} />

@@ -2,7 +2,8 @@ import React, { useState, useMemo } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent } from '@/components/ui/card';
-import { Loader2, Calculator } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Calculator, Building2 } from 'lucide-react';
 import PayrollDashboard from '@/components/payroll/PayrollDashboard';
 import { calculateEmployeeSalary, summarizePayroll } from '@/lib/salaryCalculator';
 import { toast } from 'sonner';
@@ -44,6 +45,11 @@ export default function PayrollManagement() {
     return { employment: e, calc: calculateEmployeeSalary(e, metric) };
   }), [employments, metrics]);
   const summary = useMemo(() => summarizePayroll(records), [records]);
+
+  const currentEmployer = useMemo(() => ownEmp.find(e => e.employment_status === 'employed') || null, [ownEmp]);
+  const currentPayout = useMemo(() => currentEmployer
+    ? calculateEmployeeSalary(currentEmployer, metrics.find(m => m.player_id === currentEmployer.player_id && m.period === 'monthly'))
+    : null, [currentEmployer, metrics]);
 
   const runMutation = useMutation({
     mutationFn: async () => {
@@ -95,6 +101,28 @@ export default function PayrollManagement() {
         <h1 className="text-3xl font-bold bg-gradient-to-r from-green-400 to-purple-400 bg-clip-text text-transparent flex items-center gap-2"><Calculator className="w-7 h-7 text-green-400" /> Payroll Management</h1>
         <p className="text-gray-400 mt-1">Automated salary calculation from performance ratings — lawful corporate (buy power, tax, pension) and criminal payouts (crypto, launderer cuts)</p>
       </div>
+      {currentEmployer && currentPayout && (
+        <Card className="glass-panel border-green-500/30">
+          <CardContent className="p-4 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <Building2 className="w-8 h-8 text-cyan-400" />
+              <div>
+                <p className="text-xs text-gray-400 uppercase tracking-wide">Current Employer</p>
+                <p className="text-lg font-bold text-white">{currentEmployer.employer_name || 'Unknown Employer'}</p>
+                <p className="text-sm text-gray-400">{currentEmployer.job_title} · Level {currentEmployer.career_level}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <Badge className={currentPayout.lawful ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}>{currentPayout.lawful ? 'Lawful' : 'Criminal'}</Badge>
+              <div className="text-right">
+                <p className="text-xs text-gray-400">Your payout / cycle</p>
+                <p className={`text-xl font-bold ${currentPayout.currency === 'crypto' ? 'text-purple-400' : 'text-green-400'}`}>{currentPayout.currency === 'crypto' ? 'Ξ' : '$'}{(currentPayout.net + currentPayout.bonus).toLocaleString()}</p>
+                <p className="text-[10px] text-gray-500">from {currentPayout.performance}/100 performance</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
       <PayrollDashboard records={records} summary={summary} onRun={() => runMutation.mutate()} running={runMutation.isPending} lastRun={lastRun} />
     </div>
   );

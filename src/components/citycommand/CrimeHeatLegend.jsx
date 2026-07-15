@@ -12,6 +12,7 @@ export default function CrimeHeatLegend() {
       </div>
       <div className="flex justify-between text-[10px] text-gray-400 mt-0.5"><span>Low</span><span>High</span></div>
       <p className="text-[10px] text-gray-500 mt-1">🔥 Hotspot = intensity above 70</p>
+      <p className="text-[10px] text-orange-400 mt-0.5">⚔️ Orange ring = conflict zone</p>
     </div>
   );
 }
