@@ -17,6 +17,7 @@ import WorldEventDirector from './pages/WorldEventDirector';
 import CareerPaths from './pages/CareerPaths';
 import ShiftManagement from './pages/ShiftManagement';
 import PayrollManagement from './pages/PayrollManagement';
+import Trends from './pages/Trends';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -106,6 +107,11 @@ const AuthenticatedApp = () => {
       <Route path="/PayrollManagement" element={
         <LayoutWrapper currentPageName="PayrollManagement">
           <PayrollManagement />
+        </LayoutWrapper>
+      } />
+      <Route path="/Trends" element={
+        <LayoutWrapper currentPageName="Trends">
+          <Trends />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />

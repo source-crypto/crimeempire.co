@@ -62,6 +62,7 @@ export default function Layout({ children, currentPageName }) {
     { name: 'AI Systems', page: 'AIManagement', icon: Zap },
     { name: 'Items Center', page: 'ItemsCenter', icon: Package },
     { name: 'Macro Economics', page: 'MacroEconomics', icon: TrendingUp },
+    { name: 'City Trends', page: 'Trends', icon: TrendingUp },
     { name: 'Performance', page: 'Performance', icon: Activity },
     { name: 'Metaverse', page: 'Metaverse', icon: Zap },
     { name: 'Earnings', page: 'Earnings', icon: DollarSign },
