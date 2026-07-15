@@ -251,7 +251,7 @@ export default function InteractiveCrimeMap({
         ))}
 
         {/* Law Enforcement */}
-        {activeLayers.lawEnforcement && lawEnforcement.map((unit) => (
+        {activeLayers.lawEnforcement && lawEnforcement.filter(unit => unit.coordinates?.lat != null).map((unit) => (
           <Marker
             key={unit.id}
             position={[unit.coordinates.lat, unit.coordinates.lng]}
