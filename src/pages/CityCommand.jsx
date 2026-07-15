@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import CityIntelligenceMap from '@/components/citycommand/CityIntelligenceMap';
+import CrimeHeatLegend from '@/components/citycommand/CrimeHeatLegend';
 import ActiveEventsFeed from '@/components/citycommand/ActiveEventsFeed';
 import CitySummaryCards from '@/components/citycommand/CitySummaryCards';
 import WorldStatePanel from '@/components/missions/WorldStatePanel';
@@ -61,7 +62,8 @@ export default function CityCommand() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2 space-y-3">
           <Card className="glass-panel border-purple-500/20">
-            <CardContent className="p-3">
+            <CardContent className="p-3 relative">
+              <CrimeHeatLegend />
               <div className="flex items-center gap-2 mb-2 flex-wrap">
                 <span className="text-xs text-gray-400 flex items-center gap-1 mr-1"><Layers className="w-3.5 h-3.5" /> Layers:</span>
                 {LAYER_DEFS.map(l => {

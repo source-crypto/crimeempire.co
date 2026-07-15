@@ -1,0 +1,101 @@
+{
+  "name": "CrewShift",
+  "type": "object",
+  "properties": {
+    "crew_id": {
+      "type": "string",
+      "description": "Crew this shift belongs to"
+    },
+    "crew_member_id": {
+      "type": "string",
+      "description": "Crew member assigned to the shift"
+    },
+    "crew_member_name": {
+      "type": "string",
+      "description": "Member display name for quick reference"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "Player who owns/assigned the shift"
+    },
+    "duty_type": {
+      "type": "string",
+      "enum": [
+        "patrol",
+        "smuggling",
+        "lookout",
+        "enforcement",
+        "logistics",
+        "recon",
+        "training",
+        "rest"
+      ],
+      "default": "patrol",
+      "description": "Active duty assigned for this shift"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "active",
+        "completed",
+        "missed"
+      ],
+      "default": "scheduled",
+      "description": "Lifecycle state of the shift"
+    },
+    "scheduled_start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the shift begins"
+    },
+    "scheduled_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the shift ends"
+    },
+    "activity_score": {
+      "type": "number",
+      "default": 0,
+      "description": "Accumulated activity points (0-100)"
+    },
+    "events_logged": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of activity events recorded"
+    },
+    "last_activity_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of last activity ping"
+    },
+    "performance_rating": {
+      "type": "number",
+      "default": 0,
+      "description": "0-100 rating assigned on completion"
+    },
+    "notes": {
+      "type": "string",
+      "default": "",
+      "description": "Special instructions for the shift"
+    }
+  },
+  "required": [
+    "crew_id",
+    "crew_member_id",
+    "crew_member_name",
+    "duty_type",
+    "scheduled_start",
+    "scheduled_end"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

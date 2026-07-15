@@ -15,6 +15,8 @@ import MissionDirector from './pages/MissionDirector';
 import CityCommand from './pages/CityCommand';
 import WorldEventDirector from './pages/WorldEventDirector';
 import CareerPaths from './pages/CareerPaths';
+import ShiftManagement from './pages/ShiftManagement';
+import PayrollManagement from './pages/PayrollManagement';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -94,6 +96,16 @@ const AuthenticatedApp = () => {
       <Route path="/CareerPaths" element={
         <LayoutWrapper currentPageName="CareerPaths">
           <CareerPaths />
+        </LayoutWrapper>
+      } />
+      <Route path="/ShiftManagement" element={
+        <LayoutWrapper currentPageName="ShiftManagement">
+          <ShiftManagement />
+        </LayoutWrapper>
+      } />
+      <Route path="/PayrollManagement" element={
+        <LayoutWrapper currentPageName="PayrollManagement">
+          <PayrollManagement />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />

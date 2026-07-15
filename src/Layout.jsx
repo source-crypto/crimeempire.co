@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { 
         Home, Map, Users, Building2, Car, Gavel, 
-        Settings, Menu, X, Zap, Shield, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown, Target, Cpu, Briefcase, Hammer, Compass
+        Settings, Menu, X, Zap, Shield, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown, Target, Cpu, Briefcase, Hammer, Compass, Clock, Calculator
       } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WantedHUD from './components/wanted/WantedHUD';
@@ -84,6 +84,8 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Street Combat', page: 'DirectCombat', icon: Shield },
     { name: 'Crew Tech Tree', page: 'CrewTechTree', icon: Cpu },
     { name: 'Crew Performance', page: 'CrewPerformance', icon: Users },
+    { name: 'Shift Management', page: 'ShiftManagement', icon: Clock },
+    { name: 'Payroll', page: 'PayrollManagement', icon: Calculator },
     { name: 'Mission Director', page: 'MissionDirector', icon: Brain },
     { name: 'City Command', page: 'CityCommand', icon: Map },
     { name: 'World Event Director', page: 'WorldEventDirector', icon: Activity },

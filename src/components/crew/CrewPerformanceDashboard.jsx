@@ -4,6 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2, Users, TrendingUp, Shield, DollarSign, AlertTriangle, HeartCrack } from 'lucide-react';
 import CrewMemberPerformanceRow from './CrewMemberPerformanceRow';
+import LiveShiftStatus from './LiveShiftStatus';
 
 const SORTS = [
   { key: 'performance', label: 'Performance' },
@@ -72,6 +73,8 @@ export default function CrewPerformanceDashboard({ crewId }) {
           );
         })}
       </div>
+
+      <LiveShiftStatus crewId={crewId} />
 
       <div className="flex items-center gap-2 flex-wrap">
         <span className="text-xs text-gray-400">Sort by:</span>
