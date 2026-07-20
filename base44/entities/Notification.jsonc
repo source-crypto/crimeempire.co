@@ -18,7 +18,8 @@
         "enterprise_alert",
         "message_received",
         "resource_ready",
-        "auction_won"
+        "auction_won",
+        "shift_update"
       ],
       "description": "Type of notification"
     },

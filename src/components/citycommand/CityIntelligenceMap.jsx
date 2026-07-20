@@ -7,10 +7,10 @@ const UNIT_COLOR = { patrol: '#60a5fa', swat: '#ef4444', detective: '#a855f7', f
 const BIZ_COLOR = { legitimate: '#22c55e', front: '#fbbf24', illicit: '#a855f7' };
 
 function hashStr(s = '') { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; }
-function distKm(a, b) { const dLat = a.lat - b.lat; const dLng = (a.lng - b.lng) * Math.cos((a.lat * Math.PI) / 180); return Math.sqrt(dLat * dLat + dLng * dLng) * 111; }
+export function distKm(a, b) { const dLat = a.lat - b.lat; const dLng = (a.lng - b.lng) * Math.cos((a.lat * Math.PI) / 180); return Math.sqrt(dLat * dLat + dLng * dLng) * 111; }
 function heatColor(v) { return v >= 70 ? '#ef4444' : v >= 40 ? '#f97316' : '#facc15'; }
 
-function crimeIntensity(t, lawEnforcement, worldEvents, worldState) {
+export function crimeIntensity(t, lawEnforcement, worldEvents, worldState) {
   let v = 20;
   if (t.is_contested) v += 30;
   v += (100 - (t.control_percentage ?? 100)) * 0.2;
@@ -23,7 +23,7 @@ function crimeIntensity(t, lawEnforcement, worldEvents, worldState) {
   return Math.max(0, Math.min(100, Math.round(v)));
 }
 
-export default function CityIntelligenceMap({ territories = [], lawEnforcement = [], properties = [], worldEvents = [], activeLayers = {}, playerCrewId, worldState, tileMode = 'dark' }) {
+export default function CityIntelligenceMap({ territories = [], lawEnforcement = [], properties = [], worldEvents = [], activeLayers = {}, playerCrewId, worldState, tileMode = 'dark', onSelectDistrict }) {
   const center = useMemo(() => {
     const t = territories.find(x => x.coordinates?.lat != null);
     if (t) return [t.coordinates.lat, t.coordinates.lng];
@@ -83,7 +83,7 @@ export default function CityIntelligenceMap({ territories = [], lawEnforcement =
       ))}
 
       {activeLayers.territories && territories.filter(t => t.coordinates?.lat != null).map(t => (
-        <CircleMarker key={t.id} center={[t.coordinates.lat, t.coordinates.lng]} radius={6 + (t.control_percentage || 50) / 12} pathOptions={{ color: t.is_contested ? '#ef4444' : RESOURCE_COLOR[t.resource_type] || '#3b82f6', fillOpacity: 0.5 }}>
+        <CircleMarker key={t.id} center={[t.coordinates.lat, t.coordinates.lng]} radius={6 + (t.control_percentage || 50) / 12} pathOptions={{ color: t.is_contested ? '#ef4444' : RESOURCE_COLOR[t.resource_type] || '#3b82f6', fillOpacity: 0.5 }} eventHandlers={{ click: () => onSelectDistrict?.(t) }}>
           <Tooltip>{t.name}{t.is_contested ? ' — CONTESTED' : ''}</Tooltip>
           <Popup>
             <strong>{t.name}</strong><br />

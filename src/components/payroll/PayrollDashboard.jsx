@@ -2,9 +2,24 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calculator, DollarSign, Coins, Landmark, Shield } from 'lucide-react';
+import { Calculator, DollarSign, Coins, Landmark, Shield, Download } from 'lucide-react';
 
 export default function PayrollDashboard({ records, summary, onRun, running, lastRun }) {
+  const exportCsv = () => {
+    const rows = [['Employee', 'Career', 'Level', 'Performance', 'Net', 'Currency', 'Tax', 'Pension', 'Launderer Cut', 'Bonus']];
+    records.forEach(({ employment: e, calc }) => {
+      rows.push([e.username || e.job_title || 'Employee', e.career_path, e.career_level ?? 1, calc.performance, calc.net, calc.currency, calc.tax || 0, calc.pension || 0, calc.laundererCut || 0, calc.bonus || 0]);
+    });
+    rows.push([], ['SUMMARY'], ['Lawful Payout', summary.lawfulPayout], ['Criminal Payout', summary.criminalPayout], ['Total Pension', summary.totalPension], ['Launderer Cuts', summary.totalLaundering]);
+    const csv = rows.map((r) => r.map((c) => `"${c}"`).join(',')).join('\n');
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `payroll-summary-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between flex-wrap gap-3">
@@ -14,9 +29,14 @@ export default function PayrollDashboard({ records, summary, onRun, running, las
           <Card className="glass-panel border-blue-500/20"><CardContent className="p-3 text-center"><Landmark className="w-4 h-4 mx-auto text-blue-400 mb-1" /><p className="text-lg font-bold text-blue-400">${summary.totalPension.toLocaleString()}</p><p className="text-xs text-gray-400">Pension Accrued</p></CardContent></Card>
           <Card className="glass-panel border-red-500/20"><CardContent className="p-3 text-center"><Shield className="w-4 h-4 mx-auto text-red-400 mb-1" /><p className="text-lg font-bold text-red-400">Ξ{summary.totalLaundering.toLocaleString()}</p><p className="text-xs text-gray-400">Launderer Cuts</p></CardContent></Card>
         </div>
-        <Button className="bg-gradient-to-r from-green-600 to-purple-600" onClick={onRun} disabled={running || records.length === 0}>
-          <Calculator className="w-4 h-4 mr-1" /> {running ? 'Processing…' : 'Run Payroll'}
-        </Button>
+        <div className="flex gap-2">
+          <Button className="bg-gradient-to-r from-green-600 to-purple-600" onClick={onRun} disabled={running || records.length === 0}>
+            <Calculator className="w-4 h-4 mr-1" /> {running ? 'Processing…' : 'Run Payroll'}
+          </Button>
+          <Button variant="outline" className="border-green-500/40 text-green-300" onClick={exportCsv} disabled={records.length === 0}>
+            <Download className="w-4 h-4 mr-1" /> Export CSV
+          </Button>
+        </div>
       </div>
 
       {lastRun && <p className="text-xs text-gray-400">Last run: {lastRun}</p>}

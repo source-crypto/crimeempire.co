@@ -37,7 +37,7 @@ export default function ShiftManagement() {
       const t = Date.now();
       const st = new Date(payload.scheduled_start).getTime();
       const status = t >= st ? 'active' : 'scheduled';
-      await base44.entities.CrewShift.create({
+      const shift = await base44.entities.CrewShift.create({
         crew_id: crewId,
         crew_member_id: m.id,
         crew_member_name: m.member_name,
@@ -49,6 +49,15 @@ export default function ShiftManagement() {
         activity_score: 0,
         events_logged: 0,
         notes: payload.notes || '',
+      });
+      await base44.entities.Notification.create({
+        player_id: playerData.id,
+        notification_type: 'shift_update',
+        title: 'New Duty Assigned',
+        message: `${m.member_name} → ${payload.duty_type} duty · ${new Date(payload.scheduled_start).toLocaleString()} → ${new Date(payload.scheduled_end).toLocaleTimeString()}`,
+        priority: 'medium',
+        action_url: '/ShiftManagement',
+        related_entity_id: shift?.id,
       });
     },
     onSuccess: () => { queryClient.invalidateQueries(['crewShifts']); toast.success('Shift assigned'); },

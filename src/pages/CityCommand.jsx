@@ -3,7 +3,8 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import CityIntelligenceMap from '@/components/citycommand/CityIntelligenceMap';
+import CityIntelligenceMap, { crimeIntensity, distKm } from '@/components/citycommand/CityIntelligenceMap';
+import DistrictDetailPanel from '@/components/citycommand/DistrictDetailPanel';
 import CrimeHeatLegend from '@/components/citycommand/CrimeHeatLegend';
 import ActiveEventsFeed from '@/components/citycommand/ActiveEventsFeed';
 import CitySummaryCards from '@/components/citycommand/CitySummaryCards';
@@ -20,6 +21,7 @@ const LAYER_DEFS = [
 
 export default function CityCommand() {
   const [activeLayers, setActiveLayers] = useState({ territories: true, police: true, businesses: true, events: true });
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
 
   const { data: user } = useQuery({ queryKey: ['user'], queryFn: () => base44.auth.me() });
   const { data: playerData } = useQuery({
@@ -45,6 +47,16 @@ export default function CityCommand() {
     playerLevel: playerData?.level || 1, reputation, worldEvents, globalEvents, economicEvents, factionActivities, governance,
     wantedLevel: playerData?.wanted_level || reputation.law_enforcement_heat || 0,
   }), [playerData, reputation, worldEvents, globalEvents, economicEvents, factionActivities, governance]);
+
+  const selectedDistrictData = useMemo(() => {
+    if (!selectedDistrict) return null;
+    const t = selectedDistrict;
+    const intensity = crimeIntensity(t, lawEnforcement, worldEvents, worldState);
+    const businesses = properties.filter((p) => p.district === t.name);
+    const intelReports = (worldEvents || []).filter((e) => (e.affected_territories || []).includes(t.name));
+    const lawUnits = (lawEnforcement || []).filter((u) => u.coordinates && t.coordinates && distKm(u.coordinates, t.coordinates) < (u.patrol_radius || 5));
+    return { intensity, businesses, intelReports, lawUnits };
+  }, [selectedDistrict, lawEnforcement, worldEvents, worldState, properties]);
 
   if (!playerData) return <div className="flex items-center justify-center h-96"><Loader2 className="w-8 h-8 animate-spin text-purple-400" /></div>;
 
@@ -81,9 +93,11 @@ export default function CityCommand() {
               <CityIntelligenceMap
                 territories={territories}
                 lawEnforcement={lawEnforcement}
+                properties={properties}
                 worldEvents={worldEvents}
                 activeLayers={activeLayers}
                 playerCrewId={playerData.crew_id}
+                onSelectDistrict={setSelectedDistrict}
               />
             </CardContent>
           </Card>
@@ -91,6 +105,16 @@ export default function CityCommand() {
         </div>
 
         <div className="space-y-4">
+          {selectedDistrictData && (
+            <DistrictDetailPanel
+              territory={selectedDistrict}
+              intensity={selectedDistrictData.intensity}
+              businesses={selectedDistrictData.businesses}
+              intelReports={selectedDistrictData.intelReports}
+              lawUnits={selectedDistrictData.lawUnits}
+              onClose={() => setSelectedDistrict(null)}
+            />
+          )}
           <ActiveEventsFeed events={worldEvents} />
           <Card className="glass-panel border-cyan-500/20">
             <CardContent className="p-4">

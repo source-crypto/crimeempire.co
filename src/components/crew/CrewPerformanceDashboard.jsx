@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Loader2, Users, TrendingUp, Shield, DollarSign, AlertTriangle, HeartCrack } from 'lucide-react';
 import CrewMemberPerformanceRow from './CrewMemberPerformanceRow';
 import LiveShiftStatus from './LiveShiftStatus';
+import CrewLeaderboard from './CrewLeaderboard';
 
 const SORTS = [
   { key: 'performance', label: 'Performance' },
@@ -73,6 +74,8 @@ export default function CrewPerformanceDashboard({ crewId }) {
           );
         })}
       </div>
+
+      <CrewLeaderboard members={enriched} />
 
       <LiveShiftStatus crewId={crewId} />
 
