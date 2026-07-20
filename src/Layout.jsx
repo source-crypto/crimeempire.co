@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from './utils';
 import { 
-        Home, Map, Users, Building2, Car, Gavel, 
-        Settings, Menu, X, Zap, Shield, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown, Target, Cpu, Briefcase, Hammer, Compass, Clock, Calculator
+        Home, Map, Users, Building2, Car, Gavel,
+        Settings, Menu, X, Zap, Shield, Crown, BookOpen, DollarSign, User, Brain, Package, MessageCircle, Activity, TrendingUp, ChevronDown, Target, Cpu, Briefcase, Hammer, Compass, Clock, Calculator, Landmark
       } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WantedHUD from './components/wanted/WantedHUD';
@@ -73,6 +73,8 @@ export default function Layout({ children, currentPageName }) {
     { name: 'Fleet Management', page: 'FleetManagement', icon: Building2 },
     { name: 'Currency Exchange', page: 'CurrencyExchange', icon: DollarSign },
     { name: 'Property Market', page: 'PropertyMarket', icon: Building2 },
+    { name: 'Empire Command', page: 'EmpireCommand', icon: Crown },
+    { name: 'Mayor & President', page: 'LeadershipOffice', icon: Landmark },
     { name: 'Careers', page: 'Employment', icon: Briefcase },
     { name: 'Career Paths', page: 'CareerPaths', icon: Compass },
     { name: 'Crafting', page: 'Crafting', icon: Hammer },

@@ -18,6 +18,8 @@ import CareerPaths from './pages/CareerPaths';
 import ShiftManagement from './pages/ShiftManagement';
 import PayrollManagement from './pages/PayrollManagement';
 import Trends from './pages/Trends';
+import EmpireCommand from './pages/EmpireCommand';
+import LeadershipOffice from './pages/LeadershipOffice';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -112,6 +114,16 @@ const AuthenticatedApp = () => {
       <Route path="/Trends" element={
         <LayoutWrapper currentPageName="Trends">
           <Trends />
+        </LayoutWrapper>
+      } />
+      <Route path="/EmpireCommand" element={
+        <LayoutWrapper currentPageName="EmpireCommand">
+          <EmpireCommand />
+        </LayoutWrapper>
+      } />
+      <Route path="/LeadershipOffice" element={
+        <LayoutWrapper currentPageName="LeadershipOffice">
+          <LeadershipOffice />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />

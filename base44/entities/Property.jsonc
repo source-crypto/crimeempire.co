@@ -47,6 +47,31 @@
       "default": 0,
       "description": "Current fluctuating market value"
     },
+    "highest_value": {
+      "type": "number",
+      "default": 0,
+      "description": "Peak valuation reached"
+    },
+    "lowest_value": {
+      "type": "number",
+      "default": 0,
+      "description": "Lowest valuation recorded"
+    },
+    "appreciation_pct": {
+      "type": "number",
+      "default": 0,
+      "description": "Percent change since purchase"
+    },
+    "growth_trend": {
+      "type": "string",
+      "enum": [
+        "up",
+        "down",
+        "stable"
+      ],
+      "default": "stable",
+      "description": "Direction of recent valuation movement"
+    },
     "income_per_hour": {
       "type": "number",
       "default": 0,
@@ -71,9 +96,75 @@
       "maximum": 100,
       "description": "Staff/tenant happiness 0-100 (affects income)"
     },
+    "occupancy_rate": {
+      "type": "number",
+      "default": 85,
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Occupancy/utilization 0-100"
+    },
+    "neighborhood_rating": {
+      "type": "number",
+      "default": 60,
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Neighborhood desirability 0-100"
+    },
+    "crime_index": {
+      "type": "number",
+      "default": 30,
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Local crime level 0-100 (fictional)"
+    },
+    "market_demand": {
+      "type": "number",
+      "default": 50,
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Current buyer demand 0-100"
+    },
+    "tax_burden_pct": {
+      "type": "number",
+      "default": 12,
+      "description": "Effective tax rate percent"
+    },
+    "insurance_cost_hr": {
+      "type": "number",
+      "default": 0,
+      "description": "Insurance cost per hour"
+    },
+    "expansion_potential": {
+      "type": "number",
+      "default": 50,
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Room for upgrades/expansion 0-100"
+    },
+    "roi_monthly": {
+      "type": "number",
+      "default": 0,
+      "description": "Monthly return on investment percent"
+    },
+    "roi_annual": {
+      "type": "number",
+      "default": 0,
+      "description": "Annual return on investment percent"
+    },
     "staff_count": {
       "type": "number",
       "default": 0
+    },
+    "manager_name": {
+      "type": "string",
+      "description": "Assigned property manager"
+    },
+    "ai_performance_score": {
+      "type": "number",
+      "default": 70,
+      "minimum": 0,
+      "maximum": 100,
+      "description": "AI-assessed operational performance 0-100"
     },
     "upgrade_level": {
       "type": "number",

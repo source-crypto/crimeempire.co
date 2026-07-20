@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import PropertyCatalog from '@/components/property/PropertyCatalog';
 import MyProperties from '@/components/property/MyProperties';
+import PropertyROIAnalytics from '@/components/property/PropertyROIAnalytics';
 import { Loader2 } from 'lucide-react';
 
 export default function PropertyMarket() {
@@ -55,12 +56,16 @@ export default function PropertyMarket() {
         <TabsList className="glass-panel border border-purple-500/20">
           <TabsTrigger value="market">🏙️ Market</TabsTrigger>
           <TabsTrigger value="owned">🏘️ My Properties ({owned.length})</TabsTrigger>
+          <TabsTrigger value="analytics">📊 Empire Analytics</TabsTrigger>
         </TabsList>
         <TabsContent value="market" className="mt-4">
           <PropertyCatalog playerData={playerData} ownedNames={ownedNames} />
         </TabsContent>
         <TabsContent value="owned" className="mt-4">
           <MyProperties playerData={playerData} />
+        </TabsContent>
+        <TabsContent value="analytics" className="mt-4">
+          <PropertyROIAnalytics playerData={playerData} />
         </TabsContent>
       </Tabs>
     </div>
