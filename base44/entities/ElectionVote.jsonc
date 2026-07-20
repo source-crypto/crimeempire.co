@@ -1,0 +1,51 @@
+{
+  "name": "ElectionVote",
+  "type": "object",
+  "properties": {
+    "election_id": {
+      "type": "string",
+      "description": "Election this vote belongs to"
+    },
+    "office": {
+      "type": "string",
+      "enum": [
+        "mayor",
+        "president"
+      ]
+    },
+    "voter_id": {
+      "type": "string"
+    },
+    "voter_name": {
+      "type": "string"
+    },
+    "candidate_id": {
+      "type": "string"
+    },
+    "candidate_name": {
+      "type": "string"
+    },
+    "crypto_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Crypto committed \u2014 equals the vote weight"
+    }
+  },
+  "required": [
+    "election_id",
+    "office",
+    "voter_id",
+    "candidate_id",
+    "crypto_amount"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

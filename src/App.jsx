@@ -20,6 +20,7 @@ import PayrollManagement from './pages/PayrollManagement';
 import Trends from './pages/Trends';
 import EmpireCommand from './pages/EmpireCommand';
 import LeadershipOffice from './pages/LeadershipOffice';
+import Elections from './pages/Elections';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -124,6 +125,11 @@ const AuthenticatedApp = () => {
       <Route path="/LeadershipOffice" element={
         <LayoutWrapper currentPageName="LeadershipOffice">
           <LeadershipOffice />
+        </LayoutWrapper>
+      } />
+      <Route path="/Elections" element={
+        <LayoutWrapper currentPageName="Elections">
+          <Elections />
         </LayoutWrapper>
       } />
       <Route path="*" element={<PageNotFound />} />

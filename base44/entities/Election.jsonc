@@ -1,0 +1,84 @@
+{
+  "name": "Election",
+  "type": "object",
+  "properties": {
+    "cycle_number": {
+      "type": "number",
+      "description": "Sequential cycle number for this office"
+    },
+    "office": {
+      "type": "string",
+      "enum": [
+        "mayor",
+        "president"
+      ],
+      "description": "Which office this election determines"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "voting",
+        "completed"
+      ],
+      "default": "voting"
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "player_id": {
+            "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "level": {
+            "type": "number"
+          }
+        }
+      },
+      "default": [],
+      "description": "50 random platform users nominated for this cycle"
+    },
+    "winner_player_id": {
+      "type": "string"
+    },
+    "winner_username": {
+      "type": "string"
+    },
+    "total_crypto_voted": {
+      "type": "number",
+      "default": 0
+    },
+    "total_vote_count": {
+      "type": "number",
+      "default": 0
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ends_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "cycle_number",
+    "office",
+    "status"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}
